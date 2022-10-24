@@ -190,12 +190,12 @@ static func _parse(_url : String)-> String: #works
 	return _url
 
 'Internet COnnectivity Check'
-static func _check_if_device_is_online():
+static func _check_if_device_is_online(node: HTTPRequest):
 	
 	#index = index + 1
 	#dialgue_box.show_dialog('Checking for Internet Connectivity','admin')
-	var q =HTTPRequest.new()
-	_check_connection('https://mfts.io', q)#url('https://play.google.com/store/apps/details?id=dystopia.app')
+	#var q =HTTPRequest.new()
+	_check_connection('https://mfts.io', node)#url('https://play.google.com/store/apps/details?id=dystopia.app')
 	
 
 

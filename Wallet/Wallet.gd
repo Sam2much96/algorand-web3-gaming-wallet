@@ -183,11 +183,14 @@ signal transaction
 
 #**********************************#
 #onready var timer = $Timer #depreciated
-onready var q = HTTPRequest.new()
+onready var _Request_Node = HTTPRequest.new()
 
 func _ready():
 	
-	print ("HTTP REQUEST NODE: ",typeof(q))
+
+	
+	
+	#print ("HTTP REQUEST NODE: ",typeof(q))
 	
 	
 	#*****Txn UI options************#
@@ -217,7 +220,10 @@ func _ready():
 		
 		upscale_wallet_ui()
 
+	#*************Handle RequestNodes*****************#
 	'Connect and Debug Networking signals'
+		#Add Request Node as a child of the Tree
+	self.add_child(_Request_Node)
 	connect_signals()
 	debug_signal_connections()
 
@@ -346,10 +352,14 @@ func _process(_delta):
 					#state = GENERATE_ADDRESS
 				
 			'Handles if account info is deleted'
-			if not FileCheck1.file_exists("user://wallet/account_info.token"):
+			#Buggy
+			if not check_local_wallet_directory():
 				#Revert to Import account state
 				
 				push_error('account info file does not exist, Import Wallet or generate New One')
+				
+				create_wallet_directory()
+				
 				state_controller.select(3) #rewrite as a method
 				#state = IMPORT_ACCOUNT  #rewrite as a method
 				
@@ -403,6 +413,8 @@ func _process(_delta):
 				
 				# show account
 				state_controller.select(0)
+				state = SHOW_ACCOUNT
+				
 
 			pass
 		#Saves transactions to be processed in the ready function
@@ -525,7 +537,7 @@ func _process(_delta):
 						 
 						#makes a https request to download image from local server
 						
-						Networking. _connect_to_ipfs_gateway(image_url, q)  
+						Networking. _connect_to_ipfs_gateway(image_url, _Request_Node)  
 						
 						
 						wallet_check += 1
@@ -589,7 +601,7 @@ func run_wallet_checks()-> bool: # works #run networking internet checks test be
 		Algorand.create_algod_node('TESTNET')
 	
 	if !good_internet:
-		Networking._check_if_device_is_online()
+		Networking._check_if_device_is_online(_Request_Node)
 	
 	wallet_check_counter+= 1
 	#var status
@@ -630,7 +642,11 @@ func run_wallet_checks()-> bool: # works #run networking internet checks test be
 			FileCheck1.close()
 			FileDirectory.remove(token_path ) #use Globals delete function instead
 
-
+	'Checks Directory and Local Token Paths'
+	check_local_wallet_directory()
+	
+	
+	
 	print ("----wallet check done------")
 	
 	#***********Transaction and Smart Contract functions**************#
@@ -662,12 +678,12 @@ func show_account_info(load_from_local_wallet: bool):
 
 func connect_signals(): #connects all required signals in the parent node
 	print ("Connect Networking Signls please")
-	if not q.is_connected("request_completed", self, "_http_request_completed"):
-		return q.connect("request_completed", self, "_http_request_completed")
+	if not _Request_Node.is_connected("request_completed", self, "_http_request_completed"):
+		return _Request_Node.connect("request_completed", self, "_http_request_completed")
 
 func debug_signal_connections()->void:
 	#debuggers
-	print("Networking Connected: ",q.is_connected("request_completed", self, "_http_request_completed"))
+	print("Networking Connected: ",_Request_Node.is_connected("request_completed", self, "_http_request_completed"))
 	print ("please connect Networking Signals")
 
 func generate_address(_mnemonic:String)-> String: #works
@@ -683,7 +699,7 @@ func generate_address(_mnemonic:String)-> String: #works
 func save_account_info( info : Dictionary, number: int): 
 	var save_game = File.new() #change from save game
 	save_game.open(token_path, File.WRITE)
-	var save_dict = {}
+	var save_dict =  {'address': address, 'amount': 0, 'mnemonic': mnemonic, 'asset_index': '','asset_name': '','asset_unit_name': '', 'asset_url': '' }
 	
 	#************Use Assets parameter ,Disabling for now*******************************#
 	
@@ -692,10 +708,12 @@ func save_account_info( info : Dictionary, number: int):
 		
 	# encode mnemonic
 	save_dict.mnemonic = convert_string_to_binary(mnemonic)  #saves mnemonic as string error
-		
-	# Temporarily disabling
 	
-	save_dict.asset_index =info["created-assets"][number]["index"] 
+	#corrupts and Deletes file if not done properly
+	#backup_wallet_token() #placeholder function
+	
+	#ssss
+	save_dict.asset_index =info["created-assets"][number]["index"]  # Temporarily disabling
 	save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
 	save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
 	save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
@@ -704,6 +722,8 @@ func save_account_info( info : Dictionary, number: int):
 	save_game.close()
 	
 	print ("saved account info")
+	
+	
 
 
 
@@ -777,7 +797,7 @@ func _http_request_completed(result, response_code, headers, body): #works with 
 		print (" request successful")
 			
 			#disabling for now
-		set_image_(Networking.download_image_(body, "user://wallet/img0",q)) #works
+		set_image_(Networking.download_image_(body, "user://wallet/img0",_Request_Node)) #works
 			
 	else: return
 	#Networking.cancel_request()
@@ -803,6 +823,7 @@ func check_wallet_info(): #works. Pass a variable check
 	
 	if address != null && mnemonic != null && check_local_wallet_directory():
 		account_info = yield(Algorand.algod.account_information(address), "completed")
+		
 		save_account_info(account_info, 0) #testing
 	else : 
 		push_error('Either address or mnemonic cannot be null')
@@ -852,8 +873,9 @@ func _on_reset():
 #			return
 
 func check_local_wallet_directory()-> bool:
-	return FileDirectory. dir_exists("user://wallet")
-
+	if FileDirectory. dir_exists("user://wallet") && FileCheck1.file_exists(token_path):
+		return true
+	else : return false
 func create_wallet_directory()-> void:
 # Creates a Wallet folder.
 	if not FileDirectory. dir_exists("user://wallet"):
@@ -871,6 +893,7 @@ func convert_string_to_binary(string : String)-> Array:
 	return binary
 
 
+"Simple string to Utf8 converter"
 func convert_binary_to_string(binary : PoolByteArray)-> String:
 	var string : String
 	string =binary.get_string_from_utf8()
@@ -903,15 +926,6 @@ func upscale_wallet_ui()-> void:
 	#scale selection button
 	state_controller.set_scale(newScale2) #doenst work. Using aniamtion player instead
 	pass
-
-func _on_withdraw_pressed():
-	#Music.play_track(Music.ui_sfx[0])
-	_on_withraw()
-
-
-func _on_Main_menu_pressed():
-	#Music.play_track(Music.ui_sfx[0])
-	return Globals._go_to_title()
 
 
 func _on_testnetdispenser_pressed():
@@ -1010,3 +1024,17 @@ func smart_contract(): #doesnt work
 
 func _on_enter_asset_pressed():
 	asset_id_valid = true
+
+"Backs up wallet token to prevent DataLoss"
+func backup_wallet_token()->void:
+	
+	if check_local_wallet_directory():
+		FileDirectory.copy(token_path,  "user://wallet/account_info.token.backup")
+
+
+func load_backup_wallet_token()-> void:
+	FileDirectory.copy("user://wallet/account_info.token.backup",token_path)
+
+
+func _on_reset_pressed():
+	reset()

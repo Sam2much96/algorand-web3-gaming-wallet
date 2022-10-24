@@ -84,18 +84,6 @@ var uncompressed # Varible holds uncompressed zip files
 'ingame Environment Variables'
 var near_interractible_objects #which objects use this?
 
-'Scene Loading variables'
-var _q : PackedScene # Large Resouce Scene Placeholder
-var _r # Large Resource Placeholder Variable
-var _o #for polling resource loader
-var err
-var a : int # Loader progress variable (a/b) 
-var b : int
-var loading_resource : bool = false
-onready var scene_loader= ResourceLoader
-#onready var wait_frames : int = 10 #not used, delete later
-onready var progress : float
-
 
 
 
@@ -120,10 +108,6 @@ enum { SCREEN_HORIZONTAL, SCREEN_VERTICAL}
 
 var screenOrientation 
 
-"In Game FX"
-var blood_fx: PackedScene = load ('res://scenes/UI & misc/Blood_Splatter_FX.tscn') #only load this once gameplay is on (optimization)
-var despawn_fx: PackedScene = load ("res://scenes/UI & misc/DespawnFX.tscn")
-var bullet_fx : PackedScene
 
 'Temporary variants'
 var temp
@@ -133,8 +117,7 @@ var NFT: TextureRect #should ideally be an array for multiple NFT's
 var wallet_state  #wallet state global variabe
 
 func _ready():
-	print('Blood fx:',blood_fx) #optimize blood fx to only load during game runtimes
-	
+
 	# Resizes window the preselected sizes
 	
 	if os == "Android":
@@ -161,53 +144,6 @@ func _process(_delta): #Turn process off if not in use (optimiztion) turn_off_pr
 
 		pass
 	else: return 1;
-
-	'Resource Loader FOr Large Scenes'
-
-	if _r is String && _r != "" && _q == null:
-		var time_max = 50000 #sets an estimate maximum time to load scene
-		var t = OS.get_ticks_msec()
-		
-		#scene_loader.load_interactive(_r) 
-		
-		_o= (scene_loader.load_interactive(_r)) #function returns a resourceInteractiveLoader
-
-		scene_loader.load_interactive(_r) #function returns a resourceInteractiveLoader
-		
-	
-		print (" Loader Debug Outer loop >>> Inner Loop")
-		while OS.get_ticks_msec() < (t + time_max) && _o != null: 
-
-			err = _o.poll()
-			#loading_resource = true
-			
-			print ("_q: ",_q," _r: ",_r," Error: ",str(err),"Loop Debug") #Debugger
-			
-			
-			
-			if err == ERR_FILE_EOF: # Finished Loading #Works
-				loading_resource = false
-				
-				_q = (_o.get_resource()) 
-				print (_q , "Resource Loaded")
-				change_scene_to( _q) # auto changes the scene
-				#turn_off_processing("off") #introduces bugs
-				break
-				#return _q
-			elif err == OK: #works
-				a = _o.get_stage()
-				b = _o.get_stage_count() 
-				progress = (b/a) 
-				print (a, "/",b,'/',"Progress: ", progress) #progress Debug?
-			else: # Error during loading
-				push_error("Problems loading Scene.  Debug Gloabls scene loader")
-				print (str(progress) + "% " + str (_r))
-				
-				break
-	if _r is String && _q != null: # 
-		return
-
-
 
 
 """
@@ -321,18 +257,6 @@ func _ram_convert(bytes) :
 		var _mb = String(round(float(bytes) / 1_048_576))
 		return _mb
 
-func change_scene_to(scene): #Loads scenes faster?
-	if scene is PackedScene: 
-		if scene != null: return get_tree().change_scene_to(scene)  
-	elif scene is String: 
-		if scene != "": 
-			loading_resource = true
-			_r = scene # triggers an auto scene loader in the processes 
-			return _r
-
-	else: return (print (typeof(scene) ,"is not supported in this function"))
-	#if scene is 
-	
 func turn_off_processing(toggle): # to improve game speed and turn off idle processsing
 	if toggle is String:
 		if toggle == "on":
