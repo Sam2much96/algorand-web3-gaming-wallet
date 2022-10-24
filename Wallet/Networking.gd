@@ -39,7 +39,7 @@ export (bool) var enabled
 export(String) var connection_debug
 export (String) var cfg_server_ip 
 #########################  Web browser codes  ############################3
-var url : String = ''
+export (String) var url  = ''
 var check_timer 
 var debug = ''
 

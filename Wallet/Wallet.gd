@@ -56,6 +56,7 @@
 		#if asset_url ='' && local_image_texture exists
 		#delete local image texture
 # (18) Show Asset ID on NFT
+# (19) Implement account token backup and Load from backup methods
 
 # Testing
 #(1) Image Downloder (works)
@@ -522,10 +523,7 @@ func _process(_delta):
 						state_controller.select(0)
 					if asset_url && asset_name != '':
 
-						
-						'theres a problem with the network connection'
-						'my server isnt serving the json file to godot properly'
-						"using python instead"
+
 						
 						#image url should be gotten from asset-id
 						# some hosted assets might be meta data, 
@@ -533,6 +531,9 @@ func _process(_delta):
 						image_url=asset_url 
 						
 						print ('nft host site',image_url) #image_url should not be null
+						
+						#use request node for these
+						
 						Networking.url=image_url #disabling for now
 						 
 						#makes a https request to download image from local server
@@ -592,8 +593,7 @@ func _process(_delta):
 		
 
 
-# Uses Connection Health and internet health to check Account info
-#Rewrite to include local NFT images check and all checks
+# Runs all Wallet Checks and Presaved Transactions
 func run_wallet_checks()-> bool: # works #run networking internet checks test before running this function
 #if wallet_check == 0:
 	#Make sure an algod node is running or connet to mainnet or testnet
@@ -645,6 +645,7 @@ func run_wallet_checks()-> bool: # works #run networking internet checks test be
 	'Checks Directory and Local Token Paths'
 	check_local_wallet_directory()
 	
+
 	
 	
 	print ("----wallet check done------")
@@ -709,14 +710,16 @@ func save_account_info( info : Dictionary, number: int):
 	# encode mnemonic
 	save_dict.mnemonic = convert_string_to_binary(mnemonic)  #saves mnemonic as string error
 	
-	#corrupts and Deletes file if not done properly
-	#backup_wallet_token() #placeholder function
+
 	
-	#ssss
-	save_dict.asset_index =info["created-assets"][number]["index"]  # Temporarily disabling
-	save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
-	save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
-	save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
+	#Catches a bug that occurs from Wallet Addresses that havent created accounts before
+	#Bug NFT parse only works on Accounts that created Assets
+	if info.has("assets"):
+
+		save_dict.asset_index =info["created-assets"][number]["index"]  # Temporarily disabling
+		save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
+		save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
+		save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
 	
 	save_game.store_line(to_json(save_dict))
 	save_game.close()
@@ -822,9 +825,21 @@ func check_wallet_info(): #works. Pass a variable check
 	#THen checks wallet account information
 	
 	if address != null && mnemonic != null && check_local_wallet_directory():
-		account_info = yield(Algorand.algod.account_information(address), "completed")
+		if Algorand.algod != null:
+			account_info = yield(Algorand.algod.account_information(address), "completed")
 		
-		save_account_info(account_info, 0) #testing
+		
+		
+			#print ("Debugging Account Info Checker: ",account_info)
+			
+			#invalid account info corrupts local saved token file
+			#save wallet token isn't saving Asset name and url from the correct variables
+			#Bug: Account Info doesn't list asset held, only asset created
+			print ("Debugging Account Asset and Saver:  ",account_info.get("assets"))
+			
+				#corrupts and Deletes file if not done properly
+			backup_wallet_token() #placeholder function
+			save_account_info(account_info, 0) #testing
 	else : 
 		push_error('Either address or mnemonic cannot be null')
 		push_error("Import Mnemonic or Generate New Account")
@@ -1026,7 +1041,7 @@ func _on_enter_asset_pressed():
 	asset_id_valid = true
 
 "Backs up wallet token to prevent DataLoss"
-func backup_wallet_token()->void:
+func backup_wallet_token()->void: #works
 	
 	if check_local_wallet_directory():
 		FileDirectory.copy(token_path,  "user://wallet/account_info.token.backup")

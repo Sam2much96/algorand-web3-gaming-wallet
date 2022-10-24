@@ -286,6 +286,7 @@ static func free_children(node: Node) -> void:
 		node.free()
 
 'Delete Files'
+#buggy
 func delete_local_file(path_to_file: String) -> void:
 	var dir = Directory.new()
 	if dir.file_exists(path_to_file):
