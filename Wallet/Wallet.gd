@@ -534,7 +534,7 @@ func _process(_delta):
 						
 						#use request node for these
 						
-						Networking.url=image_url #disabling for now
+						#Networking.url=image_url #disabling for now
 						 
 						#makes a https request to download image from local server
 						
@@ -554,7 +554,7 @@ func _process(_delta):
 					
 					#calls NFT from comics node
 					#NFT is a call to the SceneTree's Texture react
-					Comics.load_local_image_texture_from_global(NFT, local_image_path)
+					Comics.load_local_image_texture_from_global(Globals.NFT, local_image_path)
 					
 					#change states
 					state_controller.select(0)

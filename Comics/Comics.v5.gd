@@ -606,7 +606,7 @@ static func load_local_image_texture_from_global(node : TextureRect, _local_imag
 	var image = Image.new()
 	image.load(_local_image_path)
 	texture.create_from_image(image)
-	node.show()
+	#node.show()
 	node.set_texture(texture) #cannot load directly from local storage without permissions
 		#print (NFT.texture) for debug purposes only
 	node.set_expand(true)
