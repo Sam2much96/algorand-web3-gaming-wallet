@@ -283,7 +283,8 @@ func _process(_delta):
 		
 			
 			'Generates New Account'
-			if not FileDirectory.file_exists(token_path) : # if account info doesn't exist
+			#Only generates new account if previous wallet data has been deleted
+			if not FileDirectory.file_exists(token_path) && wallet_check == 0  : # if account info doesn't exist
 				
 				"Creates Wallet Directory if it doesn't exist"
 				create_wallet_directory()
@@ -309,7 +310,9 @@ func _process(_delta):
 				save_account_info(dict,1)
 				
 				state = SHOW_ACCOUNT
-				#wallet_check += 1
+				wallet_check += 1
+				return wallet_check
+				
 			if FileDirectory.file_exists(token_path) :
 				state = SHOW_ACCOUNT
 				return
