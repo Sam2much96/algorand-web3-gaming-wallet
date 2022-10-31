@@ -172,6 +172,7 @@ var algod_node_health_is_good: bool
 var imported_mnemonic : bool = false
 var transaction_valid: bool =false
 var asset_id_valid : bool = false
+var optin_asset : bool #for optin into asset transations
 
 var loaded_wallet: bool= false #fixes looping loading bug
 var good_internet : bool #debugs user's internet
@@ -194,16 +195,16 @@ func _ready():
 	#print ("HTTP REQUEST NODE: ",typeof(q))
 	
 	
-	#*****Txn UI options************#
+		#*****Txn UI options************#
 	#check if methods exist
 	if (txn_ui_options_button.get_item_count() == 0):
 		txn_ui_options.add_item('Transactions') 
 		txn_ui_options.add_item('Assets') 
+		txn_ui_options.add_item('Optin') 
 		
 		#**********State Controller Options***********#
-		#add error checker so its not duplicated
-		#if _ready() is called multiple times
-		#sssss
+		
+	if (state_controller.get_item_count() == 0):	
 		state_controller.add_item("Show Account")
 		state_controller.add_item("Check Account")
 		state_controller.add_item("New Account")
@@ -435,7 +436,7 @@ func _process(_delta):
 			txn_ui_options_button.show()
 			transaction_hint.show()
 			
-			" Swtiches Between Assets and Normal Transactions UI"
+			" Algo Transactions UI"
 			if txn_ui_options.get_selected() == 0:
 				txn_amount.show()
 				nft_asset_id.hide()
@@ -477,6 +478,7 @@ func _process(_delta):
 						txn_check += 1
 						return txn_check
 
+			"Asset Tranfers"
 			if txn_ui_options.get_selected() == 1:
 				#txn_amount.hide()
 				#uses two different buttons for assets and algo transactions
@@ -496,6 +498,26 @@ func _process(_delta):
 					#calls the transaction function which is a subprocess of _ready() function
 					_ready()
 					
+			"Opt in Asset Transfer"
+			if txn_ui_options.get_selected() == 2:
+				txn_assets_valid_button.show()
+				txn_txn_valid_button.hide()
+				txn_addr.hide()
+				txn_amount.hide()
+				nft_asset_id.show()
+				
+				if asset_id_valid:
+					_asset_id = int (nft_asset_id.text)
+					#asset_sender_address = txn_addr.text
+					state_controller.select(0)
+					
+					#prepares the address to optin asset transaction
+					optin_asset = true
+					
+					#calls the optin transaction which is a subprocess of the _ready() function
+					_ready()
+			
+			
 			pass
 			
 	
@@ -656,6 +678,8 @@ func run_wallet_checks()-> bool: # works #run networking internet checks test be
 	#***********Transaction and Smart Contract functions**************#
 	call_deferred('txn')
 	
+	call_deferred('optin')
+	
 	call_deferred('smart_contract')
 	return 0;
 
@@ -699,7 +723,7 @@ func generate_address(_mnemonic:String)-> String: #works
 
 
 #saves account information to a dictionary
-#i don't know what number does ngl. It jusst works, lol
+#
 func save_account_info( info : Dictionary, number: int): 
 	var save_game = File.new() #change from save game
 	save_game.open(token_path, File.WRITE)
@@ -714,15 +738,18 @@ func save_account_info( info : Dictionary, number: int):
 	save_dict.mnemonic = convert_string_to_binary(mnemonic)  #saves mnemonic as string error
 	
 
+	# Error Catchers
 	
-	#Catches a bug that occurs from Wallet Addresses that havent created accounts before
-	#Bug NFT parse only works on Accounts that created Assets
-	if info.has("assets"):
-
-		save_dict.asset_index =info["created-assets"][number]["index"]  # Temporarily disabling
+	# saves if address has assets
+	if info.has("assets") :
+		save_dict.asset_index =  info['assets'][0].get('asset-id')  #info["created-assets"][number]["index"] 
+		save_dict.asset_amount = info['assets'][0].get('amount')
+	# saves if address has created assets
+	if info.has("created-assets"):
 		save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
 		save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
 		save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
+
 	
 	save_game.store_line(to_json(save_dict))
 	save_game.close()
@@ -766,11 +793,13 @@ func _restore_wallet_data(info: Dictionary):
 	_wallet_algos = info.amount 
 	
 	#***********Assets Information*****************#
-	#might break if wallet has no assets. 
-	#Write proper fix for this function and save asset function which duplicates code
-	asset_name = str (info.asset_name) 
-	asset_url = str(info.asset_url) #asset url and asset meta data are different
-	asset_unit_name = str(info.asset_unit_name)
+	if info.has('asset_amount'):
+		asset_amount = int (info.asset_amount)
+		_asset_id = int (info.asset_index)
+	if info.has('asset_name'):
+		asset_name = str (info.asset_name) 
+		asset_url = str(info.asset_url) #asset url and asset meta data are different
+		asset_unit_name = str(info.asset_unit_name)
 	
 	print ('wallet data restored from local database')
 	
@@ -802,7 +831,7 @@ func _http_request_completed(result, response_code, headers, body): #works with 
 		"Downloads the NFT image"
 		print (" request successful")
 			
-			#disabling for now
+			
 		set_image_(Networking.download_image_(body, "user://wallet/img0",_Request_Node)) #works
 			
 	else: return
@@ -991,22 +1020,58 @@ func txn(): #runs presaved transactions once wallet is ready
 		
 		yield(Algorand._send_txn_to_receiver_addr(params,mnemonic,recievers_addr, _amount), "completed")
 
+		OS.alert('Transaction Done', str(Algorand.txid))
+
 		#reset transaction details
 		recievers_addr = ''
 		_amount = 0
 		
 		transaction_valid = false
 	
-	if _asset_id != 0 && asset_id_valid :
-		print (' Asset Txn Debug: ',recievers_addr, '/','asset id: ',_asset_id, '/', 'txn check', txn_check)
+	if _asset_id != 0 && asset_id_valid && _amount != 0 :
+		print (' Asset Txn Debug: ',recievers_addr, '/','asset id: ',_asset_id, '/', 'txn check', txn_check, ' /amount', _amount)
 		
 		#can be used to send both NFT's and Tokens
+		
 		yield(Algorand.transferAssets(params,mnemonic, recievers_addr,_asset_id, _amount), "completed")
+		
+		#to receive an asset, the receiving wallet would have to opt into the asset transaction
+		OS.alert('Transaction Done', str( _asset_id))
 		
 		#reset transaction details
 		recievers_addr = ''
 		_asset_id = 0
 		asset_id_valid = false
+
+"Opts into Asset ID for valid transactions"
+func optin(): #works
+#include checks to see if wallet has previously opted into asset-id
+	if optin_asset :
+		print ('optin- transaction debug:', _asset_id)
+		
+		# Construct Aset tx
+		#Algorand.construct_asset_transfer(params,address, address, 0, _asset_id)
+		
+		Algorand.opt_in_asset_transaction( params ,address, _asset_id)
+		
+		# Sends grouped transactions
+		#Algorand.create_grouped_transaction(Algorand.optin_tx, Algorand.asset_tx)
+		
+		var stx = Algorand.algod.sign_transaction(Algorand.optin_tx, mnemonic)
+
+		#Generating transaction Id from signed transaction
+		var txid = yield(Algorand.algod.send_transaction(stx), "completed") 
+	
+		print (txid)
+		
+
+		#----------------------------------------------
+
+		#reset optin asset boolean
+		optin_asset = false
+		
+		OS.alert('successfully opted into asset', str(_asset_id))
+
 
 'Processes Smart COntract transactions'
 func smart_contract(): #doesnt work
