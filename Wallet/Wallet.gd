@@ -126,6 +126,7 @@ var mnemonic : String
 var recievers_addr : String = '' #for transactions
 var _amount : int = 0#for transactions
 var _asset_id :int = 0
+var asset_amount: int = 0
 
 var encoded_mnemonic : PoolByteArray
 var encrypted_mnemonic 
