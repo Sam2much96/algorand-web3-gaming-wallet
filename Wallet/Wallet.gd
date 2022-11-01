@@ -213,6 +213,7 @@ func _ready():
 		state_controller.add_item("Transactions")
 		state_controller.add_item("SmartContacts") #should be a sub of Transactions
 		state_controller.add_item('NFT')
+		state_controller.add_item('Quit')
 	
 	
 	
@@ -269,7 +270,8 @@ func _process(_delta):
 	elif state_controller.get_selected() == 6:
 		wallet_check = 0 # resets the wallet check stopper
 		state = COLLECTIBLES
-	
+	elif state_controller.get_selected() == 7:
+		get_tree().quit()
 	
 	## PROCESS STATES (testing)
 	
