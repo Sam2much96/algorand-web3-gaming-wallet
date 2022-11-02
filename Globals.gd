@@ -146,90 +146,6 @@ func _process(_delta): #Turn process off if not in use (optimiztion) turn_off_pr
 	else: return 1;
 
 
-"""
-Really simple save file implementation. Just saving some variables to a dictionary
-"""
-func save_game(): #modify code to include current scene and player position. also enemy spawner postions and info
-	var save_game = File.new()
-	save_game.open("user://savegeme.save", File.WRITE)
-	var save_dict = {}
-	save_dict.player = player #saves the player node 
-	#save_dict.spawnpoint = spawnpoint
-	save_dict.spawn_x = spawn_x
-	save_dict.spawn_y =spawn_y
-	save_dict.current_level = current_level
-#	save_dict.inventory = Inventory.list()
-#	save_dict.quests = Quest.get_quest_list()
-	#my code
-	save_dict.os = os
-	save_dict.kill_count = kill_count
-	#save_dict.currency = Suds #should load from encrypted wallet.cfg
-	save_dict.prev_scene = prev_scene
-	save_dict.prev_scene_spawnpoint = prev_scene_spawnpoint
-	save_dict.player_hitpoints = player_hitpoints
-	save_dict.direction_control = direction_control
-	save_dict.Music_on_settings = Music_on_settings #add other variables to save
-	
-	#Comics Variables
-	#save_dict.comics_chapter
-	#save_dict.comics_page
-	
-	save_game.store_line(to_json(save_dict))
-	save_game.close()
-	print ("saved gameplay")
-
-"""
-If check_only is true it will only check for a valid save file and return true or false without
-restoring any data
-"""
-func load_game(check_only=false):
-	var save_game = File.new()
-	
-	if not save_game.file_exists("user://savegeme.save"):
-		return false
-	
-	save_game.open("user://savegeme.save", File.READ)
-	
-	var save_dict = parse_json(save_game.get_line())
-	if typeof(save_dict) != TYPE_DICTIONARY:
-		return false
-	if not check_only:
-		_restore_data(save_dict)
-	
-	save_game.close()
-	return true
-
-"""
-Restores data from the JSON dictionary inside the save files
-"""
-func _restore_data(save_dict):
-	# JSON numbers are always parsed as floats. In this case we need to turn them into ints
-	for key in save_dict.quests:
-		save_dict.quests[key] = int(save_dict.quests[key])
-#	Quest.quest_list = save_dict.quests
-	
-	# JSON numbers are always parsed as floats. In this case we need to turn them into ints
-	for key in save_dict.inventory:
-		save_dict.inventory[key] = int(save_dict.inventory[key])
-#	Inventory.inventory = save_dict.inventory
-	
-	spawn_x = save_dict.spawn_x 
-	spawn_y = save_dict.spawn_y
-	current_level = save_dict.current_level
-	
-	player = save_dict.player
-	
-	os = save_dict.os 
-	kill_count = save_dict.kill_count 
-	#Suds = save_dict.currency #should load from encrypted wallet.cfg. Check NFT parser 
-	player_hitpoints = save_dict.player_hitpoints
-	prev_scene =save_dict.prev_scene 
-	prev_scene_spawnpoint = save_dict.prev_scene_spawnpoint 
-	direction_control = save_dict.direction_control
-	
-	######################################################
-	print ("Loaded gameplay")
-
 func update_curr_scene(): 
 	curr_scene= get_tree().get_current_scene().get_name() 
 	
@@ -237,7 +153,6 @@ func _go_to_title():
 	'Quits if already at title screen'
 	if get_tree().get_current_scene().get_name() == 'Menu':
 		get_tree().quit()
-#	Music.play_track(Music.ui_sfx[1])
 	
 	'changes scene to title_screen'
 	return get_tree().change_scene_to(title_screen)
@@ -286,12 +201,12 @@ static func free_children(node: Node) -> void:
 		node.free()
 
 'Delete Files'
-#buggy
+
 func delete_local_file(path_to_file: String) -> void:
 	var dir = Directory.new()
 	if dir.file_exists(path_to_file):
 		dir.remove(path_to_file)
-		dir.queue_free()
+		#dir.queue_free()
 	else:
 		push_error('File To Delete Doesnt Exist')
 		return
