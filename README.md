@@ -1,6 +1,7 @@
 # algorand-web3-gaming-wallet
 
- https://youtu.be/0LVXwbE1EsQ
+**Demo Video**
+
 [![**Demo Video**](https://img.youtube.com/vi/0LVXwbE1EsQ/hqdefault.jpg)](https://youtu.be/0LVXwbE1EsQ)
 
 An implemented Open source Web 3.0 Gaming Wallet for Algorand in Godot Game Engine 
