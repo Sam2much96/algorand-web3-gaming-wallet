@@ -4,7 +4,7 @@
 A Web 3.0 Gaming Wallet for Algorand in Godot Game Engine 
 
 # Features
-**(1) Works on Testnet**
+**(1) Works on Testnet & Sandbox environment**
 
 **(2) It can Transfer MicroAlgos, Tokens, NFT's** 
 
