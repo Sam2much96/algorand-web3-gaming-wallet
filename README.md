@@ -1,7 +1,7 @@
 # algorand-web3-gaming-wallet
 
 
-A Web 3.0 Gaming Wallet for Algorand in Godot Game Engine 
+An implemented Open source Web 3.0 Gaming Wallet for Algorand in Godot Game Engine 
 
 # Features
 **(1) Works on Testnet & Sandbox environment**
