@@ -18,5 +18,8 @@ An implemented Open source Web 3.0 Gaming Wallet for Algorand in Godot Game Engi
 
 
 
-It implements Algodot SDK and uses openssl 1.1 compiled for Mobile and PC as dependencies
+It implements Algodot SDK and uses openssl 1.1 compiled for Mobile and PC as dependencies.
+It comes bundled with Algodot Plugin and Can be downloaded at the website below
+
+https://inhumanity-arts.itch.io/algodot
 
