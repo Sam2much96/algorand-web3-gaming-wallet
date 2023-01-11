@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Wallet/NFT.gd" type="Script" id=1]
 [ext_resource path="res://addons/algodot/Algod.gd" type="Script" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://Wallet Scenes/AccountsDashboard1.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Wallet Scenes/Merchant ID Validation.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Wallet Scenes/Merchant Pin.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Wallet Scenes/FundingSuccess.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Wallet Scenes/ChoosePaymentOption.tscn" type="PackedScene" id=11]
 
 [sub_resource type="Animation" id=1]
 resource_name = "MOBILE UI"
@@ -272,7 +274,19 @@ grow_horizontal = 0
 grow_vertical = 0
 rect_scale = Vector2( 1.77854, 1.77854 )
 
+[node name="state_controller" type="OptionButton" parent="CanvasLayer"]
+margin_left = 265.0
+margin_top = 484.0
+margin_right = 393.0
+margin_bottom = 504.0
+rect_scale = Vector2( 2.42, 2.42 )
+focus_mode = 0
+input_pass_on_modal_close_click = false
+enabled_focus_mode = 0
+text = "State Controller"
+
 [node name="Mnemonic_UI" parent="CanvasLayer" instance=ExtResource( 8 )]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -285,14 +299,24 @@ rect_scale = Vector2( 1.78005, 1.78005 )
 
 [node name="Password_UI" parent="CanvasLayer" instance=ExtResource( 9 )]
 visible = false
+margin_left = -482.0
+margin_top = 17.0
+margin_right = -514.0
+margin_bottom = -400.0
+rect_scale = Vector2( 1.56, 1.56 )
 
-[node name="state_controller" type="OptionButton" parent="CanvasLayer"]
-margin_left = 265.0
-margin_top = 484.0
-margin_right = 393.0
-margin_bottom = 504.0
-rect_scale = Vector2( 2.42, 2.42 )
-text = "State Controller"
+[node name="FundingSuccess" parent="CanvasLayer" instance=ExtResource( 10 )]
+visible = false
+
+[node name="Transaction_UI" parent="CanvasLayer" instance=ExtResource( 11 )]
+margin_left = -456.0
+margin_top = 37.0
+margin_right = -534.0
+margin_bottom = -376.0
+rect_scale = Vector2( 1.56, 1.56 )
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+visible = false
 
 [connection signal="gui_input" from="Control/KinematicBody2D/TextureRect" to="Control" method="_on_TextureRect_gui_input"]
 [connection signal="text_entered" from="mnemonic_ui" to="." method="_on_mnemonic_ui_text_entered"]

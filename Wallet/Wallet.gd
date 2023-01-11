@@ -61,6 +61,7 @@
 #(1) Image Downloder (works)
 # (2) Create NFT (work with python script)
 # (3) Parse NFT (works)
+# (4) New UI
 # *************************************************
 
 
@@ -92,17 +93,30 @@ onready var refresh_button= $wallet_ui/HBoxContainer/refresh
 
 onready var wallet_ui = $wallet_ui
 onready var mnemonic_ui = $CanvasLayer/Mnemonic_UI 
-onready var transaction_ui = $transaction_ui
+onready var transaction_ui = $CanvasLayer/Transaction_UI
+onready var funding_success_ui = $CanvasLayer/FundingSuccess
+
 onready var txn_ui_options = $transaction_ui/txn_ui_options
 
 onready var address_ui_options = $mnemonic_ui/address_ui_options
 
+#updating for the new ui
+
 onready var nft_asset_id = $transaction_ui/nft
+
+
 onready var txn_amount = $transaction_ui/transaction_amount
-onready var txn_addr = $transaction_ui/transaction_address
+
+onready var txn_addr = $CanvasLayer/Transaction_UI/LineEdit
+
 onready var txn_ui_options_button = $transaction_ui/txn_ui_options
 onready var txn_assets_valid_button = $transaction_ui/enter_asset
-onready var txn_txn_valid_button = $transaction_ui/enter_transaction
+
+#Txn valid should use Passward UI
+onready var passward_UI = $CanvasLayer/Password_UI
+
+onready var txn_txn_valid_button = $CanvasLayer/Transaction_UI/Button
+
 onready var transaction_hint= $transaction_ui/Label
 
 
@@ -436,9 +450,11 @@ func _process(_delta):
 		TRANSACTIONS: #works
 			#hide other ui states
 			#use animation player to alter UI
+			hideUI()
 			transaction_ui.show()
-			mnemonic_ui.hide()
-			wallet_ui.hide()
+			
+			#mnemonic_ui.hide()
+			#wallet_ui.hide()
 			
 			txn_ui_options_button.show()
 			transaction_hint.show()
@@ -988,6 +1004,9 @@ func txn(): #runs presaved transactions once wallet is ready
 		_amount = 0
 		
 		transaction_valid = false
+		
+		hideUI()
+		funding_success_ui.show()
 	
 	if _asset_id != 0 && asset_id_valid :
 		print (' Asset Txn Debug: ',recievers_addr, '/','asset id: ',_asset_id, '/', 'txn check', txn_check)
@@ -999,6 +1018,10 @@ func txn(): #runs presaved transactions once wallet is ready
 		recievers_addr = ''
 		_asset_id = 0
 		asset_id_valid = false
+
+		hideUI()
+		funding_success_ui.show()
+	
 
 'Processes Smart Contract NoOp transactions'
 func smart_contract(): 

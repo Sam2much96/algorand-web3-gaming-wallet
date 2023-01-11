@@ -121,9 +121,9 @@ enum { SCREEN_HORIZONTAL, SCREEN_VERTICAL}
 var screenOrientation 
 
 "In Game FX"
-var blood_fx: PackedScene = load ('res://scenes/UI & misc/Blood_Splatter_FX.tscn') #only load this once gameplay is on (optimization)
-var despawn_fx: PackedScene = load ("res://scenes/UI & misc/DespawnFX.tscn")
-var bullet_fx : PackedScene
+#var blood_fx: PackedScene = load ('res://scenes/UI & misc/Blood_Splatter_FX.tscn') #only load this once gameplay is on (optimization)
+#var despawn_fx: PackedScene = load ("res://scenes/UI & misc/DespawnFX.tscn")
+#var bullet_fx : PackedScene
 
 'Temporary variants'
 var temp
@@ -133,7 +133,7 @@ var NFT: TextureRect #should ideally be an array for multiple NFT's
 var wallet_state  #wallet state global variabe
 
 func _ready():
-	print('Blood fx:',blood_fx) #optimize blood fx to only load during game runtimes
+#	print('Blood fx:',blood_fx) #optimize blood fx to only load during game runtimes
 	
 	# Resizes window the preselected sizes
 	
