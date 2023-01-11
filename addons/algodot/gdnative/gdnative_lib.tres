@@ -1,0 +1,15 @@
+[gd_resource type="GDNativeLibrary" format=2]
+
+[resource]
+entry/Android.armeabi-v7a = "res://addons/algodot/lib/android armv7/libalgodot.so"
+entry/Android.arm64-v8a = "res://addons/algodot/lib/android arm64-v8a/libalgodot.so"
+entry/Windows.64 = "res://addons/algodot/lib/algodot.dll"
+entry/Windows.32 = "res://addons/algodot/lib/algodot.dll"
+entry/X11.64 = "res://addons/algodot/lib/libalgodot.so"
+entry/X11.32 = "res://addons/algodot/lib/libalgodot.so"
+dependency/Android.armeabi-v7a = [ "res://addons/algodot/lib/android armv7/libcrypto.so.1.1", "res://addons/algodot/lib/android armv7/libssl.so.1.1" ]
+dependency/Android.arm64-v8a = [ "res://addons/algodot/lib/android arm64-v8a/libcrypto.so", "res://addons/algodot/lib/android arm64-v8a/libssl.so" ]
+dependency/Windows.64 = [ "res://addons/algodot/lib/windows_dependencies/libcrypto-1_1-x64.dll", "res://addons/algodot/lib/windows_dependencies/libssl-1_1-x64.dll" ]
+dependency/Windows.32 = [ "res://addons/algodot/lib/windows_dependencies/libcrypto-1_1.dll", "res://addons/algodot/lib/windows_dependencies/libssl-1_1.dll" ]
+dependency/X11.64 = [ "res://addons/algodot/lib/linux_dependencies/libcrypto.so.1.1", "res://addons/algodot/lib/linux_dependencies/libssl.so.1.1" ]
+dependency/X11.32 = [ "res://addons/algodot/lib/linux_dependencies/libcrypto.so.1.1", "res://addons/algodot/lib/linux_dependencies/libssl.so.1.1" ]

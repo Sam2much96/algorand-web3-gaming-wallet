@@ -1,0 +1,75 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://themes/Bold.tres" type="Theme" id=1]
+[ext_resource path="res://themes/Light.tres" type="Theme" id=2]
+[ext_resource path="res://themes/Buttons_white.tres" type="Theme" id=3]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = 315.0
+margin_right = 675.0
+margin_bottom = 603.0
+color = Color( 0.168627, 0.254902, 0.956863, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="."]
+margin_left = 405.0
+margin_top = 475.0
+margin_right = 596.0
+margin_bottom = 516.0
+theme = ExtResource( 3 )
+text = "Home"
+
+[node name="Label" type="Label" parent="."]
+margin_left = 343.0
+margin_top = 283.0
+margin_right = 648.0
+margin_bottom = 319.0
+theme = ExtResource( 1 )
+text = "Success"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="."]
+margin_left = 357.0
+margin_top = 354.0
+margin_right = 637.0
+margin_bottom = 413.0
+theme = ExtResource( 2 )
+text = "You can now send
+and pay your bills"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="YSort" type="YSort" parent="."]
+
+[node name="Line2D2" type="Line2D" parent="YSort"]
+position = Vector2( 13, -4 )
+points = PoolVector2Array( 449, 125, 464, 147, 478, 135, 513, 111 )
+width = 15.0
+default_color = Color( 1, 1, 1, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 0.0
+round_precision = 9
+antialiased = true
+
+[node name="Line2D" type="Line2D" parent="YSort"]
+position = Vector2( -109, 17 )
+scale = Vector2( 1.22858, 0.999866 )
+points = PoolVector2Array( 541.715, 48.6286, 519.563, 29.2, 491.082, 24.3429, 458.646, 29.2, 434.911, 51.5429, 422.253, 82.6286, 419.88, 112.743, 425.418, 137.029, 437, 162, 461.019, 179.771, 490.291, 187.543, 521.937, 178.8, 542.506, 160.343, 555.956, 138.971, 559.12, 108.857, 555.165, 75.8286, 541.715, 49.6 )
+width = 6.0
+default_color = Color( 1, 1, 1, 1 )
+joint_mode = 1
+begin_cap_mode = 2
+end_cap_mode = 2

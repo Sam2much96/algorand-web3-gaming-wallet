@@ -1,0 +1,134 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://themes/Panel+blue+2.tres" type="StyleBox" id=1]
+[ext_resource path="res://themes/Buttons.tres" type="Theme" id=2]
+[ext_resource path="res://themes/Bold.tres" type="Theme" id=3]
+[ext_resource path="res://themes/Light.tres" type="Theme" id=4]
+[ext_resource path="res://themes/Textbar.tres" type="Theme" id=5]
+
+[sub_resource type="Theme" id=1]
+Panel/styles/panel = ExtResource( 1 )
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = 273.0
+margin_top = -2.0
+margin_right = 686.0
+margin_bottom = 600.0
+
+[node name="Panel" type="Panel" parent="."]
+margin_left = 305.0
+margin_top = 151.0
+margin_right = 658.0
+margin_bottom = 364.0
+theme = SubResource( 1 )
+
+[node name="Button" type="Button" parent="."]
+margin_left = 364.0
+margin_top = 408.0
+margin_right = 578.0
+margin_bottom = 452.0
+theme = ExtResource( 2 )
+text = "Pay with Paystack"
+
+[node name="Button2" type="Button" parent="."]
+margin_left = 363.0
+margin_top = 481.0
+margin_right = 577.0
+margin_bottom = 525.0
+theme = ExtResource( 2 )
+text = "Bank Transfer"
+
+[node name="Label" type="Label" parent="."]
+modulate = Color( 0.12549, 0.117647, 0.886275, 1 )
+margin_left = 306.0
+margin_top = 67.0
+margin_right = 649.0
+margin_bottom = 103.0
+theme = ExtResource( 3 )
+text = "Choose Payment Options"
+
+[node name="Label2" type="Label" parent="."]
+modulate = Color( 0.12549, 0.117647, 0.886275, 1 )
+margin_left = 304.0
+margin_top = 109.0
+margin_right = 647.0
+margin_bottom = 145.0
+theme = ExtResource( 4 )
+text = "Pay with Algo"
+
+[node name="LineEdit" type="LineEdit" parent="."]
+margin_left = 330.0
+margin_top = 173.0
+margin_right = 617.0
+margin_bottom = 209.0
+theme = ExtResource( 5 )
+text = "123 6890 0000"
+
+[node name="LineEdit2" type="LineEdit" parent="."]
+margin_left = 328.0
+margin_top = 254.0
+margin_right = 377.0
+margin_bottom = 290.0
+theme = ExtResource( 5 )
+text = "123 "
+secret = true
+
+[node name="LineEdit3" type="LineEdit" parent="."]
+margin_left = 388.0
+margin_top = 255.0
+margin_right = 437.0
+margin_bottom = 291.0
+theme = ExtResource( 5 )
+text = "MM/YY"
+
+[node name="LineEdit4" type="LineEdit" parent="."]
+margin_left = 453.0
+margin_top = 255.0
+margin_right = 511.0
+margin_bottom = 291.0
+theme = ExtResource( 5 )
+text = "MM/YY"
+secret = true
+
+[node name="Label3" type="Label" parent="."]
+margin_left = 336.0
+margin_top = 155.0
+margin_right = 471.0
+margin_bottom = 183.0
+rect_scale = Vector2( 0.6, 0.6 )
+theme = ExtResource( 4 )
+text = "Card Number"
+
+[node name="Label4" type="Label" parent="."]
+margin_left = 328.0
+margin_top = 234.0
+margin_right = 463.0
+margin_bottom = 262.0
+rect_scale = Vector2( 0.6, 0.6 )
+theme = ExtResource( 4 )
+text = "CVV"
+
+[node name="Label5" type="Label" parent="."]
+margin_left = 391.0
+margin_top = 235.0
+margin_right = 526.0
+margin_bottom = 263.0
+rect_scale = Vector2( 0.6, 0.6 )
+theme = ExtResource( 4 )
+text = "Expiry"
+
+[node name="Label6" type="Label" parent="."]
+margin_left = 461.0
+margin_top = 236.0
+margin_right = 596.0
+margin_bottom = 264.0
+rect_scale = Vector2( 0.6, 0.6 )
+theme = ExtResource( 4 )
+text = "Pin"

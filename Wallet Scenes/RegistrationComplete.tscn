@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://themes/Bold.tres" type="Theme" id=1]
+[ext_resource path="res://themes/Light.tres" type="Theme" id=2]
+[ext_resource path="res://themes/Buttons_white.tres" type="Theme" id=3]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = 315.0
+margin_right = 675.0
+margin_bottom = 603.0
+color = Color( 0.168627, 0.254902, 0.956863, 1 )
+
+[node name="Button" type="Button" parent="."]
+margin_left = 420.0
+margin_top = 488.0
+margin_right = 590.0
+margin_bottom = 534.0
+theme = ExtResource( 3 )
+text = "Go Back"
+
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2( 0, 2 )
+points = PoolVector2Array( 441, 98, 415, 103, 404, 114, 399, 136, 404, 151, 415, 157, 443, 159, 579, 158, 589, 156, 597, 145, 597, 127, 587, 117, 576, 113, 547, 111, 546, 90, 537, 76, 520, 62, 497, 57, 471, 66, 459, 76, 455, 88, 453, 99, 430, 100 )
+width = 17.0
+default_color = Color( 1, 1, 1, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 0.0
+round_precision = 9
+antialiased = true
+
+[node name="Line2D2" type="Line2D" parent="."]
+position = Vector2( 11, -8 )
+points = PoolVector2Array( 449, 125, 464, 147, 478, 135, 513, 111 )
+width = 15.0
+default_color = Color( 1, 1, 1, 1 )
+joint_mode = 2
+sharp_limit = 0.0
+round_precision = 9
+antialiased = true
+
+[node name="Label" type="Label" parent="."]
+margin_left = 343.0
+margin_top = 283.0
+margin_right = 648.0
+margin_bottom = 319.0
+theme = ExtResource( 1 )
+text = "Registration Complete"
+
+[node name="Label2" type="Label" parent="."]
+margin_left = 357.0
+margin_top = 354.0
+margin_right = 637.0
+margin_bottom = 413.0
+theme = ExtResource( 2 )
+text = "You will receive a text from 
+us shortly"
+align = 1

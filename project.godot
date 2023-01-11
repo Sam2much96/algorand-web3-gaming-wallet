@@ -1,0 +1,88 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Node",
+"class": "Algod",
+"language": "NativeScript",
+"path": "res://addons/algodot/gdnative/algod.gdns"
+}, {
+"base": "Node",
+"class": "Algodot",
+"language": "GDScript",
+"path": "res://addons/algodot/Algod.gd"
+}, {
+"base": "Node",
+"class": "AsyncExecutorDriver",
+"language": "NativeScript",
+"path": "res://addons/algodot/gdnative/async_executor.gdns"
+}, {
+"base": "Control",
+"class": "Comics",
+"language": "GDScript",
+"path": "res://Comics/Comics.v5.gd"
+}, {
+"base": "TextureRect",
+"class": "NFT",
+"language": "GDScript",
+"path": "res://Wallet/NFT.gd"
+}, {
+"base": "HTTPRequest",
+"class": "Networking",
+"language": "GDScript",
+"path": "res://Wallet/Networking.gd"
+}, {
+"base": "EditorScript",
+"class": "ReferenceCollector",
+"language": "GDScript",
+"path": "res://addons/algodot/Documentation/Scripts/DocsReferenceCollector.gd"
+} ]
+_global_script_class_icons={
+"Algod": "",
+"Algodot": "res://addons/algodot/icon.png",
+"AsyncExecutorDriver": "",
+"Comics": "",
+"NFT": "",
+"Networking": "",
+"ReferenceCollector": ""
+}
+
+[application]
+
+config/name="Algowallet_GameFi"
+config/description="A Demo Test Project for GHH03, showcasing the capabilities of Algodot Plugin."
+run/main_scene="res://Wallet/Wallet main.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+DocsHelper="*res://addons/algodot/Documentation/Scripts/DocsHelper.gd"
+AsyncExecutorDriver="*res://addons/algodot/gdnative/async_executor.gdns"
+Globals="*res://Globals.gd"
+
+[display]
+
+window/size/width=600
+window/size/height=1024
+window/handheld/orientation="portrait"
+window/stretch/mode="2d"
+window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/algodot/plugin.cfg" )
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
