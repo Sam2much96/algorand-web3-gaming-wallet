@@ -86,7 +86,7 @@ onready var _input_device
 onready var _e = Timer.new()
 onready var _comics_root = self
 
-onready var _debug_= get_tree().get_root().get_node("/root/Debug")
+#onready var _debug_= get_tree().get_root().get_node("/root/Debug")
 
 "Bug FIx from <200 absolute Distances"
 
@@ -334,12 +334,13 @@ func _process(_delta):
 
 	"""Updates the Comic Debug to a global debug singleton"""
 	if enabled:
-		if _debug_ != null && _debug_.enabled == true:
+		pass
+		#if _debug_ != null && _debug_.enabled == true:
 			#var Debug  = Engine.get_singleton('Debug')
-			_debug_.Comics_debug = str(
-				'Curr frme:', current_frame , 'Cmx: ',current_comics, 'Enbled',enabled,'can drag: ',#can_drag,
-				 ' Zoom: ',zoom, 'LC: ',loaded_comics
-				)
+		#	_debug_.Comics_debug = str(
+		#		'Curr frme:', current_frame , 'Cmx: ',current_comics, 'Enbled',enabled,'can drag: ',#can_drag,
+		#		 ' Zoom: ',zoom, 'LC: ',loaded_comics
+		#		)
 """
 DRAG FUNCTION
 """

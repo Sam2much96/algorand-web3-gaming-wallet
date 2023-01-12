@@ -1,9 +1,8 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Wallet/NFT.gd" type="Script" id=1]
 [ext_resource path="res://addons/algodot/Algod.gd" type="Script" id=2]
 [ext_resource path="res://Wallet/Wallet.gd" type="Script" id=3]
-[ext_resource path="res://fonts/wallet.tres" type="Theme" id=4]
 [ext_resource path="res://icon.png" type="Texture" id=5]
 [ext_resource path="res://Wallet/Drag_extension.gd" type="Script" id=6]
 [ext_resource path="res://Wallet Scenes/AccountsDashboard1.tscn" type="PackedScene" id=7]
@@ -68,38 +67,6 @@ script = ExtResource( 1 )
 position = Vector2( 10.2808, 7.63516 )
 polygon = PoolVector2Array( -8.90822, -7.09424, -8.79504, 30.0023, 23.0644, 30.2209, 22.5198, -7.1642 )
 
-[node name="mnemonic_ui" type="LineEdit" parent="."]
-visible = false
-margin_left = 9.15687
-margin_top = 0.561343
-margin_right = 531.156
-margin_bottom = 24.5614
-rect_scale = Vector2( 0.1, 0.1 )
-text = "     123456"
-clear_button_enabled = true
-
-[node name="enter_mnemonic" type="Button" parent="mnemonic_ui"]
-margin_left = 8.60156
-margin_top = 125.034
-margin_right = 53.6016
-margin_bottom = 145.034
-text = "Enter"
-
-[node name="address_ui_options" type="LineEdit" parent="mnemonic_ui"]
-visible = false
-margin_left = 2.0
-margin_top = 35.0
-margin_right = 210.0
-margin_bottom = 59.0
-text = "wallet address"
-
-[node name="Label" type="Label" parent="mnemonic_ui"]
-margin_left = -81.6111
-margin_top = 7.90176
-margin_right = -5.61105
-margin_bottom = 21.9018
-text = "Mnemonic: "
-
 [node name="transaction_ui" type="Control" parent="."]
 visible = false
 margin_left = 9.15687
@@ -107,44 +74,7 @@ margin_top = 0.561343
 margin_right = 531.156
 margin_bottom = 24.5614
 rect_scale = Vector2( 0.1, 0.1 )
-
-[node name="transaction_address" type="LineEdit" parent="transaction_ui"]
-margin_left = -17.3041
-margin_top = 3.10949
-margin_right = 532.696
-margin_bottom = 29.1095
-text = "To Address"
-clear_button_enabled = true
-
-[node name="transaction_amount" type="LineEdit" parent="transaction_ui"]
-margin_left = -3.56536
-margin_top = 43.5547
-margin_right = 146.435
-margin_bottom = 69.5547
-text = "Amount to send"
-clear_button_enabled = true
-
-[node name="nft" type="LineEdit" parent="transaction_ui"]
-margin_left = -7.0
-margin_top = 84.0
-margin_right = 143.0
-margin_bottom = 108.0
-text = "Asset-ID"
-clear_button_enabled = true
-
-[node name="enter_transaction" type="Button" parent="transaction_ui"]
-margin_left = 202.454
-margin_top = 52.8271
-margin_right = 247.454
-margin_bottom = 72.8271
-text = "Enter"
-
-[node name="enter_asset" type="Button" parent="transaction_ui"]
-margin_left = 202.454
-margin_top = 91.4339
-margin_right = 247.454
-margin_bottom = 111.434
-text = "Enter"
+mouse_filter = 2
 
 [node name="txn_ui_options" type="OptionButton" parent="transaction_ui"]
 margin_left = -10.0
@@ -152,99 +82,6 @@ margin_top = 131.0
 margin_right = 154.0
 margin_bottom = 151.0
 text = "Transaction"
-
-[node name="Label" type="Label" parent="transaction_ui"]
-margin_left = 269.662
-margin_top = 62.031
-margin_right = 511.662
-margin_bottom = 76.031
-text = "You Can Only send 1 NFT, But you can 
-send multiple Tokens"
-
-[node name="wallet_ui" type="VBoxContainer" parent="."]
-margin_left = 5.1404
-margin_top = 0.670656
-margin_right = 340.14
-margin_bottom = 601.671
-rect_scale = Vector2( 0.02, 0.02 )
-
-[node name="address" type="Label" parent="wallet_ui"]
-margin_right = 531.0
-margin_bottom = 193.0
-theme = ExtResource( 4 )
-text = "Address: 
-"
-
-[node name="ingame_algos" type="Label" parent="wallet_ui"]
-margin_top = 197.0
-margin_right = 531.0
-margin_bottom = 292.0
-theme = ExtResource( 4 )
-text = "Ingame Algos:"
-
-[node name="wallet_algos" type="Label" parent="wallet_ui"]
-margin_top = 296.0
-margin_right = 531.0
-margin_bottom = 391.0
-theme = ExtResource( 4 )
-text = "wallet algos: "
-
-[node name="HBoxContainer" type="GridContainer" parent="wallet_ui"]
-margin_top = 395.0
-margin_right = 531.0
-margin_bottom = 811.0
-
-[node name="withdraw" type="Button" parent="wallet_ui/HBoxContainer"]
-visible = false
-margin_right = 522.0
-margin_bottom = 101.0
-theme = ExtResource( 4 )
-text = "withdraw"
-
-[node name="refresh" type="Button" parent="wallet_ui/HBoxContainer"]
-margin_right = 531.0
-margin_bottom = 101.0
-theme = ExtResource( 4 )
-text = "Refresh"
-
-[node name="show_mnemonic" type="Button" parent="wallet_ui/HBoxContainer"]
-margin_top = 105.0
-margin_right = 531.0
-margin_bottom = 206.0
-theme = ExtResource( 4 )
-text = "show mnemonic"
-
-[node name="Copy address" type="Button" parent="wallet_ui/HBoxContainer"]
-margin_top = 210.0
-margin_right = 531.0
-margin_bottom = 311.0
-theme = ExtResource( 4 )
-text = "Copy Address"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="wallet_ui/HBoxContainer"]
-margin_top = 315.0
-margin_right = 531.0
-margin_bottom = 416.0
-
-[node name="testnet-dispenser" type="Button" parent="wallet_ui/HBoxContainer/HBoxContainer"]
-margin_right = 216.0
-margin_bottom = 101.0
-theme = ExtResource( 4 )
-text = "withdraw"
-
-[node name="Label" type="Label" parent="wallet_ui/HBoxContainer/HBoxContainer"]
-margin_left = 220.0
-margin_top = 43.0
-margin_right = 292.0
-margin_bottom = 57.0
-text = "                  "
-
-[node name="Main menu" type="Button" parent="wallet_ui/HBoxContainer/HBoxContainer"]
-margin_left = 296.0
-margin_right = 531.0
-margin_bottom = 101.0
-theme = ExtResource( 4 )
-text = "main menu"
 
 [node name="Algodot" type="Node" parent="."]
 script = ExtResource( 2 )
@@ -261,7 +98,6 @@ one_shot = true
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Dashboard_UI" parent="CanvasLayer" instance=ExtResource( 7 )]
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -273,17 +109,7 @@ margin_bottom = 82.0
 grow_horizontal = 0
 grow_vertical = 0
 rect_scale = Vector2( 1.77854, 1.77854 )
-
-[node name="state_controller" type="OptionButton" parent="CanvasLayer"]
-margin_left = 265.0
-margin_top = 484.0
-margin_right = 393.0
-margin_bottom = 504.0
-rect_scale = Vector2( 2.42, 2.42 )
-focus_mode = 0
-input_pass_on_modal_close_click = false
-enabled_focus_mode = 0
-text = "State Controller"
+mouse_filter = 1
 
 [node name="Mnemonic_UI" parent="CanvasLayer" instance=ExtResource( 8 )]
 visible = false
@@ -296,6 +122,7 @@ margin_top = -526.0
 margin_right = -317.0
 margin_bottom = 60.0
 rect_scale = Vector2( 1.78005, 1.78005 )
+mouse_filter = 1
 
 [node name="Password_UI" parent="CanvasLayer" instance=ExtResource( 9 )]
 visible = false
@@ -304,28 +131,32 @@ margin_top = 17.0
 margin_right = -514.0
 margin_bottom = -400.0
 rect_scale = Vector2( 1.56, 1.56 )
+mouse_filter = 1
 
 [node name="FundingSuccess" parent="CanvasLayer" instance=ExtResource( 10 )]
 visible = false
+mouse_filter = 1
 
 [node name="Transaction_UI" parent="CanvasLayer" instance=ExtResource( 11 )]
+visible = false
 margin_left = -456.0
 margin_top = 37.0
 margin_right = -534.0
 margin_bottom = -376.0
 rect_scale = Vector2( 1.56, 1.56 )
+mouse_filter = 1
 
-[node name="CanvasLayer2" type="CanvasLayer" parent="."]
-visible = false
+[node name="state_controller" type="OptionButton" parent="CanvasLayer"]
+margin_left = 265.0
+margin_top = 484.0
+margin_right = 393.0
+margin_bottom = 504.0
+rect_scale = Vector2( 2.42, 2.42 )
+focus_mode = 0
+mouse_filter = 1
+enabled_focus_mode = 0
+text = "State Controller"
 
 [connection signal="gui_input" from="Control/KinematicBody2D/TextureRect" to="Control" method="_on_TextureRect_gui_input"]
-[connection signal="text_entered" from="mnemonic_ui" to="." method="_on_mnemonic_ui_text_entered"]
-[connection signal="pressed" from="mnemonic_ui/enter_mnemonic" to="." method="_on_enter_mnemonic_pressed"]
-[connection signal="pressed" from="transaction_ui/enter_transaction" to="." method="_on_enter_transaction_pressed"]
-[connection signal="pressed" from="transaction_ui/enter_asset" to="." method="_on_enter_asset_pressed"]
-[connection signal="pressed" from="wallet_ui/HBoxContainer/withdraw" to="." method="_on_withdraw_pressed"]
-[connection signal="pressed" from="wallet_ui/HBoxContainer/refresh" to="." method="_on_refresh_pressed"]
-[connection signal="pressed" from="wallet_ui/HBoxContainer/Copy address" to="." method="_on_Copy_address_pressed"]
-[connection signal="pressed" from="wallet_ui/HBoxContainer/HBoxContainer/testnet-dispenser" to="." method="_on_testnetdispenser_pressed"]
-[connection signal="pressed" from="wallet_ui/HBoxContainer/HBoxContainer/Main menu" to="." method="_on_Main_menu_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="toggled" from="CanvasLayer/state_controller" to="." method="_on_state_controller_toggled"]

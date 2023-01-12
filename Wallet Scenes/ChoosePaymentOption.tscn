@@ -63,40 +63,6 @@ margin_bottom = 145.0
 theme = ExtResource( 4 )
 text = "Pay with Algo"
 
-[node name="LineEdit" type="LineEdit" parent="."]
-margin_left = 330.0
-margin_top = 173.0
-margin_right = 617.0
-margin_bottom = 209.0
-theme = ExtResource( 5 )
-text = "123 6890 0000"
-
-[node name="LineEdit2" type="LineEdit" parent="."]
-margin_left = 328.0
-margin_top = 254.0
-margin_right = 377.0
-margin_bottom = 290.0
-theme = ExtResource( 5 )
-text = "123 "
-secret = true
-
-[node name="LineEdit3" type="LineEdit" parent="."]
-margin_left = 388.0
-margin_top = 255.0
-margin_right = 437.0
-margin_bottom = 291.0
-theme = ExtResource( 5 )
-text = "MM/YY"
-
-[node name="LineEdit4" type="LineEdit" parent="."]
-margin_left = 453.0
-margin_top = 255.0
-margin_right = 511.0
-margin_bottom = 291.0
-theme = ExtResource( 5 )
-text = "MM/YY"
-secret = true
-
 [node name="Label3" type="Label" parent="."]
 margin_left = 336.0
 margin_top = 155.0
@@ -132,3 +98,38 @@ margin_bottom = 264.0
 rect_scale = Vector2( 0.6, 0.6 )
 theme = ExtResource( 4 )
 text = "Pin"
+
+[node name="LineEdit" type="LineEdit" parent="."]
+margin_left = 330.0
+margin_top = 173.0
+margin_right = 617.0
+margin_bottom = 209.0
+mouse_filter = 1
+theme = ExtResource( 5 )
+text = "123 6890 0000"
+
+[node name="LineEdit2" type="LineEdit" parent="."]
+margin_left = 328.0
+margin_top = 254.0
+margin_right = 377.0
+margin_bottom = 290.0
+theme = ExtResource( 5 )
+text = "123 "
+secret = true
+
+[node name="LineEdit3" type="LineEdit" parent="."]
+margin_left = 388.0
+margin_top = 255.0
+margin_right = 437.0
+margin_bottom = 291.0
+theme = ExtResource( 5 )
+text = "MM/YY"
+
+[node name="LineEdit4" type="LineEdit" parent="."]
+margin_left = 453.0
+margin_top = 255.0
+margin_right = 511.0
+margin_bottom = 291.0
+theme = ExtResource( 5 )
+text = "MM/YY"
+secret = true

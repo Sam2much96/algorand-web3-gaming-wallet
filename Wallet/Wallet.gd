@@ -81,13 +81,19 @@ onready var Algorand = $Algodot
 
 #**********UI************#
 onready var dashboard_UI = $CanvasLayer/Dashboard_UI
-onready var dashboard_UI_amount_label = $CanvasLayer/Dashboard_UI/YSort/Label
+#onready var dashboard_UI_amount_label = $CanvasLayer/Dashboard_UI/YSort/Label
 
 
 
-onready var account_address = $wallet_ui/address
-onready var ingame_algos = $wallet_ui/ingame_algos
-onready var wallet_algos = $wallet_ui/wallet_algos
+onready var account_address = $CanvasLayer/Dashboard_UI/YSort/Label2
+
+#temporary placeholder
+onready var ingame_algos = $CanvasLayer/Dashboard_UI/YSort2/HBoxContainer/VBoxContainer2/Label2
+
+#temporary placeholder
+onready var wallet_algos = $CanvasLayer/Dashboard_UI/YSort/Label
+
+
 onready var withdraw_button = $wallet_ui/HBoxContainer/withdraw
 onready var refresh_button= $wallet_ui/HBoxContainer/refresh
 
@@ -117,7 +123,7 @@ onready var passward_UI = $CanvasLayer/Password_UI
 
 onready var txn_txn_valid_button = $CanvasLayer/Transaction_UI/Button
 
-onready var transaction_hint= $transaction_ui/Label
+#onready var transaction_hint= $transaction_ui/Label #depreciated
 
 
 onready var NFT =  get_tree().get_nodes_in_group('NFT')#$Control/TextureRect
@@ -259,7 +265,7 @@ func _ready():
 	#generate_address('purity inner pilot suggest cave funny hip joke bean radar cheese moon sad depth book laundry pave lift robust length task fringe they abandon kitten')
 
 		#*******UI***********#
-	setUp_UI()
+#	setUp_UI()
 
 
 func _process(_delta):
@@ -452,12 +458,12 @@ func _process(_delta):
 			#use animation player to alter UI
 			hideUI()
 			transaction_ui.show()
-			
+			transaction_ui.focus_mode = 2
 			#mnemonic_ui.hide()
 			#wallet_ui.hide()
 			
 			txn_ui_options_button.show()
-			transaction_hint.show()
+			#transaction_hint.show()
 			
 			" Swtiches Between Assets and Normal Transactions UI"
 			if txn_ui_options.get_selected() == 0:
@@ -598,7 +604,7 @@ func _process(_delta):
 			mnemonic_ui.hide()
 			wallet_ui.hide()
 			
-			transaction_hint.hide()
+			#transaction_hint.hide()
 			txn_amount.hide()
 			txn_assets_valid_button.hide()
 			nft_asset_id.hide()
@@ -679,6 +685,8 @@ func run_wallet_checks()-> bool: # works #run networking internet checks test be
 	call_deferred('smart_contract')
 	return 0;
 
+
+
 #loads from saved account info 
 func show_account_info(load_from_local_wallet: bool): 
 	"load from local wallet"
@@ -686,8 +694,8 @@ func show_account_info(load_from_local_wallet: bool):
 		#account_address.text = str(Globals.address)
 		#looping bug : fix is bolean
 		account_address.text = str(address)
-		ingame_algos.text += str (Globals.algos)
-		wallet_algos.text += str(_wallet_algos)
+		ingame_algos.text = str (Globals.algos)
+		wallet_algos.text = "Algo: "+ str(_wallet_algos)
 		loaded_wallet = true
 		return 
 	
@@ -699,6 +707,8 @@ func show_account_info(load_from_local_wallet: bool):
 		account_address.text   = account_info['address']
 		ingame_algos.text = str(Globals.algos)
 		wallet_algos.text = account_info['amount']
+
+
 
 func connect_signals(): #connects all required signals in the parent node
 	print ("Connect Networking Signls please")
@@ -1052,20 +1062,36 @@ func smart_contract():
 func _on_enter_asset_pressed():
 	asset_id_valid = true
 
-"Placeholder method for setting the UI elements"
-func setUp_UI()-> bool:
-	if dashboard_UI_amount_label != null:
-		dashboard_UI_amount_label.set_text("Algo: "+str(_wallet_algos))
-		return true
-	return false
+#"Placeholder method for setting the UI elements"
+#func setUp_UI()-> bool:
+#	if dashboard_UI_amount_label != null:
+#		dashboard_UI_amount_label.set_text("Algo: "+str(_wallet_algos))
+#		return true
+#	return false
 
 "UI methods for handling the new Wallet UI"
 func hideUI()-> void:
 	for i in $CanvasLayer.get_children():
 		if i.name != 'state_controller':
+			#if i.get_mouse_filter()  
+			i.set_mouse_filter(1)
+			i.focus_mode = 0
 			i.hide()
 
 func showUI()-> void:
 	for i in $CanvasLayer.get_children():
 		if i.name != 'state_controller':
+			i.focus_mode = 1
 			i.show()
+
+
+
+"Bug: Transaction UI doesnt collect inputs"
+
+#doesnt work
+
+func _on_state_controller_toggled(button_pressed):
+	print ('sdgjanglaksnglaksdnk') #works
+	state_controller.focus_mode = 0
+	$CanvasLayer/Transaction_UI/LineEdit.grab_focus()
+	#transaction_ui.grab_focus()
