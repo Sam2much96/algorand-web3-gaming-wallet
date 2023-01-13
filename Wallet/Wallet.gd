@@ -7,12 +7,12 @@
 # Parses an image from an NFT url, ising a Networking singleton
 # NFT "Non FUungible Token
 # To Do:
-#(1) Fix Hacky Spagetti Code
-#(2) Implement NFT subcode.
-# (3) Unimplement Networking Singleton i.e. script should run it's own networking node
-# (4) Users should be able to copy wallet details
-# (5) Test transaction state for Tokens and Algos
-# (6) Compile Teal FOr SMartContract Testing
+#(1) Fix Hacky Spagetti Code (Done)
+#(2) Implement NFT subcode. (Done)
+# (3) Unimplement Networking Singleton i.e. script should run it's own networking node (Done)
+# (4) Users should be able to copy wallet details (Done)
+# (5) Test transaction state for Tokens and Algos (Done)
+# (6) Compile Teal FOr SMartContract Testing (Depreciated)
 # (7) 
 #Logic
 # It uses the Networking singleton and Algorand library
@@ -28,8 +28,9 @@
 # *************************************************
 #Bugs:
 
-#(1) UI is not intuitive 
+#(1) UI is not intuitive (fixed)
 #(2) NFT drag and Drop is buggy
+# (3)  Script disrupts UI input
 
 # To-DO:
 # (1) Implement as State Machine (done)
@@ -67,68 +68,14 @@
 
 extends Control
 
-#class_name wallet
+class_name wallet
 
 
 var image_url
 var json= File.new()
 var account_info: Dictionary = {1:[]}
 
-onready var Algorand = $Algodot
 
-#*****************Wallet UI ************************************
-# Undergoing upgrades
-
-#**********UI************#
-onready var dashboard_UI = $CanvasLayer/Dashboard_UI
-#onready var dashboard_UI_amount_label = $CanvasLayer/Dashboard_UI/YSort/Label
-
-
-
-onready var account_address = $CanvasLayer/Dashboard_UI/YSort/Label2
-
-#temporary placeholder
-onready var ingame_algos = $CanvasLayer/Dashboard_UI/YSort2/HBoxContainer/VBoxContainer2/Label2
-
-#temporary placeholder
-onready var wallet_algos = $CanvasLayer/Dashboard_UI/YSort/Label
-
-
-onready var withdraw_button = $wallet_ui/HBoxContainer/withdraw
-onready var refresh_button= $wallet_ui/HBoxContainer/refresh
-
-onready var wallet_ui = $wallet_ui
-onready var mnemonic_ui = $CanvasLayer/Mnemonic_UI 
-onready var transaction_ui = $CanvasLayer/Transaction_UI
-onready var funding_success_ui = $CanvasLayer/FundingSuccess
-
-onready var txn_ui_options = $transaction_ui/txn_ui_options
-
-onready var address_ui_options = $mnemonic_ui/address_ui_options
-
-#updating for the new ui
-
-onready var nft_asset_id = $transaction_ui/nft
-
-
-onready var txn_amount = $transaction_ui/transaction_amount
-
-onready var txn_addr = $CanvasLayer/Transaction_UI/LineEdit
-
-onready var txn_ui_options_button = $transaction_ui/txn_ui_options
-onready var txn_assets_valid_button = $transaction_ui/enter_asset
-
-#Txn valid should use Passward UI
-onready var passward_UI = $CanvasLayer/Password_UI
-
-onready var txn_txn_valid_button = $CanvasLayer/Transaction_UI/Button
-
-#onready var transaction_hint= $transaction_ui/Label #depreciated
-
-
-onready var NFT =  get_tree().get_nodes_in_group('NFT')#$Control/TextureRect
-onready var state_controller = $CanvasLayer/state_controller
-onready var anim = $AnimationPlayer
 #*****************************************************
 
 
@@ -213,34 +160,110 @@ signal transaction
 #onready var timer = $Timer #depreciated
 onready var q = HTTPRequest.new()
 
+var Algorand : Algodot
+var state_controller : OptionButton
+var dashboard_UI : Control
+
+var UI_Elements : Array
+
+"Checks the Nodes connection Between Singleton & UI"
+func check_Nodes() -> bool:
+	 
+
+	#*****************Wallet UI ************************************
+	# Undergoing upgrades
+
+	#**********UI************#
+	dashboard_UI = $root/CanvasLayer/Dashboard_UI
+	#onready var dashboard_UI_amount_label = $CanvasLayer/Dashboard_UI/YSort/Label
 
 
 
+	var account_address = $CanvasLayer/Dashboard_UI/YSort/Label2
 
-func _ready():
+	#temporary placeholder
+	var ingame_algos = $CanvasLayer/Dashboard_UI/YSort2/HBoxContainer/VBoxContainer2/Label2
+
+	#temporary placeholder
+	var wallet_algos = $CanvasLayer/Dashboard_UI/YSort/Label
+
+
+	var withdraw_button = $wallet_ui/HBoxContainer/withdraw
 	
-	print ("HTTP REQUEST NODE: ",typeof(q))
+	var refresh_button= $wallet_ui/HBoxContainer/refresh
+
+	var wallet_ui = $wallet_ui
+	var mnemonic_ui = $CanvasLayer/Mnemonic_UI 
+	
+	var transaction_ui = $CanvasLayer/Transaction_UI
+	
+	var funding_success_ui = $CanvasLayer/FundingSuccess
+
+	var txn_ui_options = $transaction_ui/txn_ui_options
+
+	var address_ui_options = $mnemonic_ui/address_ui_options
+
+	#updating for the new ui
+
+	var nft_asset_id = $transaction_ui/nft
+
+
+	var txn_amount = $transaction_ui/transaction_amount
+
+	var txn_addr = $CanvasLayer/Transaction_UI/LineEdit
+
+	var txn_ui_options_button = $transaction_ui/txn_ui_options
+	var txn_assets_valid_button = $transaction_ui/enter_asset
+
+	#Txn valid should use Passward UI
+	var passward_UI = $CanvasLayer/Password_UI
+
+	var txn_txn_valid_button = $CanvasLayer/Transaction_UI/Button
+
+	#onready var transaction_hint= $transaction_ui/Label #depreciated
+
+
+	var NFT : TextureRect #=  get_tree().get_nodes_in_group('NFT')#$Control/TextureRect
+	#var state_controller : OptionButton #= get_node_or_null("root/Node/state_controller")
+	var anim : AnimationPlayer = $AnimationPlayer
+
+	#UI_Elements = [Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
+	var UI_Elements : Array = [state_controller]#[Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
+	
+	var p : bool
+	#checks if any UI element is null
+	#works
+	for i in UI_Elements:
+		if i != null:
+			p = i.is_inside_tree() 
+		else: p = false
+	return p
+func __ready():
+		#*****Txn UI options************#
+	if bool(check_Nodes()) == true:
+	
+		#check if methods exist
+		if (self.state_controller.get_item_count() == 0):
+			#txn_ui_options.add_item('Transactions') 
+			#txn_ui_options.add_item('Assets') 
+			
+			#**********State Controller Options***********#
+			#add error checker so its not duplicated
+			#if _ready() is called multiple times
+			#sssss
+			self.state_controller.add_item("Show Account")
+			self.state_controller.add_item("Check Account")
+			self.state_controller.add_item("New Account")
+			self.state_controller.add_item("Import Account")
+			self.state_controller.add_item("Transactions")
+			self.state_controller.add_item("SmartContacts") #should be a sub of Transactions
+			self.state_controller.add_item('NFT')
+		print ("HTTP REQUEST NODE: ",typeof(q))
 	
 
 	
-	
-	#*****Txn UI options************#
-	#check if methods exist
-	if (txn_ui_options_button.get_item_count() == 0):
-		txn_ui_options.add_item('Transactions') 
-		txn_ui_options.add_item('Assets') 
-		
-		#**********State Controller Options***********#
-		#add error checker so its not duplicated
-		#if _ready() is called multiple times
-		#sssss
-		state_controller.add_item("Show Account")
-		state_controller.add_item("Check Account")
-		state_controller.add_item("New Account")
-		state_controller.add_item("Import Account")
-		state_controller.add_item("Transactions")
-		state_controller.add_item("SmartContacts") #should be a sub of Transactions
-		state_controller.add_item('NFT')
+	#state_controller.select(4)
+
 	
 	
 	
@@ -268,31 +291,31 @@ func _ready():
 #	setUp_UI()
 
 
-func _process(_delta):
+func _on_process(_delta):
 	#makes the state a global variable
 	Globals.wallet_state = state
 	
 	
 	# UI state Processing (works-ish)
-	if state_controller.get_selected() == 0:
+	if self.state_controller.get_selected() == 0:
 		state = SHOW_ACCOUNT #only loads wallet once
 		
-	elif state_controller.get_selected() == 1:
+	elif self.state_controller.get_selected() == 1:
 		#wallet_check = 0 # resets the wallet check stopper
 		state = CHECK_ACCOUNT
-	elif state_controller.get_selected() == 2:
+	elif self.state_controller.get_selected() == 2:
 		wallet_check = 0 # resets the wallet check stopper
 		state = NEW_ACCOUNT
-	elif state_controller.get_selected() == 3:
+	elif self.state_controller.get_selected() == 3:
 		wallet_check = 0 # resets the wallet check stopper
 		state = IMPORT_ACCOUNT
-	elif state_controller.get_selected() == 4:
+	elif self.state_controller.get_selected() == 4:
 		wallet_check = 0 # resets the wallet check stopper
 		state = TRANSACTIONS
-	elif state_controller.get_selected() == 5:
+	elif self.state_controller.get_selected() == 5:
 		wallet_check = 0 # resets the wallet check stopper
 		state = SMARTCONTRACTS
-	elif state_controller.get_selected() == 6:
+	elif self.state_controller.get_selected() == 6:
 		wallet_check = 0 # resets the wallet check stopper
 		state = COLLECTIBLES
 	
@@ -305,8 +328,8 @@ func _process(_delta):
 			run_wallet_checks()
 			if not algod_node_exists:
 				#Make sure an algod node is running or connet to mainnet or testnet
-				Algorand.create_algod_node('TESTNET')
-				Algorand._test_algod_connection()
+				self.Algorand.create_algod_node('TESTNET')
+				self.Algorand._test_algod_connection()
 				algod_node_exists= true
 		
 			
@@ -318,8 +341,8 @@ func _process(_delta):
 				
 
 				'Generate new Account'
-				Algorand.generate_new_account = true
-				Player_account_details=Algorand.create_new_account(Player_account_temp)
+				self.Algorand.generate_new_account = true
+				Player_account_details=self.Algorand.create_new_account(Player_account_temp)
 				
 				#wallet_check += 1
 				'Gets the Users Wallet Address'
@@ -347,19 +370,19 @@ func _process(_delta):
 			#if FileCheck1.file_exists("user://wallet/account_info.token") :
 			if wallet_check == 0:
 				#Make sure an algod node is running or connet to mainnet or testnet
-				if Algorand.algod == null:
-					Algorand.create_algod_node('TESTNET')
+				if self.Algorand.algod == null:
+					self.Algorand.create_algod_node('TESTNET')
 
 					
 					#var status
 				var status : bool
-				status= yield(Algorand.algod.health(), "completed")
+				status= yield(self.Algorand.algod.health(), "completed")
 				
 				print ("Status debug: ", status,' ',wallet_check_counter)
 				yield(check_wallet_info(),"completed")#ddd
 				
 				# Escape Current State to Show Account State
-				state_controller.select(0) 
+				self.state_controller.select(0) 
 				state = SHOW_ACCOUNT
 				
 
@@ -371,7 +394,7 @@ func _process(_delta):
 				
 				hideUI()
 				
-				dashboard_UI.show()
+				self.dashboard_UI.show()
 				
 				#wallet_ui.show()
 				#mnemonic_ui.hide()
@@ -389,7 +412,7 @@ func _process(_delta):
 				#Revert to Import account state
 				
 				push_error('account info file does not exist, Import Wallet or generate New One')
-				state_controller.select(3) #rewrite as a method
+				self.state_controller.select(3) #rewrite as a method
 				#state = IMPORT_ACCOUNT  #rewrite as a method
 				
 				#programmatically delete NFT
@@ -407,7 +430,7 @@ func _process(_delta):
 			#transaction_ui.hide()
 			#wallet_ui.hide()
 			
-			mnemonic_ui.show()
+			self.mnemonic_ui.show()
 			
 			#hide mnemonic characters
 			#mnemonic_ui.set_secret(true) 
@@ -420,7 +443,7 @@ func _process(_delta):
 				
 				'Cannot convert argument error'
 				
-				mnemonic = mnemonic_ui.text
+				mnemonic = self.mnemonic_ui.text
 
 				
 				#*******Generates Address************#
@@ -446,7 +469,7 @@ func _process(_delta):
 				
 				
 				# show account
-				state_controller.select(0)
+				self.state_controller.select(0)
 
 			pass
 		#Saves transactions to be processed in the ready function
@@ -457,41 +480,41 @@ func _process(_delta):
 			#hide other ui states
 			#use animation player to alter UI
 			hideUI()
-			transaction_ui.show()
-			transaction_ui.focus_mode = 2
+			self.transaction_ui.show()
+			self.transaction_ui.focus_mode = 2
 			#mnemonic_ui.hide()
 			#wallet_ui.hide()
 			
-			txn_ui_options_button.show()
+			#txn_ui_options_button.show()
 			#transaction_hint.show()
 			
 			" Swtiches Between Assets and Normal Transactions UI"
-			if txn_ui_options.get_selected() == 0:
-				txn_amount.show()
-				nft_asset_id.hide()
+			#if txn_ui_options.get_selected() == 0:
+			#txn_amount.show()
+			#nft_asset_id.hide()
 				
-				txn_assets_valid_button.hide()
+			#txn_assets_valid_button.hide()
 
 				
 				
-				if transaction_valid : #user selected normal transactions
+			if transaction_valid : #user selected normal transactions
 					
 					#saves transaction details
 					#make them into a global variable so changing scenes doesn't reset it
-					recievers_addr = txn_addr.text
-					_amount = int(txn_amount.text)
+				recievers_addr = self.txn_addr.text
+				_amount = int(self.txn_amount.text)
 					
 					# cannot process any txn less than 10_000 microAlgos
-					if _amount  < 100_000:
+				if _amount  < 100_000:
 						
 						#should ideally be sent to the UI
-						push_error('Cannot send balance less tha 100_000 MicroAlgos')
+					push_error('Cannot send balance less tha 100_000 MicroAlgos')
 						
 						
-						'Error Catcher 1'
+					'Error Catcher 1'
 						# return to show account
-						state_controller.select(0)
-					if _amount > 100_000 && txn_check == 0:
+					self.state_controller.select(0)
+				if _amount > 100_000 && txn_check == 0:
 						
 						#txn_check += 1
 						
@@ -499,28 +522,28 @@ func _process(_delta):
 						
 						#goes to the title screen to reset ready function
 						#state = SHOW_ACCOUNT 
-						state_controller.select(0) 
+					self.state_controller.select(0) 
 
 						#calls the transaction function which is a child of _ready()
-						_ready()
+					_ready()
 						
-						txn_check += 1
-						return txn_check
+					txn_check += 1
+					return txn_check
 
-			if txn_ui_options.get_selected() == 1:
+			#if txn_ui_options.get_selected() == 1:
 				#txn_amount.hide()
 				#uses two different buttons for assets and algo transactions
-				txn_assets_valid_button.show()
-				txn_txn_valid_button.hide()
-				nft_asset_id.show()
+			#	txn_assets_valid_button.show()
+			#	txn_txn_valid_button.hide()
+			#	nft_asset_id.show()
 				if asset_id_valid : # user selected asset transaction
 					#eee
-					_asset_id = int(nft_asset_id.text)
-					recievers_addr = txn_addr.text
+					_asset_id = int(self.nft_asset_id.text)
+					recievers_addr = self.txn_addr.text
 					
 					#change wallet state
 					#state = SHOW_ACCOUNT 
-					state_controller.select(0) 
+					self.state_controller.select(0) 
 
 					
 					#calls the transaction function which is a subprocess of _ready() function
@@ -540,20 +563,20 @@ func _process(_delta):
 					#************NFT Logic***********#
 					if wallet_check == 0 && asset_url == '':
 						#Make sure an algod node is running or connet to mainnet or testnet
-						if Algorand.algod == null:
-							Algorand.create_algod_node('TESTNET')
+						if self.Algorand.algod == null:
+							self.Algorand.create_algod_node('TESTNET')
 
 							
 							#var status
 						var status : bool
-						status= yield(Algorand.algod.health(), "completed")
+						status= yield(self.Algorand.algod.health(), "completed")
 						
 						print ("Status debug: ", status,' ',wallet_check_counter)
 						check_wallet_info()#saves account info with assets details
 						
 
 						# show account
-						state_controller.select(0)
+						self.state_controller.select(0)
 					if asset_url && asset_name != '':
 
 						
@@ -587,10 +610,10 @@ func _process(_delta):
 					
 					#calls NFT from comics node
 					#NFT is a call to the SceneTree's Texture react
-					Comics.load_local_image_texture_from_global(NFT, local_image_path)
+					Comics.load_local_image_texture_from_global(self.NFT, local_image_path)
 					
 					#change states
-					state_controller.select(0)
+					self.state_controller.select(0)
 				 #duplicate of above for bug catching
 					#load_local_image_texture()
 				else: return
@@ -600,15 +623,15 @@ func _process(_delta):
 			#use animation player to alter UI
 			#opt into counter smart contract deployed to host address
 			#try running in ready function
-			transaction_ui.show()
-			mnemonic_ui.hide()
-			wallet_ui.hide()
+			self.transaction_ui.show()
+			self.mnemonic_ui.hide()
+			self.wallet_ui.hide()
 			
 			#transaction_hint.hide()
-			txn_amount.hide()
-			txn_assets_valid_button.hide()
-			nft_asset_id.hide()
-			txn_ui_options.hide()
+			self.txn_amount.hide()
+			self.txn_assets_valid_button.hide()
+			self.nft_asset_id.hide()
+			self.txn_ui_options.hide()
 			if transaction_valid: #buggy
 				#Would Require Compiling to Teal
 				print (" Opt into Smartcontract---Debugging")
@@ -617,7 +640,7 @@ func _process(_delta):
 				_ready()
 
 					#change state to check success of app call
-				state_controller.select(0) #check account state 1,  show account state 0
+				self.state_controller.select(0) #check account state 1,  show account state 0
 			pass
 		
 		IDLE:
@@ -631,8 +654,8 @@ func _process(_delta):
 func run_wallet_checks()-> bool: # works #run networking internet checks test before running this function
 #if wallet_check == 0:
 	#Make sure an algod node is running or connet to mainnet or testnet
-	if Algorand.algod == null:
-		Algorand.create_algod_node('TESTNET')
+	if self.Algorand.algod == null:
+		self.Algorand.create_algod_node('TESTNET')
 	
 	if !good_internet:
 		Networking._check_if_device_is_online()
@@ -640,12 +663,12 @@ func run_wallet_checks()-> bool: # works #run networking internet checks test be
 	wallet_check_counter+= 1
 	#var status
 	var status : bool
-	status= yield(Algorand.algod.health(), "completed")
+	status= yield(self.Algorand.algod.health(), "completed")
 	
 	print ("Status debug:" , status, wallet_check_counter,  "good internet:", good_internet)
 	
 	#calculates suggested parameters for all transactions
-	params = yield(Algorand.algod.suggested_transaction_params(), "completed") #works
+	params = yield(self.Algorand.algod.suggested_transaction_params(), "completed") #works
 	
 	
 	if status:
@@ -693,9 +716,9 @@ func show_account_info(load_from_local_wallet: bool):
 	if load_from_local_wallet == true && loaded_wallet == false: 
 		#account_address.text = str(Globals.address)
 		#looping bug : fix is bolean
-		account_address.text = str(address)
-		ingame_algos.text = str (Globals.algos)
-		wallet_algos.text = "Algo: "+ str(_wallet_algos)
+		self.account_address.text = str(address)
+		self.ingame_algos.text = str (Globals.algos)
+		self.wallet_algos.text = "Algo: "+ str(_wallet_algos)
 		loaded_wallet = true
 		return 
 	
@@ -703,10 +726,10 @@ func show_account_info(load_from_local_wallet: bool):
 	if load_from_local_wallet== false:
 		print ('loading account info from Algorand Blockchain')
 		#should load Account info from outside scene
-		account_info=(yield(Algorand._check_account_information(Player_account, Player_mnemonic, ""), "completed"))
-		account_address.text   = account_info['address']
-		ingame_algos.text = str(Globals.algos)
-		wallet_algos.text = account_info['amount']
+		account_info=(yield(self.Algorand._check_account_information(Player_account, Player_mnemonic, ""), "completed"))
+		self.account_address.text   = account_info['address']
+		self.ingame_algos.text = str(Globals.algos)
+		self.wallet_algos.text = account_info['amount']
 
 
 
@@ -721,7 +744,7 @@ func debug_signal_connections()->void:
 	print ("please connect Networking Signals")
 
 func generate_address(_mnemonic:String)-> String: #works
-	var _address =Algorand.algod.get_address(_mnemonic)
+	var _address =self.Algorand.algod.get_address(_mnemonic)
 	print ('address; ', _address)
 	return _address
 	
@@ -835,7 +858,7 @@ func _http_request_completed(result, response_code, headers, body): #works with 
 func set_image_(texture):
 	if FileCheck3.file_exists(local_image_path):#use file check
 		#dowmload image
-		NFT.set_texture(texture)
+		self.NFT.set_texture(texture)
 		"update Local image"
 		print("Image Tex: ",NFT.texture)
 		print("Image Format: ",NFT.texture.get_format() )
@@ -852,7 +875,7 @@ func check_wallet_info(): #works. Pass a variable check
 	#THen checks wallet account information
 	
 	if address != null && mnemonic != null && check_local_wallet_directory():
-		account_info = yield(Algorand.algod.account_information(address), "completed")
+		account_info = yield(self.Algorand.algod.account_information(address), "completed")
 		save_account_info(account_info, 0) #testing
 	else : 
 		push_error('Either address or mnemonic cannot be null')
@@ -935,23 +958,23 @@ func upscale_wallet_ui()-> void:
 	var newScale2 = Vector2(0.25,0.25)
 	var newScale3 = Vector2(1.5,1.5)
 	
-	wallet_ui.set_scale(newScale) 
-	mnemonic_ui.set_scale(newScale2)
-	transaction_ui.set_scale(newScale2)
+	self.wallet_ui.set_scale(newScale) 
+	self.mnemonic_ui.set_scale(newScale2)
+	self.transaction_ui.set_scale(newScale2)
 	
 	#upscale their childern
 	
-	for i in wallet_ui.get_children():
+	for i in self.wallet_ui.get_children():
 		i.set_scale(newScale)
 	
-	for t in mnemonic_ui.get_children():
+	for t in self.mnemonic_ui.get_children():
 		if not t is Timer:
 			t.set_scale(newScale3)
 	
 	#transaction_ui.get_children().set_scale(newScale)
 	
 	#scale selection button
-	state_controller.set_scale(newScale2) #doenst work. Using aniamtion player instead
+	self.state_controller.set_scale(newScale2) #doenst work. Using aniamtion player instead
 	pass
 
 func _on_withdraw_pressed():
@@ -1007,7 +1030,7 @@ func txn(): #runs presaved transactions once wallet is ready
 	if recievers_addr != '' && _amount >= 100_000:
 		print ('Transaction Debug: ',recievers_addr, '/','amount: ',_amount, '/', 'txn check', txn_check)
 		
-		yield(Algorand._send_txn_to_receiver_addr(params,mnemonic,recievers_addr, _amount), "completed")
+		yield(self.Algorand._send_txn_to_receiver_addr(params,mnemonic,recievers_addr, _amount), "completed")
 
 		#reset transaction details
 		recievers_addr = ''
@@ -1016,13 +1039,13 @@ func txn(): #runs presaved transactions once wallet is ready
 		transaction_valid = false
 		
 		hideUI()
-		funding_success_ui.show()
+		self.funding_success_ui.show()
 	
 	if _asset_id != 0 && asset_id_valid :
 		print (' Asset Txn Debug: ',recievers_addr, '/','asset id: ',_asset_id, '/', 'txn check', txn_check)
 		
 		#can be used to send both NFT's and Tokens
-		yield(Algorand.transferAssets(params,mnemonic, recievers_addr,_asset_id, _amount), "completed")
+		yield(self.Algorand.transferAssets(params,mnemonic, recievers_addr,_asset_id, _amount), "completed")
 		
 		#reset transaction details
 		recievers_addr = ''
@@ -1030,25 +1053,25 @@ func txn(): #runs presaved transactions once wallet is ready
 		asset_id_valid = false
 
 		hideUI()
-		funding_success_ui.show()
+		self.funding_success_ui.show()
 	
 
 'Processes Smart Contract NoOp transactions'
 func smart_contract(): 
 	if transaction_valid:
-		var noop_txn = Algorand.algod.construct_app_call(params, '4KMRCP23JP4SM2L65WBLK6A3TPT723ILD27R7W755P7GAU5VCE7LJHAUEQ', 116639568,['4KMRCP23JP4SM2L65WBLK6A3TPT723ILD27R7W755P7GAU5VCE7LJHAUEQ'],["inc"])
+		var noop_txn = self.Algorand.algod.construct_app_call(params, '4KMRCP23JP4SM2L65WBLK6A3TPT723ILD27R7W755P7GAU5VCE7LJHAUEQ', 116639568,['4KMRCP23JP4SM2L65WBLK6A3TPT723ILD27R7W755P7GAU5VCE7LJHAUEQ'],["inc"])
 	
 
 		#print ("opt in transcation: ",noop_txn) #for debug purposes only
 	
 		# Signs the Raw transaction
-		var stx = Algorand.raw_sign_transactions(noop_txn, mnemonic)
+		var stx = self.Algorand.raw_sign_transactions(noop_txn, mnemonic)
 	
 	#print ("Raw Signed Transaction: ",stx) #shouldn't be null
 
-		var txid = Algorand.algod.send_transaction(stx) # sends raw signed transaction to the network
+		var txid = self.Algorand.algod.send_transaction(stx) # sends raw signed transaction to the network
 
-		txid = Algorand.algod.send_transaction(stx)
+		txid = self.Algorand.algod.send_transaction(stx)
 	
 	#print (txid)
 	
@@ -1086,12 +1109,4 @@ func showUI()-> void:
 
 
 
-"Bug: Transaction UI doesnt collect inputs"
 
-#doesnt work
-
-func _on_state_controller_toggled(button_pressed):
-	print ('sdgjanglaksnglaksdnk') #works
-	state_controller.focus_mode = 0
-	$CanvasLayer/Transaction_UI/LineEdit.grab_focus()
-	#transaction_ui.grab_focus()

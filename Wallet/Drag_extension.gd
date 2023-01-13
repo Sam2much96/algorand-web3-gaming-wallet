@@ -49,43 +49,43 @@ func _process(_delta):
 #	pass
 
 
+#Disabling for UI Integration
 
-
-func _handle_input_(event): #Works but buggy
+#func _handle_input_(event): #Works but buggy
 	
-	"Stops From Processing Mouse Inputs"
-	if event is InputEventMouse:
+#	"Stops From Processing Mouse Inputs"
+#	if event is InputEventMouse:
 		#return
-		pass
-	if event in InputEventMouseMotion:
+#		pass
+#	if event in InputEventMouseMotion:
 		#return
-		pass
+#		pass
 	
-	if event is InputEventMouseButton && event.doubleclick : #doesnt work
+#	if event is InputEventMouseButton && event.doubleclick : #doesnt work
 		
-		_zoom() #disabled for debugging, enable when done debugging
-		return
+#		_zoom() #disabled for debugging, enable when done debugging
+#		return
 	
 	
 	
-	if event is InputEventScreenDrag :
+#	if event is InputEventScreenDrag :
 		
 		
 		
 		
-		target = event.get_position()
+#		target = event.get_position()
 		#print ("Drag and Drop Debug: ",target.x, "/",target.y, "can drag", can_drag, ' position: ', Kinematic_2d.position) #for debug purposes only
 		#print ("Drag and Drop Debug 2: ", Kinematic_2d.position,' Distance debug: ', Kinematic_2d.position.distance_to(target)) #for debug purposes only
 		
-		return drag(Vector2(round(target.x), round(target.y)), Kinematic_2d.position, Kinematic_2d)
-		pass
+#		return drag(Vector2(round(target.x), round(target.y)), Kinematic_2d.position, Kinematic_2d)
+#		pass
 
 
-func _on_TextureRect_gui_input(event):
+#func _on_TextureRect_gui_input(event):
 	
-	can_drag = true
-	_handle_input_(event)
-	pass
+#	can_drag = true
+#	_handle_input_(event)
+#	pass
 
 
 

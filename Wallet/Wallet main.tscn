@@ -1,35 +1,42 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Wallet/NFT.gd" type="Script" id=1]
 [ext_resource path="res://addons/algodot/Algod.gd" type="Script" id=2]
-[ext_resource path="res://Wallet/Wallet.gd" type="Script" id=3]
-[ext_resource path="res://icon.png" type="Texture" id=5]
-[ext_resource path="res://Wallet/Drag_extension.gd" type="Script" id=6]
 [ext_resource path="res://Wallet Scenes/AccountsDashboard1.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Wallet Scenes/Merchant ID Validation.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Wallet Scenes/Merchant Pin.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Wallet Scenes/FundingSuccess.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Wallet Scenes/ChoosePaymentOption.tscn" type="PackedScene" id=11]
 
-[sub_resource type="Animation" id=1]
-resource_name = "MOBILE UI"
-tracks/0/type = "method"
-tracks/0/path = NodePath("..")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0.1 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "upscale_wallet_ui"
-} ]
-}
+[sub_resource type="GDScript" id=1]
+script/source = "extends OptionButton
 
-[sub_resource type="Animation" id=2]
-length = 0.001
+\"\"\"
+WALLET NODE MANAGER
+
+\"\"\"
+
+onready var Algorand = get_parent().get_node(\"Algodot\")
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	Wallet.state_controller = self
+	Wallet.Algorand = Algorand
+	
+	# How to FIx
+	# Get All Node Items
+	# Send them to the Wallet Singletons
+	# Run Wallet Checks
+	
+	#Wallet.__ready()
+	print (Wallet.state_controller)
+	
+	print(Wallet.check_Nodes())
+	print (Wallet.UI_Elements)
+	Wallet.__ready()
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+"
 
 [node name="Node" type="Control"]
 anchor_right = 0.474
@@ -37,67 +44,15 @@ anchor_bottom = 0.996
 margin_right = -567.72
 margin_bottom = -680.12
 rect_scale = Vector2( 15.563, 19.384 )
-script = ExtResource( 3 )
-
-[node name="ColorRect" type="ColorRect" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
-rect_scale = Vector2( 1.66221, 1.44276 )
-color = Color( 0.278431, 0.278431, 0.278431, 1 )
-
-[node name="Control" type="Control" parent="."]
-visible = false
-margin_right = 40.0
-margin_bottom = 40.0
-rect_pivot_offset = Vector2( 8.86526, 4.48991 )
-mouse_filter = 2
-script = ExtResource( 6 )
-
-[node name="KinematicBody2D" type="KinematicBody2D" parent="Control"]
-
-[node name="TextureRect" type="TextureRect" parent="Control/KinematicBody2D"]
-margin_right = 40.0
-margin_bottom = 40.0
-rect_pivot_offset = Vector2( 18.0789, 17.8748 )
-texture = ExtResource( 5 )
-expand = true
-script = ExtResource( 1 )
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Control/KinematicBody2D"]
-position = Vector2( 10.2808, 7.63516 )
-polygon = PoolVector2Array( -8.90822, -7.09424, -8.79504, 30.0023, 23.0644, 30.2209, 22.5198, -7.1642 )
-
-[node name="transaction_ui" type="Control" parent="."]
-visible = false
-margin_left = 9.15687
-margin_top = 0.561343
-margin_right = 531.156
-margin_bottom = 24.5614
-rect_scale = Vector2( 0.1, 0.1 )
-mouse_filter = 2
-
-[node name="txn_ui_options" type="OptionButton" parent="transaction_ui"]
-margin_left = -10.0
-margin_top = 131.0
-margin_right = 154.0
-margin_bottom = 151.0
-text = "Transaction"
 
 [node name="Algodot" type="Node" parent="."]
 script = ExtResource( 2 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("../CanvasLayer/state_controller")
-method_call_mode = 1
-"anims/MOBILE UI" = SubResource( 1 )
-anims/RESET = SubResource( 2 )
-
-[node name="Timer" type="Timer" parent="."]
-one_shot = true
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
 
 [node name="Dashboard_UI" parent="CanvasLayer" instance=ExtResource( 7 )]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -128,8 +83,8 @@ mouse_filter = 1
 visible = false
 margin_left = -482.0
 margin_top = 17.0
-margin_right = -514.0
-margin_bottom = -400.0
+margin_right = -482.0
+margin_bottom = -322.784
 rect_scale = Vector2( 1.56, 1.56 )
 mouse_filter = 1
 
@@ -138,25 +93,24 @@ visible = false
 mouse_filter = 1
 
 [node name="Transaction_UI" parent="CanvasLayer" instance=ExtResource( 11 )]
-visible = false
-margin_left = -456.0
-margin_top = 37.0
-margin_right = -534.0
-margin_bottom = -376.0
-rect_scale = Vector2( 1.56, 1.56 )
+margin_left = -417.0
+margin_top = 88.0
+margin_right = -417.0
+margin_bottom = -251.784
+rect_scale = Vector2( 1.65, 1.65 )
 mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="state_controller" type="OptionButton" parent="CanvasLayer"]
-margin_left = 265.0
-margin_top = 484.0
-margin_right = 393.0
-margin_bottom = 504.0
-rect_scale = Vector2( 2.42, 2.42 )
+[node name="state_controller" type="OptionButton" parent="."]
+margin_left = 2.31318
+margin_top = 31.5724
+margin_right = 130.313
+margin_bottom = 51.5724
+rect_scale = Vector2( 0.2, 0.2 )
 focus_mode = 0
 mouse_filter = 1
 enabled_focus_mode = 0
 text = "State Controller"
-
-[connection signal="gui_input" from="Control/KinematicBody2D/TextureRect" to="Control" method="_on_TextureRect_gui_input"]
-[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
-[connection signal="toggled" from="CanvasLayer/state_controller" to="." method="_on_state_controller_toggled"]
+script = SubResource( 1 )
