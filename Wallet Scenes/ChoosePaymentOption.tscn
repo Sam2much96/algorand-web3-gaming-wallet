@@ -32,7 +32,7 @@ margin_top = 408.0
 margin_right = 578.0
 margin_bottom = 452.0
 theme = ExtResource( 2 )
-text = "Pay with Paystack"
+text = "Send Algos"
 
 [node name="Button2" type="Button" parent="."]
 margin_left = 363.0
@@ -40,7 +40,7 @@ margin_top = 481.0
 margin_right = 577.0
 margin_bottom = 525.0
 theme = ExtResource( 2 )
-text = "Bank Transfer"
+text = "Send Assets"
 
 [node name="Label" type="Label" parent="."]
 modulate = Color( 0.12549, 0.117647, 0.886275, 1 )
@@ -67,31 +67,31 @@ margin_right = 471.0
 margin_bottom = 183.0
 rect_scale = Vector2( 0.6, 0.6 )
 theme = ExtResource( 4 )
-text = "Card Number"
+text = "Wallet Address"
 
 [node name="Label4" type="Label" parent="."]
-margin_left = 328.0
-margin_top = 234.0
-margin_right = 463.0
-margin_bottom = 262.0
+margin_left = 332.0
+margin_top = 236.0
+margin_right = 467.0
+margin_bottom = 264.0
 rect_scale = Vector2( 0.6, 0.6 )
 theme = ExtResource( 4 )
-text = "CVV"
+text = "Amount"
 
 [node name="Label5" type="Label" parent="."]
-margin_left = 391.0
-margin_top = 235.0
-margin_right = 526.0
-margin_bottom = 263.0
+margin_left = 428.0
+margin_top = 236.0
+margin_right = 563.0
+margin_bottom = 264.0
 rect_scale = Vector2( 0.6, 0.6 )
 theme = ExtResource( 4 )
-text = "Expiry"
+text = "Asset ID"
 
 [node name="Label6" type="Label" parent="."]
-margin_left = 461.0
-margin_top = 236.0
-margin_right = 596.0
-margin_bottom = 264.0
+margin_left = 536.0
+margin_top = 233.0
+margin_right = 671.0
+margin_bottom = 261.0
 rect_scale = Vector2( 0.6, 0.6 )
 theme = ExtResource( 4 )
 text = "Pin"
@@ -104,28 +104,28 @@ margin_bottom = 209.0
 mouse_filter = 1
 theme = ExtResource( 5 )
 text = "123 6890 0000"
+align = 1
 
 [node name="LineEdit2" type="LineEdit" parent="."]
-margin_left = 328.0
-margin_top = 254.0
-margin_right = 377.0
-margin_bottom = 290.0
+margin_left = 327.0
+margin_top = 257.0
+margin_right = 417.0
+margin_bottom = 293.0
 theme = ExtResource( 5 )
-text = "123 "
-secret = true
+text = "123 4567"
 
 [node name="LineEdit3" type="LineEdit" parent="."]
-margin_left = 388.0
-margin_top = 255.0
-margin_right = 437.0
-margin_bottom = 291.0
+margin_left = 423.0
+margin_top = 256.0
+margin_right = 529.0
+margin_bottom = 292.0
 theme = ExtResource( 5 )
 text = "MM/YY"
 
 [node name="LineEdit4" type="LineEdit" parent="."]
-margin_left = 453.0
+margin_left = 534.0
 margin_top = 255.0
-margin_right = 511.0
+margin_right = 592.0
 margin_bottom = 291.0
 theme = ExtResource( 5 )
 text = "MM/YY"

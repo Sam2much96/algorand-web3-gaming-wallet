@@ -163,18 +163,27 @@ onready var q = HTTPRequest.new()
 var Algorand : Algodot
 var state_controller : OptionButton
 var dashboard_UI : Control
-
+var passward_UI : Control
 var account_address : Label
 
 var wallet_algos : Label
 var ingame_algos : Label
 
 var transaction_ui : Control
+var mnemonic_ui : Control
+var funding_success_ui : Control
+var mnemonic_ui_lineEdit : LineEdit
+
+var txn_txn_valid_button : Button
+
+var imported_mnemonic_button : Button
 
 var UI_Elements : Array
 
 var canvas_layer : CanvasLayer
 
+var txn_addr : LineEdit
+var txn_amount : LineEdit
 
 
 "Checks the Nodes connection Between Singleton & UI"
@@ -199,16 +208,16 @@ func check_Nodes() -> bool:
 	#var wallet_algos = $CanvasLayer/Dashboard_UI/YSort/Label
 
 
-	var withdraw_button = $wallet_ui/HBoxContainer/withdraw
+	var withdraw_button = $wallet_ui/HBoxContainer/withdraw #connect to smartcontract
 	
 	var refresh_button= $wallet_ui/HBoxContainer/refresh
 
 	var wallet_ui = $wallet_ui
-	var mnemonic_ui = $CanvasLayer/Mnemonic_UI 
+	#var mnemonic_ui #= $CanvasLayer/Mnemonic_UI 
 	
 	#var transaction_ui = $CanvasLayer/Transaction_UI
 	
-	var funding_success_ui = $CanvasLayer/FundingSuccess
+	#var funding_success_ui = $CanvasLayer/FundingSuccess
 
 	var txn_ui_options = $transaction_ui/txn_ui_options
 
@@ -219,17 +228,18 @@ func check_Nodes() -> bool:
 	var nft_asset_id = $transaction_ui/nft
 
 
-	var txn_amount = $transaction_ui/transaction_amount
+	#var txn_amount = $transaction_ui/transaction_amount
 
-	var txn_addr = $CanvasLayer/Transaction_UI/LineEdit
+
+	#var txn_addr = $CanvasLayer/Transaction_UI/LineEdit
 
 	var txn_ui_options_button = $transaction_ui/txn_ui_options
 	var txn_assets_valid_button = $transaction_ui/enter_asset
 
 	#Txn valid should use Passward UI
-	var passward_UI = $CanvasLayer/Password_UI
+	#var passward_UI = $CanvasLayer/Password_UI
 
-	var txn_txn_valid_button = $CanvasLayer/Transaction_UI/Button
+	#var txn_txn_valid_button = $CanvasLayer/Transaction_UI/Button
 
 	#onready var transaction_hint= $transaction_ui/Label #depreciated
 
@@ -239,7 +249,7 @@ func check_Nodes() -> bool:
 	var anim : AnimationPlayer = $AnimationPlayer
 
 	#UI_Elements = [Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
-	UI_Elements = [state_controller, Algorand, dashboard_UI, wallet_algos, ingame_algos]#[Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
+	UI_Elements = [state_controller, Algorand, dashboard_UI, wallet_algos, ingame_algos, mnemonic_ui, mnemonic_ui_lineEdit, txn_txn_valid_button, imported_mnemonic_button, passward_UI, txn_addr, txn_amount, funding_success_ui]#[Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
 	
 	var p : bool
 	#checks if any UI element is null
@@ -289,6 +299,7 @@ func __ready():
 	connect_signals()
 	debug_signal_connections()
 
+	#connect_buttons() depreciated
 	'NFT checks'
 	print ("NFT debug: ", NFT)
 
@@ -304,7 +315,7 @@ func __ready():
 
 func _process(_delta):
 	#makes the state a global variable
-	Globals.wallet_state = state
+	#Globals.wallet_state = state #depreciated
 	
 	
 	# UI state Processing (works-ish)
@@ -397,7 +408,7 @@ func _process(_delta):
 				state = SHOW_ACCOUNT
 				
 
-		
+				
 		SHOW_ACCOUNT: #buggy with state controller
 			"it's always load account details when ready"
 			if FileCheck1.file_exists("user://wallet/account_info.token")  :
@@ -454,7 +465,7 @@ func _process(_delta):
 				
 				'Cannot convert argument error'
 				
-				mnemonic = self.mnemonic_ui.text
+				mnemonic = self.mnemonic_ui_lineEdit.text
 
 				
 				#*******Generates Address************#
@@ -536,7 +547,7 @@ func _process(_delta):
 					self.state_controller.select(0) 
 
 						#calls the transaction function which is a child of _ready()
-					_ready()
+					__ready()
 						
 					txn_check += 1
 					return txn_check
@@ -558,7 +569,7 @@ func _process(_delta):
 
 					
 					#calls the transaction function which is a subprocess of _ready() function
-					_ready()
+					__ready()
 					
 			pass
 			
@@ -901,19 +912,7 @@ func check_wallet_info(): #works. Pass a variable check
 
 func _on_withraw(): #withdraws Algos from wallet data into my test algorand wallet
 	#var status
-	#if Globals.algos != 0: #cannot withdraw with zero balance
-	#	Algorand.create_algod_node() #from an escrow account
-		
-	#	status = status && yield(Algorand._send_transaction_to_receiver_addr(Escrow_mnemoic ,"rigid steak better media circle nothing range tray firm fatigue pool damage welcome supply police spoon soul topic grant offer chimney total bronze able human", Globals.algos), "completed") #works
-		#status = status && yield(_send_asset_transfers_to_receivers_address(funder_address , funder_mnemonic , receivers_address , receivers_mnemonic), "completed") #works
-	#	print (status)
-	#if Globals.algos == 0:
-		
-	#	print ("Cannot withdraw from ",Globals.algos, " balance")
-		
-	#if status:
-	#	print('withdrawal Successful')
-	#	show_account_info(false) #updates account info
+	# Connect to Box Escrow SmartContrac
 	pass
 
 func _on_reset():
@@ -1026,12 +1025,19 @@ func _on_Copy_address_pressed():
 
 
 'For Importing Mnemonic and Address'
-func _on_enter_mnemonic_pressed():
-	imported_mnemonic = true
+#connected with via signals
+#func _on_enter_mnemonic_pressed():dsfsdfdfd
+#	
 
-
-func _on_enter_transaction_pressed():
-	transaction_valid = true
+"Parses Input frm UI buttons"
+#formerly txn valid signal
+#func _on_enter_transaction_pressed():
+func _input(_event):
+	if txn_txn_valid_button.pressed:
+		transaction_valid = true #works
+		print ("Txn button pressed: ",transaction_valid) #for debug purposes only
+	if imported_mnemonic_button.pressed:
+		imported_mnemonic = true
 
 
 'Processes Algo and Asset Transactions'
@@ -1093,7 +1099,7 @@ func smart_contract():
 	transaction_valid = false
 	return transaction_valid
 
-func _on_enter_asset_pressed():
+func _on_enter_asset_pressed(): #depreciated
 	asset_id_valid = true
 
 #"Placeholder method for setting the UI elements"
@@ -1117,7 +1123,5 @@ func showUI()-> void:
 	#	if i.name != 'state_controller':
 		i.focus_mode = 1
 		i.show()
-
-
 
 

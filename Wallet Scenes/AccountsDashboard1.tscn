@@ -70,13 +70,14 @@ theme = ExtResource( 4 )
 text = "$4,000.00"
 
 [node name="Label2" type="Label" parent="YSort"]
-margin_left = 13.0
-margin_top = -203.0
-margin_right = 93.0
-margin_bottom = -175.0
+margin_left = 14.0
+margin_top = -225.0
+margin_right = 336.0
+margin_bottom = -157.0
 rect_scale = Vector2( 0.6, 0.6 )
 theme = ExtResource( 3 )
 text = "Address: "
+autowrap = true
 
 [node name="YSort2" type="YSort" parent="."]
 
