@@ -30,7 +30,7 @@
 
 #(1) UI is not intuitive (fixed)
 #(2) NFT drag and Drop is buggy
-# (3)  Script disrupts UI input
+# (3)  Script disrupts UI input ( Turning Node's Process off fixes it)
 
 # To-DO:
 # (1) Implement as State Machine (done)
@@ -164,7 +164,18 @@ var Algorand : Algodot
 var state_controller : OptionButton
 var dashboard_UI : Control
 
+var account_address : Label
+
+var wallet_algos : Label
+var ingame_algos : Label
+
+var transaction_ui : Control
+
 var UI_Elements : Array
+
+var canvas_layer : CanvasLayer
+
+
 
 "Checks the Nodes connection Between Singleton & UI"
 func check_Nodes() -> bool:
@@ -174,18 +185,18 @@ func check_Nodes() -> bool:
 	# Undergoing upgrades
 
 	#**********UI************#
-	dashboard_UI = $root/CanvasLayer/Dashboard_UI
+	#dashboard_UI = $root/CanvasLayer/Dashboard_UI
 	#onready var dashboard_UI_amount_label = $CanvasLayer/Dashboard_UI/YSort/Label
 
 
 
-	var account_address = $CanvasLayer/Dashboard_UI/YSort/Label2
+	#var account_address = $CanvasLayer/Dashboard_UI/YSort/Label2
 
 	#temporary placeholder
-	var ingame_algos = $CanvasLayer/Dashboard_UI/YSort2/HBoxContainer/VBoxContainer2/Label2
+	#var ingame_algos = $CanvasLayer/Dashboard_UI/YSort2/HBoxContainer/VBoxContainer2/Label2
 
 	#temporary placeholder
-	var wallet_algos = $CanvasLayer/Dashboard_UI/YSort/Label
+	#var wallet_algos = $CanvasLayer/Dashboard_UI/YSort/Label
 
 
 	var withdraw_button = $wallet_ui/HBoxContainer/withdraw
@@ -195,7 +206,7 @@ func check_Nodes() -> bool:
 	var wallet_ui = $wallet_ui
 	var mnemonic_ui = $CanvasLayer/Mnemonic_UI 
 	
-	var transaction_ui = $CanvasLayer/Transaction_UI
+	#var transaction_ui = $CanvasLayer/Transaction_UI
 	
 	var funding_success_ui = $CanvasLayer/FundingSuccess
 
@@ -228,7 +239,7 @@ func check_Nodes() -> bool:
 	var anim : AnimationPlayer = $AnimationPlayer
 
 	#UI_Elements = [Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
-	var UI_Elements : Array = [state_controller]#[Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
+	UI_Elements = [state_controller, Algorand, dashboard_UI, wallet_algos, ingame_algos]#[Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
 	
 	var p : bool
 	#checks if any UI element is null
@@ -291,7 +302,7 @@ func __ready():
 #	setUp_UI()
 
 
-func _on_process(_delta):
+func _process(_delta):
 	#makes the state a global variable
 	Globals.wallet_state = state
 	
@@ -320,7 +331,7 @@ func _on_process(_delta):
 		state = COLLECTIBLES
 	
 	
-	## PROCESS STATES (testing)
+	"Constantly Running Process Introduces a Text UI Bug"
 	
 	match state:
 		NEW_ACCOUNT: #loads wallet details if account already exists
@@ -404,7 +415,7 @@ func _on_process(_delta):
 				
 				show_account_info(true)
 				
-			
+				set_process(false)
 					#state = GENERATE_ADDRESS
 				
 			'Handles if account info is deleted'
@@ -1094,18 +1105,18 @@ func _on_enter_asset_pressed():
 
 "UI methods for handling the new Wallet UI"
 func hideUI()-> void:
-	for i in $CanvasLayer.get_children():
-		if i.name != 'state_controller':
+	for i in canvas_layer.get_children():
+	#	if i.name != 'state_controller':
 			#if i.get_mouse_filter()  
-			i.set_mouse_filter(1)
-			i.focus_mode = 0
-			i.hide()
+		i.set_mouse_filter(1)
+		i.focus_mode = 0
+		i.hide()
 
 func showUI()-> void:
-	for i in $CanvasLayer.get_children():
-		if i.name != 'state_controller':
-			i.focus_mode = 1
-			i.show()
+	for i in canvas_layer.get_children():
+	#	if i.name != 'state_controller':
+		i.focus_mode = 1
+		i.show()
 
 
 

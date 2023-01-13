@@ -14,21 +14,41 @@ script/source = "extends OptionButton
 WALLET NODE MANAGER
 
 \"\"\"
-
+onready var canvasLayer = get_parent().get_node(\"CanvasLayer\")
 onready var Algorand = get_parent().get_node(\"Algodot\")
+onready var dashboard_UI = get_parent().get_node(\"CanvasLayer/Dashboard_UI\")
+onready var transaction_UI = get_parent().get_node(\"CanvasLayer/Transaction_UI\")
+onready var account_addr = get_parent().get_node(\"CanvasLayer/Dashboard_UI/YSort/Label2\") 
+
+onready var ingame_algos = get_parent().get_node(\"CanvasLayer/Dashboard_UI/YSort2/HBoxContainer/VBoxContainer2/Label2\")
+
+onready var wallet_algos = get_parent().get_node(\"CanvasLayer/Dashboard_UI/YSort/Label\")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Wallet.state_controller = self
 	Wallet.Algorand = Algorand
+	Wallet.canvas_layer = canvasLayer
+	Wallet.account_address = account_addr
+	Wallet.dashboard_UI = dashboard_UI
+	Wallet.transaction_ui = transaction_UI
+	
+	#print (dashboard_UI.get_children())
+	
+	###Setting this variables bug out the UI input system
+	Wallet.wallet_algos = wallet_algos#dashboard_UI.get_child(4).get_child(1) #ingame_algos
+	Wallet.ingame_algos = ingame_algos#dashboard_UI.get_child(5).get_child(2).get_child(0).get_child(0)#wallet_algos
+
 	
 	# How to FIx
-	# Get All Node Items
+	# Get All Node Items in this scene
+	# Structure Global variables properly
 	# Send them to the Wallet Singletons
 	# Run Wallet Checks
+	# If true, Node should begin working properly
 	
 	#Wallet.__ready()
-	print (Wallet.state_controller)
+	#print (Wallet.state_controller)
 	
 	print(Wallet.check_Nodes())
 	print (Wallet.UI_Elements)
@@ -36,6 +56,13 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+\"Fixes Stuck Button Bug\"
+# By toggling the Wallet's Processing on/off
+func _on_state_controller_toggled(button_pressed):
+	if button_pressed:
+		Wallet.set_process(true)
+	else : Wallet.set_process(false)
 "
 
 [node name="Node" type="Control"]
@@ -114,3 +141,5 @@ mouse_filter = 1
 enabled_focus_mode = 0
 text = "State Controller"
 script = SubResource( 1 )
+
+[connection signal="toggled" from="state_controller" to="state_controller" method="_on_state_controller_toggled"]
