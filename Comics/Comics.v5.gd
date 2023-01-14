@@ -250,10 +250,18 @@ func _input(event):
 		_handle_swipe_detection(event)
 
 	"Handles Screen Dragging"
-	if event is InputEventScreenDrag && current_comics != null :
+	if event is InputEventScreenDrag   :
 		#if event is InputEventMultiScreenDrag: breaks
-		target = event.get_position()
-		return drag(target, Kinematic_2d.position, Kinematic_2d)
+		#target = event.get_position()
+		print ("sglgnlngakdfnl")
+		#return drag(target, Kinematic_2d.position, Kinematic_2d)
+		Networking.start_check()
+		while not Networking.stop_check():
+		#if !Networking.stop_check():
+			_start_detection(target)
+		
+			
+		if Networking.stop_check(): _end_detection(target)
 		
 
 # Handles releasing 
@@ -483,21 +491,23 @@ func center_page(): #
 				pass
 
 func next_panel():
-	if loaded_comics == true :
-		current_frame = current_frame + 1
-		emit_signal("panel_change") 
-		center_page()
-		return int(current_frame) 
+	print ('Next Panel')
+	#if loaded_comics == true :
+	#	current_frame = current_frame + 1
+	#	emit_signal("panel_change") 
+	#	center_page()
+	#	return int(current_frame) 
 	#if Music.music_on == true:
 	#	Music.play_sfx(Music.comic_sfx)
 
 
 func prev_panel():
-	if loaded_comics == true :
-		current_frame =abs(current_frame - 1 )
-		emit_signal("panel_change")  
-		center_page()
-		return int(current_frame) 
+	print ('prev panel')
+	#if loaded_comics == true :
+	#	current_frame =abs(current_frame - 1 )
+	#	emit_signal("panel_change")  
+	#	center_page()
+	#	return int(current_frame) 
 	#if Music.music_on == true: 
 	##	Music.play_sfx(Music.comic_sfx)
 
@@ -545,6 +555,8 @@ func _handle_swipe_detection(event)-> void:
 	elif not _e.is_stopped():
 		_end_detection(event.position)
 
+" Swipe Direction Detection"
+
 func _start_detection(_position): #for swipe detection
 	if enabled == true:
 		swipe_start_position = _position
@@ -563,7 +575,7 @@ func _end_detection(__position):
 		print ('Direction on X: ', direction.x) #horizontal swipe debug purposs
 		if round(direction.x) == -1:
 			print('left swipe') #for debug purposes
-			next_panel()
+			next_panel() 
 		if round(direction.x) == 1:
 			print('right swipe') #for debug purposes
 			prev_panel()

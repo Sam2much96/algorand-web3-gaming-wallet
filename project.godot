@@ -89,11 +89,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Wallet/NFT.gd"
 }, {
-"base": "HTTPRequest",
-"class": "Networking",
-"language": "GDScript",
-"path": "res://Wallet/Networking.gd"
-}, {
 "base": "InputEventAction",
 "class": "RawGesture",
 "language": "GDScript",
@@ -126,7 +121,6 @@ _global_script_class_icons={
 "InputEventSingleScreenTap": "",
 "InputEventSingleScreenTouch": "",
 "NFT": "",
-"Networking": "",
 "RawGesture": "",
 "ReferenceCollector": "",
 "wallet": ""
@@ -148,6 +142,7 @@ AsyncExecutorDriver="*res://addons/algodot/gdnative/async_executor.gdns"
 Globals="*res://Globals.gd"
 Wallet="*res://Wallet/Wallet.gd"
 InputManager="*res://addons/GDTIM-Demo-v2_1_2/InputManager.gd"
+Networking="*res://Wallet/Networking.gd"
 
 [display]
 
@@ -165,6 +160,7 @@ enabled=PoolStringArray( "res://addons/algodot/plugin.cfg" )
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
+pointing/emulate_mouse_from_touch=false
 
 [physics]
 

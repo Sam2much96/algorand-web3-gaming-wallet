@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
+[ext_resource path="res://Comics/Comics.v5.gd" type="Script" id=1]
 [ext_resource path="res://addons/algodot/Algod.gd" type="Script" id=2]
 [ext_resource path="res://Wallet Scenes/AccountsDashboard1.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Wallet Scenes/Merchant ID Validation.tscn" type="PackedScene" id=8]
@@ -14,6 +15,8 @@ script/source = "extends OptionButton
 WALLET NODE MANAGER
 
 \"\"\"
+# Implement TouchScreen Controller for State controller
+
 onready var canvasLayer = get_parent().get_node(\"CanvasLayer\")
 onready var Algorand = get_parent().get_node(\"Algodot\")
 onready var dashboard_UI = get_parent().get_node(\"CanvasLayer/Dashboard_UI\")
@@ -38,6 +41,8 @@ onready var transaction_UI_address_lineEdit = get_parent().get_node(\"CanvasLaye
 
 onready var transaction_UI_amount_lineEdit = get_parent().get_node(\"CanvasLayer/Transaction_UI/LineEdit2\")
 onready var FundingSuccessUI = get_parent().get_node(\"CanvasLayer/FundingSuccess\")
+onready var Funding_Success_Close_Button = get_parent().get_node(\"CanvasLayer/FundingSuccess/Button\")
+
 #onready var fundingSuccess_UI
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -64,7 +69,7 @@ func _ready():
 	Wallet.imported_mnemonic_button = submit_mnemonic_button
 	Wallet.txn_addr = transaction_UI_address_lineEdit
 	Wallet.txn_amount = transaction_UI_amount_lineEdit
-	
+	Wallet.funding_success_close_button = Funding_Success_Close_Button
 	
 	# How to FIx
 	# Get All Node Items in this scene
@@ -143,10 +148,11 @@ rect_scale = Vector2( 1.56, 1.56 )
 mouse_filter = 1
 
 [node name="FundingSuccess" parent="CanvasLayer" instance=ExtResource( 10 )]
-margin_left = -265.0
-margin_top = 86.0
-margin_right = -265.0
-margin_bottom = -392.0
+margin_left = -552.0
+margin_top = 40.0
+margin_right = -552.0
+margin_bottom = -438.0
+rect_scale = Vector2( 1.79726, 1.79726 )
 mouse_filter = 1
 
 [node name="Transaction_UI" parent="CanvasLayer" instance=ExtResource( 11 )]
@@ -172,5 +178,10 @@ mouse_filter = 1
 enabled_focus_mode = 0
 text = "State Controller"
 script = SubResource( 1 )
+
+[node name="Control" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
 
 [connection signal="toggled" from="state_controller" to="state_controller" method="_on_state_controller_toggled"]

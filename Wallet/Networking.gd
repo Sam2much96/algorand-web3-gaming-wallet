@@ -27,12 +27,8 @@
 
 extends HTTPRequest
 
-
-class_name Networking
-
 """
 NETWORKING SINGLETON 3.0
-
 To query if there's internet access and connect to various websites
 """
 export (bool) var enabled
@@ -44,7 +40,8 @@ var check_timer
 var debug = ''
 
 # Default hostname used by the login form
-const DEFAULT_HOSTNAME = "127.0.0.1"
+#const DEFAULT_HOSTNAME = "127.0.0.1"
+const DEFAULT_HOSTNAME = "ws://localhost"
 
 
 var player_info = {} # should store Crypto info
@@ -74,21 +71,19 @@ onready var WORLD_SIZE = 40000.0
 onready var _reference_to_self =get_node('/root/Networking') #formerly _y
 
 
-const SERVER_PORT = 5225
+const SERVER_PORT = 9080
 const MAX_PLAYERS = 5
 
 const TICK_DURATION = 50 # In milliseconds, it means 20 network updates/second
 
 
-onready var timer = $Timer2
+onready var timer :Timer  = Timer.new()
 
 
 #var youtube_dl = preload ('res://New game code and features/youtube streamer/Youtube-DL.gd') #what if youtube goes down lool
 
 #**********Helper Booleans***********#
 var running_request : bool = false
-
-
 
 
 func _ready():
@@ -126,23 +121,38 @@ func _process(_delta):
 
  
 # Creates a Networking timer
-func _init_timer() : #rewrite to use actual timer
-	#write code to check if node has been instanced
+func _init_timer() : 
+	#Uses a Timer Node in the Scene
 	self.set_process(true)
 	enabled = true 
 	check_timer = timer
-	print ('Check_timer :' , check_timer) #code breaks here and gives cant resolve hostname errors
+	check_timer.wait_time = 5
+	
+	# connect timer timeout signal
+	if not timer.is_connected("timeout",self, "_on_Timer2_timeout"):
+		timer.connect("timeout",self, "_on_Timer2_timeout")
+	
+	print ('Check_timer :' , check_timer, " Is connected: ", timer.is_connected("timeout",self, "_on_Timer2_timeout")) #code breaks here and gives cant resolve hostname errors
+	
+	
 	
 
 "Stops a check using Check timer Node"
-func stop_check(): #Stops timer check
+func stop_check()-> bool: #Stops timer check
 	connection_debug = ' stop check ' # Debug Variable
 	if not check_timer.is_stopped():
+		
+		
 		check_timer.stop()
 		self.cancel_request()
+		
+		#Stopping Check Timer
+		print ('Stopping Check Timer')
+		return false
+	else: return true
 
-"Starts a check using Check timer Node"
-func start_check(): #Starts time check using Check timer
+"Starts a check using Timer Node for 3 Seconds"
+func start_check(): 
 	connection_debug = str('start check') # Debug Variable
 	print ("start check")
 	check_timer.start()
@@ -182,7 +192,7 @@ static func _connect_to_ipfs_gateway(url : String, request_node: HTTPRequest): #
 	#elif running_request:
 		return
 
-
+'Removes IPFS Domain from Asset url'
 'Removes IPFS Domain from Asset url'
 static func _parse(_url : String)-> String: #works
 	_url=_url.replace('ipfs://', '')
@@ -190,12 +200,13 @@ static func _parse(_url : String)-> String: #works
 	return _url
 
 'Internet COnnectivity Check'
-static func _check_if_device_is_online():
+'Internet COnnectivity Check'
+static func _check_if_device_is_online(node: HTTPRequest):
 	
 	#index = index + 1
 	#dialgue_box.show_dialog('Checking for Internet Connectivity','admin')
-	var q =HTTPRequest.new()
-	_check_connection('https://mfts.io', q)#url('https://play.google.com/store/apps/details?id=dystopia.app')
+	#var q =HTTPRequest.new()
+	_check_connection('https://mfts.io', node)#url('https://play.google.com/store/apps/details?id=dystopia.app')
 	
 
 
@@ -343,3 +354,6 @@ static func download_image_(body: PoolByteArray, Save_path: String, node : HTTPR
 
 func _on_Timer2_timeout():
 	print ('check timer stopped')
+	stop_check()
+
+	pass

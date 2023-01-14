@@ -49,9 +49,9 @@ func _process(_delta):
 #	pass
 
 
-#Disabling for UI Integration
 
-#func _handle_input_(event): #Works but buggy
+
+func _input(event):#Works
 	
 #	"Stops From Processing Mouse Inputs"
 #	if event is InputEventMouse:
@@ -65,12 +65,31 @@ func _process(_delta):
 		
 #		_zoom() #disabled for debugging, enable when done debugging
 #		return
+			
 	
 	
 	
-#	if event is InputEventScreenDrag :
+	#if event is InputEventSingleScreenTouch : #breaks
+	if event is InputEventScreenDrag : #breaks
 		
+		# Use Networking Timer for Swipe Detection (Done)
+		# buggy
+		Wallet.set_process(true)
+		Networking.start_check()
+		#yield(get_tree().create_timer(1), "timeout")
 		
+		while not Networking.stop_check():
+			_start_detection(event.position)
+		#if !event.is_pressed():
+			if Networking.stop_check():
+				_end_detection(event.position)
+				
+			#use swipe direction to change this parameter
+		#	Wallet.state_controller.select(int (Wallet.state_controller.get_index()) + 1)
+	else :  Wallet.set_process(false)
+	
+		#var direction
+		#print ('user swiped: ' , direction)
 		
 		
 #		target = event.get_position()

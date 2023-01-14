@@ -175,7 +175,7 @@ var funding_success_ui : Control
 var mnemonic_ui_lineEdit : LineEdit
 
 var txn_txn_valid_button : Button
-
+var funding_success_close_button : Button
 var imported_mnemonic_button : Button
 
 var UI_Elements : Array
@@ -249,7 +249,7 @@ func check_Nodes() -> bool:
 	var anim : AnimationPlayer = $AnimationPlayer
 
 	#UI_Elements = [Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
-	UI_Elements = [state_controller, Algorand, dashboard_UI, wallet_algos, ingame_algos, mnemonic_ui, mnemonic_ui_lineEdit, txn_txn_valid_button, imported_mnemonic_button, passward_UI, txn_addr, txn_amount, funding_success_ui]#[Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
+	UI_Elements = [state_controller, Algorand, dashboard_UI, wallet_algos, ingame_algos, mnemonic_ui, mnemonic_ui_lineEdit, txn_txn_valid_button, imported_mnemonic_button, passward_UI, txn_addr, txn_amount, funding_success_ui, funding_success_close_button]#[Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
 	
 	var p : bool
 	#checks if any UI element is null
@@ -680,7 +680,7 @@ func run_wallet_checks()-> bool: # works #run networking internet checks test be
 		self.Algorand.create_algod_node('TESTNET')
 	
 	if !good_internet:
-		Networking._check_if_device_is_online()
+		Networking._check_if_device_is_online(q)
 	
 	wallet_check_counter+= 1
 	#var status
@@ -1038,7 +1038,9 @@ func _input(_event):
 		print ("Txn button pressed: ",transaction_valid) #for debug purposes only
 	if imported_mnemonic_button.pressed:
 		imported_mnemonic = true
-
+	if funding_success_close_button.pressed :
+		reset_transaction_parameters()# fixes double spend buy
+		state_controller.select(0) #show account dashboard
 
 'Processes Algo and Asset Transactions'
 func txn(): #runs presaved transactions once wallet is ready
@@ -1102,12 +1104,7 @@ func smart_contract():
 func _on_enter_asset_pressed(): #depreciated
 	asset_id_valid = true
 
-#"Placeholder method for setting the UI elements"
-#func setUp_UI()-> bool:
-#	if dashboard_UI_amount_label != null:
-#		dashboard_UI_amount_label.set_text("Algo: "+str(_wallet_algos))
-#		return true
-#	return false
+
 
 "UI methods for handling the new Wallet UI"
 func hideUI()-> void:
@@ -1124,4 +1121,10 @@ func showUI()-> void:
 		i.focus_mode = 1
 		i.show()
 
-
+"Resets All Transaction Boolean Parameters"
+#fixes double spend bug
+func reset_transaction_parameters():
+	transaction_valid = false
+	asset_id_valid = false
+	
+	
