@@ -159,6 +159,7 @@ text = "      +   $256.00"
 [node name="CanvasLayer" type="CanvasLayer" parent="YSort2/HBoxContainer/VBoxContainer2"]
 
 [node name="Line2D" type="Line2D" parent="YSort2/HBoxContainer/VBoxContainer2/CanvasLayer"]
+visible = false
 position = Vector2( 459.7, 436 )
 scale = Vector2( 0.7, 0.7 )
 points = PoolVector2Array( -131, -5.71429, 159, -5.71429 )
@@ -166,6 +167,7 @@ width = 3.0
 default_color = Color( 0.647059, 0.647059, 0.647059, 1 )
 
 [node name="Line2D2" type="Line2D" parent="YSort2/HBoxContainer/VBoxContainer2/CanvasLayer"]
+visible = false
 position = Vector2( 461, 461 )
 scale = Vector2( 0.7, 0.7 )
 points = PoolVector2Array( -131, -5.71429, 159, -5.71429 )
@@ -173,6 +175,7 @@ width = 3.0
 default_color = Color( 0.647059, 0.647059, 0.647059, 1 )
 
 [node name="Line2D3" type="Line2D" parent="YSort2/HBoxContainer/VBoxContainer2/CanvasLayer"]
+visible = false
 position = Vector2( 461, 483 )
 scale = Vector2( 0.7, 0.7 )
 points = PoolVector2Array( -131, -5.71429, 159, -5.71429 )
@@ -180,6 +183,7 @@ width = 3.0
 default_color = Color( 0.647059, 0.647059, 0.647059, 1 )
 
 [node name="Line2D4" type="Line2D" parent="YSort2/HBoxContainer/VBoxContainer2/CanvasLayer"]
+visible = false
 position = Vector2( 459, 507 )
 scale = Vector2( 0.7, 0.7 )
 points = PoolVector2Array( -131, -5.71429, 159, -5.71429 )
