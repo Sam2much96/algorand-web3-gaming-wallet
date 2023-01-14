@@ -253,16 +253,16 @@ func _input(event):
 	if event is InputEventScreenDrag   :
 		#if event is InputEventMultiScreenDrag: breaks
 		#target = event.get_position()
-		print ("sglgnlngakdfnl")
+		#print ("sglgnlngakdfnl")
 		#return drag(target, Kinematic_2d.position, Kinematic_2d)
 		Networking.start_check()
-		while not Networking.stop_check():
-		#if !Networking.stop_check():
-			_start_detection(target)
+		#while not Networking.stop_check():
+		
+		#	_start_detection(target)
 		
 			
-		if Networking.stop_check(): _end_detection(target)
-		
+		#if Networking.stop_check(): _end_detection(target)
+		pass
 
 # Handles releasing 
 	#pass

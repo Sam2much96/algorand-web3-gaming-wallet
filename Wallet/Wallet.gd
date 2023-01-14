@@ -74,7 +74,7 @@ class_name wallet
 var image_url
 var json= File.new()
 var account_info: Dictionary = {1:[]}
-
+var save_dict: Dictionary = {}
 
 #*****************************************************
 
@@ -126,7 +126,9 @@ var FileDirectory=Directory.new() #deletes all theon reset
 
 
 #************Wallet Save Path**********************#
-var token_path : String = "user://wallet/account_info.token"
+var token_write_path : String = "user://wallet/account_info.token" #creating directory bugs out
+var token_dir : String = "user://wallet"
+
 export (String) var local_image_path ="user://wallet/img0.png" #Loads the image file path from a folder to prevent redownloads (depreciated)
 #var keys_path : String = "user://wallet/wallet_keys.cfg"
 #var keys_passwrd : PoolByteArray = [1234]
@@ -293,8 +295,8 @@ func __ready():
 	if Globals.screenOrientation == 1: #SCREEN_VERTICAL is 1
 		#anim.play("MOBILE UI")
 		
-		upscale_wallet_ui()
-
+		#upscale_wallet_ui() #depreciated
+		pass
 	'Connect and Debug Networking signals'
 	connect_signals()
 	debug_signal_connections()
@@ -311,7 +313,9 @@ func __ready():
 
 		#*******UI***********#
 #	setUp_UI()
-
+#Fixes Android Bug
+func _ready():
+	pass
 
 func _process(_delta):
 	#makes the state a global variable
@@ -356,7 +360,7 @@ func _process(_delta):
 		
 			
 			'Generates New Account'
-			if not FileDirectory.file_exists(token_path) : # if account info doesn't exist
+			if not FileDirectory.file_exists(token_dir) : # if account info doesn't exist
 				
 				"Creates Wallet Directory if it doesn't exist"
 				create_wallet_directory()
@@ -383,7 +387,7 @@ func _process(_delta):
 				
 				state = SHOW_ACCOUNT
 				#wallet_check += 1
-			if FileDirectory.file_exists(token_path) :
+			if FileDirectory.file_exists(token_dir) :
 				state = SHOW_ACCOUNT
 				return
 	
@@ -401,7 +405,7 @@ func _process(_delta):
 				status= yield(self.Algorand.algod.health(), "completed")
 				
 				print ("Status debug: ", status,' ',wallet_check_counter)
-				yield(check_wallet_info(),"completed")#ddd
+				check_wallet_info() #checks saved wallet variables for error
 				
 				# Escape Current State to Show Account State
 				self.state_controller.select(0) 
@@ -411,7 +415,7 @@ func _process(_delta):
 				
 		SHOW_ACCOUNT: #buggy with state controller
 			"it's always load account details when ready"
-			if FileCheck1.file_exists("user://wallet/account_info.token")  :
+			if FileCheck1.file_exists(token_write_path)  :
 				#use animation player to alter UI
 				
 				hideUI()
@@ -430,32 +434,27 @@ func _process(_delta):
 					#state = GENERATE_ADDRESS
 				
 			'Handles if account info is deleted'
-			if not FileCheck1.file_exists("user://wallet/account_info.token"):
+			#buggy on Android
+			if not FileCheck1.file_exists(token_write_path) :
 				#Revert to Import account state
 				
 				push_error('account info file does not exist, Import Wallet or generate New One')
 				self.state_controller.select(3) #rewrite as a method
 				#state = IMPORT_ACCOUNT  #rewrite as a method
-				
+				#set_process(false)
 				#programmatically delete NFT
 			
 
 
 			return
 		IMPORT_ACCOUNT: #works ish. But kinda broken too 
-			# hide wallet ui, show mnemonic ui
-			#use animation player to alter UI 
-			
+
 			
 			hideUI()
 			
-			#transaction_ui.hide()
-			#wallet_ui.hide()
 			
 			self.mnemonic_ui.show()
 			
-			#hide mnemonic characters
-			#mnemonic_ui.set_secret(true) 
 			
 
 			if  imported_mnemonic:
@@ -482,18 +481,15 @@ func _process(_delta):
 				account_info = {"address":address, "amount":0, "mnemonic": mnemonic , "created-assets": [{"index": 0, "params":{"clawback":'', "creator":"", "decimals":0, "default-frozen": '', "freeze": '', "manager":"", "name":"Punk_001", "reserve":"", "total":1, "unit-name": 'XYZ', "url":""}}]}
 				
 				"saves more account info"
-				save_account_info(account_info,0)
+				if save_account_info(account_info,0):
 				
 				
-				# check account and saves automatically
-				#check_wallet_info() #breaks sometimes
-				
-				
+					check_wallet_info()
 				
 				# show account
-				self.state_controller.select(0)
+					self.state_controller.select(0)
 
-			pass
+			return #self.set_process(false)
 		#Saves transactions to be processed in the ready function
 		# Saves the Transaction parameters and runs the txn() function
 		#as a subprocess of the _ready() function
@@ -504,20 +500,10 @@ func _process(_delta):
 			hideUI()
 			self.transaction_ui.show()
 			self.transaction_ui.focus_mode = 2
-			#mnemonic_ui.hide()
-			#wallet_ui.hide()
-			
-			#txn_ui_options_button.show()
+
 			#transaction_hint.show()
 			
 			" Swtiches Between Assets and Normal Transactions UI"
-			#if txn_ui_options.get_selected() == 0:
-			#txn_amount.show()
-			#nft_asset_id.hide()
-				
-			#txn_assets_valid_button.hide()
-
-				
 				
 			if transaction_valid : #user selected normal transactions
 					
@@ -659,7 +645,7 @@ func _process(_delta):
 				print (" Opt into Smartcontract---Debugging")
 				
 				#runs a smart contract deferred function in the ready function
-				_ready()
+				__ready()
 
 					#change state to check success of app call
 				self.state_controller.select(0) #check account state 1,  show account state 0
@@ -715,11 +701,11 @@ func run_wallet_checks()-> bool: # works #run networking internet checks test be
 		 #= _r
 	#return is_image_available_at_local_storage
 	'Fixes account token 0 bytes bug'
-	if FileDirectory.file_exists(token_path ):
-		FileCheck1.open(token_path ,File.READ)
+	if FileDirectory.file_exists(token_write_path ):
+		FileCheck1.open(token_write_path ,File.READ)
 		if FileCheck1.get_len() == 0: #prevents a  0 bytes error
 			FileCheck1.close()
-			FileDirectory.remove(token_path ) #use Globals delete function instead
+			FileDirectory.remove(token_write_path ) #use Globals delete function instead
 
 
 	print ("----wallet check done------")
@@ -775,44 +761,49 @@ func generate_address(_mnemonic:String)-> String: #works
 
 #saves account information to a dictionary
 #i don't know what number does ngl. It jusst works, lol
-func save_account_info( info : Dictionary, number: int): 
-	var save_game = File.new() #change from save game
-	save_game.open(token_path, File.WRITE)
-	var save_dict = {}
+func save_account_info( info : Dictionary, number: int)-> bool: 
+	if not check_local_wallet_directory():
+		push_error('Wallet Directry Not Yet Created.')
+		create_wallet_directory()
 	
-	#************Use Assets parameter ,Disabling for now*******************************#
-	
-	save_dict.address =info["address"] # stops presaved info from deletion
-	save_dict.amount =info["amount"]
+	if FileDirectory.open(token_dir) == OK && check_local_wallet_directory() :
+		FileCheck1.open(token_write_path, File.WRITE)
+		#************Use Assets parameter ,Disabling for now*******************************#
+		save_dict.address =info["address"] # stops presaved info from deletion
+		save_dict.amount =info["amount"]
+			
+		# encode mnemonic
+		save_dict.mnemonic = convert_string_to_binary(mnemonic)  #saves mnemonic as string error
+			
+		# Temporarily disabling
 		
-	# encode mnemonic
-	save_dict.mnemonic = convert_string_to_binary(mnemonic)  #saves mnemonic as string error
+		save_dict.asset_index =info["created-assets"][number]["index"] 
+		save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
+		save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
+		save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
 		
-	# Temporarily disabling
-	
-	save_dict.asset_index =info["created-assets"][number]["index"] 
-	save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
-	save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
-	save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
-	
-	save_game.store_line(to_json(save_dict))
-	save_game.close()
-	
-	print ("saved account info")
-
+		FileCheck1.store_line(to_json(save_dict))
+		FileCheck1.close()
+		
+		print ("saved account info")
+		return true
+	if not FileDirectory.open(token_dir) == OK: 
+		push_error("Error: " + str(FileDirectory.open(token_dir)))
+		return false
+	return false
 
 
 
 func load_account_info(check_only=false):
 	if !loaded_wallet:
-		var save_game = File.new()
+		#var save_game = File.new()
 		
-		if not save_game.file_exists(token_path):
+		if not FileCheck2.file_exists(token_write_path):
 			return false
 		
-		save_game.open(token_path, File.READ)
+		FileCheck2.open(token_write_path, File.READ)
 		
-		var save_dict = parse_json(save_game.get_line())
+		var save_dict = parse_json(FileCheck2.get_line())
 
 		if typeof(save_dict) != TYPE_DICTIONARY:
 			return false
@@ -890,7 +881,10 @@ func set_image_(texture):
 		print ("Is stored locally: ",is_image_available_at_local_storage)
 
 
-
+#func check_local_saved_wallet_token(): 
+	#check for the file size
+	# check for read/ write permission
+	# check that it is available
 
 func check_wallet_info(): #works. Pass a variable check
 	#check if wallet token exits
@@ -918,7 +912,7 @@ func _on_withraw(): #withdraws Algos from wallet data into my test algorand wall
 func _on_reset():
 	#should deleta all account details
 	print ('----Resetting')
-	var a=token_path 
+	var a=token_write_path 
 	var b=local_image_path
 	#var c="res://wallet/wallet_keys.cfg"
 	#var d="res://wallet/nft_metadata.json"
@@ -928,7 +922,7 @@ func _on_reset():
 		var error=FileDirectory.remove(_i)
 		if error==OK:
 			print ('Deleting Wallet Details')
-	return _ready()
+	return __ready()
 
 #func error_checkers()-> void:
 
@@ -961,31 +955,31 @@ func convert_binary_to_string(binary : PoolByteArray)-> String:
 	return string
 
 
-"UI Buttons"
+"UI Buttons" #disabled for debuggind
 #increases all UI parents scale for horizontal screens
-func upscale_wallet_ui()-> void:
-	var newScale = Vector2(0.08, 0.08)
-	var newScale2 = Vector2(0.25,0.25)
-	var newScale3 = Vector2(1.5,1.5)
+#func upscale_wallet_ui()-> void:
+#	var newScale = Vector2(0.08, 0.08)
+#	var newScale2 = Vector2(0.25,0.25)
+#	var newScale3 = Vector2(1.5,1.5)
 	
-	self.wallet_ui.set_scale(newScale) 
-	self.mnemonic_ui.set_scale(newScale2)
-	self.transaction_ui.set_scale(newScale2)
+#	self.wallet_ui.set_scale(newScale) 
+#	self.mnemonic_ui.set_scale(newScale2)
+#	self.transaction_ui.set_scale(newScale2)
 	
 	#upscale their childern
 	
-	for i in self.wallet_ui.get_children():
-		i.set_scale(newScale)
+#	for i in self.wallet_ui.get_children():
+#		i.set_scale(newScale)
 	
-	for t in self.mnemonic_ui.get_children():
-		if not t is Timer:
-			t.set_scale(newScale3)
+#	for t in self.mnemonic_ui.get_children():
+#		if not t is Timer:
+#			t.set_scale(newScale3)
 	
 	#transaction_ui.get_children().set_scale(newScale)
 	
 	#scale selection button
-	self.state_controller.set_scale(newScale2) #doenst work. Using aniamtion player instead
-	pass
+#	self.state_controller.set_scale(newScale2) #doenst work. Using aniamtion player instead
+#	pass
 
 func _on_withdraw_pressed():
 	#Music.play_track(Music.ui_sfx[0])
@@ -1014,7 +1008,7 @@ func _on_refresh_pressed(): #disabling refresh button
 
 #Deletes Local Account Info
 func reset()-> void:
-	Globals.delete_local_file(token_path)
+	Globals.delete_local_file(token_write_path)
 
 
 'Copies Wallet Addresss to Clipboard'
