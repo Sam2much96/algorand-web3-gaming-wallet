@@ -296,7 +296,7 @@ func __ready():
 		print ("HTTP REQUEST NODE: ",typeof(q))
 		
 	#if user first boots app
-	if OS.get_ticks_msec() < 2000: 
+	if OS.get_ticks_msec() < 5000: 
 		self.state_controller.select(7) #show password login
 
 
