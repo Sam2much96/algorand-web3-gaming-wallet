@@ -1,5 +1,7 @@
 # algorand-web3-gaming-wallet
 
+![Screenshot](https://github.com/Sam2much96/algorand-web3-gaming-wallet/blob/master/icon.png)
+
 **Demo Video**
 
 [![**Demo Video**](https://img.youtube.com/vi/0LVXwbE1EsQ/hqdefault.jpg)](https://youtu.be/0LVXwbE1EsQ)
