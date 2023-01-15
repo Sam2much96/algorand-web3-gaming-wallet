@@ -50,7 +50,6 @@ rect_scale = Vector2( 1.78005, 1.78005 )
 mouse_filter = 1
 
 [node name="Password_UI" parent="CanvasLayer" instance=ExtResource( 9 )]
-visible = false
 margin_left = -696.0
 margin_top = -69.0
 margin_right = -696.0

@@ -3,10 +3,7 @@
 [ext_resource path="res://themes/Bold.tres" type="Theme" id=1]
 [ext_resource path="res://themes/Light.tres" type="Theme" id=2]
 [ext_resource path="res://themes/Buttons_white.tres" type="Theme" id=3]
-
-[sub_resource type="Theme" id=2]
-LineEdit/colors/font_color = Color( 1, 1, 1, 1 )
-LineEdit/styles/normal = null
+[ext_resource path="res://themes/Textbar.tres" type="Theme" id=4]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -23,14 +20,13 @@ margin_bottom = 607.0
 color = Color( 0.192157, 0.262745, 0.858824, 1 )
 
 [node name="LineEdit" type="LineEdit" parent="."]
-margin_left = 466.0
+margin_left = 393.0
 margin_top = 183.0
-margin_right = 524.0
-margin_bottom = 207.0
-theme = SubResource( 2 )
+margin_right = 608.0
+margin_bottom = 211.0
+theme = ExtResource( 4 )
 text = "123456789"
 align = 1
-secret = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

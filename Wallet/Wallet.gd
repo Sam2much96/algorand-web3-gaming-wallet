@@ -121,7 +121,6 @@ var FileCheck2=File.new() #checks NFT metadata .json
 var FileCheck3=File.new()#checks local image storage
 var FileCheck4=File.new() # checks wallet mnemonic
 
-#var FileCheck5 = ResourceLoader #checks if the image texture is stored locally (depreciiated)
 
 var FileDirectory=Directory.new() #deletes all theon reset
 
@@ -132,6 +131,8 @@ var token_write_path : String = "user://wallet/account_info.token" #creating dir
 var token_dir : String = "user://wallet"
 
 export (String) var local_image_path ="user://wallet/img0.png" #Loads the image file path from a folder to prevent redownloads (depreciated)
+
+#************Wallet Password & Keys **********************#
 #var keys_path : String = "user://wallet/wallet_keys.cfg"
 #var keys_passwrd : PoolByteArray = [1234]
 
@@ -150,7 +151,7 @@ var algod_node_health_is_good: bool
 var imported_mnemonic : bool = false
 var transaction_valid: bool =false
 var asset_id_valid : bool = false
-
+var password_valid : bool = false
 var loaded_wallet: bool= false #fixes looping loading bug
 var good_internet : bool #debugs user's internet
 
@@ -172,7 +173,7 @@ var account_address : Label
 var smart_contract_UI : Control
 var wallet_algos : Label
 var ingame_algos : Label
-
+var password_Entered_Button : Button
 var transaction_ui : Control
 var mnemonic_ui : Control
 var funding_success_ui : Control
@@ -187,12 +188,27 @@ var imported_mnemonic_button : Button
 var fund_Acct_Button : Button
 var make_Payment_Button : Button
 var UI_Elements : Array
-
+var passward_UI_Buttons : Array
 var canvas_layer : CanvasLayer
 
 var txn_addr : LineEdit
 var txn_amount : LineEdit
 var nft_asset_id : LineEdit
+
+#*****PasswordUI******#
+var password_LineEdit : LineEdit
+var _1 : Button
+var _2 : Button
+var _3 : Button
+var _4 : Button
+var _5 : Button
+var _6 : Button
+var _7 : Button
+var _8 : Button
+var _9 : Button
+var _0 : Button
+var zero : Button
+var delete_last_button : Button 
 
 "Checks the Nodes connection Between Singleton & UI"
 func check_Nodes() -> bool:
@@ -246,8 +262,11 @@ func check_Nodes() -> bool:
 		mnemonic_ui_lineEdit, txn_txn_valid_button, imported_mnemonic_button, passward_UI, 
 		txn_addr, txn_amount, funding_success_ui, funding_success_close_button, smart_contract_UI, 
 		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
-		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button,
+		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
+		password_LineEdit,
 	]
+	
+	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
 	
 	var p : bool
 	#checks if any UI element is null
@@ -272,12 +291,15 @@ func __ready():
 			self.state_controller.add_item("Import Account")
 			self.state_controller.add_item("Transactions")
 			self.state_controller.add_item("SmartContacts") #should be a sub of Transactions
-			self.state_controller.add_item('NFT')
+			self.state_controller.add_item('Collectibles')
+			self.state_controller.add_item('Login')
 		print ("HTTP REQUEST NODE: ",typeof(q))
-	
-	
-	
-	
+		
+	#if user first boots app
+	if OS.get_ticks_msec() < 2000: 
+		self.state_controller.select(7) #show password login
+
+
 	"Mobile UI"
 	print ('Screen orientation debug; ',Globals.screenOrientation)
 	if Globals.screenOrientation == 1: #SCREEN_VERTICAL is 1
@@ -327,7 +349,9 @@ func _process(_delta):
 	elif self.state_controller.get_selected() == 6:
 		wallet_check = 0 # resets the wallet check stopper
 		state = COLLECTIBLES
-	
+	elif self.state_controller.get_selected() == 7:
+		wallet_check = 0
+		state = PASSWORD
 	
 	"Constantly Running Process Introduces a Text UI Bug"
 	
@@ -623,12 +647,12 @@ func _process(_delta):
 			
 			#connect password ui button signals
 			#should trigger password UI logic as a function
-			trigger_password_UI_logic(true)
+			#trigger_password_UI_logic(true)
 			#should show passord UI
 			passward_UI.show()
 			# should trigger transaction valid once button is pressed
-			if transaction_valid: 
-				trigger_password_UI_logic(false)
+			if password_valid: 
+				#trigger_password_UI_logic(false)
 			# should revert to dashboard state
 				self.state_controller.select(0)
 			pass
@@ -856,10 +880,6 @@ func set_image_(texture):
 		print ("Is stored locally: ",is_image_available_at_local_storage)
 
 
-#func check_local_saved_wallet_token(): 
-	#check for the file size
-	# check for read/ write permission
-	# check that it is available
 
 func check_wallet_info(): #works. Pass a variable check
 	#check if wallet token exits
@@ -983,7 +1003,10 @@ func _input(_event):
 	if smartcontract_UI_button.pressed: 
 		transaction_valid = true
 		print ("SmartContract button pressed: ",transaction_valid) #for debug purposes only
-
+	if password_Entered_Button.pressed:
+		password_valid = true
+		print ("Password Placeholder entered", transaction_valid)
+		
 	if fund_Acct_Button.pressed:
 		_on_testnetdispenser_pressed()
 	if make_Payment_Button.pressed:
@@ -993,6 +1016,13 @@ func _input(_event):
 	if funding_success_close_button.pressed :
 		reset_transaction_parameters()# fixes double spend buy
 		state_controller.select(0) #show account dashboard
+
+		#************PassWord UI**********#
+	if state == PASSWORD:
+		for i in passward_UI_Buttons:
+			if i.pressed:
+				password_LineEdit.text += i.text
+			#else: break
 
 'Processes Algo and Asset Transactions'
 func txn(): #runs presaved transactions once wallet is ready
@@ -1078,6 +1108,18 @@ func reset_transaction_parameters():
 	recievers_addr = ""
 
 #Self Explanatory
-func trigger_password_UI_logic(setting : bool)-> void:
-	push_warning('PlaceHolder Method for Password UI')
-	pass
+#func trigger_password_UI_logic(setting : bool)-> void:
+#	push_warning('PlaceHolder Method for Password UI')
+	# connect Password UI buttons
+	
+	#if not button connected
+#	if not passward_UI_Buttons[0].is_connected("pressed",self, ): #is_connected("request_completed", self, "_http_request_completed"):
+#	for i in passward_UI_Buttons:
+		#connect all buttons
+		
+	# update Password linedit to button
+	#fakfank
+#	pass
+
+#func password_buttons_pressed():
+#	pass

@@ -38,8 +38,21 @@ onready var smartcontract_UI_AppID = get_parent().get_node("CanvasLayer/SmartCon
 onready var smartcontract_UI_AppArgs = get_parent().get_node("CanvasLayer/SmartContract_UI/LineEdit3")
 onready var smartcontract_UI_Button = get_parent().get_node("CanvasLayer/SmartContract_UI/Button")
 onready var transaction_UI_asset_id_LineEdit = get_parent().get_node("CanvasLayer/Transaction_UI/LineEdit3")
+onready var enter_wallet_PassWord_Button = get_parent().get_node("CanvasLayer/Password_UI/Button")
+onready var password_Enter_LineEdit = get_parent().get_node("CanvasLayer/Password_UI/LineEdit")
 
-
+onready var button_0  = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button10")
+onready var button_1 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button")
+onready var button_2 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button2")
+onready var button_3 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button3")
+onready var button_4 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button4")
+onready var button_5 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button5")
+onready var button_6 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button6")
+onready var button_7 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button7")
+onready var button_8 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button8")
+onready var button_9 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button9")
+onready var button_11 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button11")
+onready var button_12 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button12")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Wallet.state_controller = self
@@ -56,12 +69,12 @@ func _ready():
 	#print (dashboard_UI.get_children())
 	
 	###Setting this variables bug out the UI input system
-	Wallet.wallet_algos = wallet_algos#dashboard_UI.get_child(4).get_child(1) #ingame_algos
-	Wallet.ingame_algos = ingame_algos#dashboard_UI.get_child(5).get_child(2).get_child(0).get_child(0)#wallet_algos
+	Wallet.wallet_algos = wallet_algos
+	Wallet.ingame_algos = ingame_algos
 	
 	#Buttons
 	Wallet.txn_txn_valid_button = submit_txn_button
-	
+	Wallet.password_Entered_Button = enter_wallet_PassWord_Button #placeholder button
 	Wallet.imported_mnemonic_button = submit_mnemonic_button
 	Wallet.txn_addr = transaction_UI_address_lineEdit
 	Wallet.txn_amount = transaction_UI_amount_lineEdit
@@ -74,7 +87,25 @@ func _ready():
 	Wallet.make_Payment_Button = make_payment_state_controller_button
 	Wallet.nft_asset_id = transaction_UI_asset_id_LineEdit
 	Wallet.fund_Acct_Button = fund_account_Button
+	Wallet.password_LineEdit = password_Enter_LineEdit
 	print("UI elemts OK: ",Wallet.check_Nodes()) #for debug purposes only
+	
+	Wallet._1 = button_1
+	Wallet._2 = button_2
+	Wallet._3 = button_3
+	Wallet._4 = button_4
+	Wallet._5 = button_5
+	Wallet._6 = button_6
+	Wallet._7 = button_7
+	Wallet._8 = button_8
+	Wallet._9 = button_9
+	Wallet._0 = button_0
+	Wallet.zero = button_11
+	Wallet.delete_last_button = button_12
+	
+	
+	
+	
 	#print ("Wallet UI elemts: ",Wallet.UI_Elements) #for debug purposes only
 	Wallet.__ready()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
