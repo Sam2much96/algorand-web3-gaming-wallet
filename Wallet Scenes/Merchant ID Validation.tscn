@@ -65,5 +65,5 @@ margin_top = 175.0
 margin_right = 614.0
 margin_bottom = 216.0
 theme = ExtResource( 1 )
-text = "Mnemonic"
+text = "Mnemonic "
 align = 1

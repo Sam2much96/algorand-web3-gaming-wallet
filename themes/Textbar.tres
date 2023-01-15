@@ -3,7 +3,7 @@
 [ext_resource path="res://Wallet fonts/LiberationSans.ttf" type="DynamicFontData" id=1]
 
 [sub_resource type="DynamicFont" id=4]
-size = 12
+size = 20
 use_filter = true
 font_data = ExtResource( 1 )
 

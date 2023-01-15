@@ -46,7 +46,7 @@
 # (10) IMplement Tokenized characters (player_v2)
 # (11) Implement cryptographic encryption and decryption
 # (12) Implement show mnemonic button
-# (13) Improve UI 
+# (13) Improve UI (done)
 		#alter UI scale for mobiles (done)
 		#use animation player to alter UI (depreciated. Functions work faster)
 # (14) Implement SHow mnemonic button
@@ -135,7 +135,7 @@ export (String) var local_image_path ="user://wallet/img0.png" #Loads the image 
 
 "State Machine"
 
-enum {NEW_ACCOUNT,CHECK_ACCOUNT, SHOW_ACCOUNT, IMPORT_ACCOUNT, TRANSACTIONS ,COLLECTIBLES, SMARTCONTRACTS, IDLE}
+enum {NEW_ACCOUNT,CHECK_ACCOUNT, SHOW_ACCOUNT, IMPORT_ACCOUNT, TRANSACTIONS ,COLLECTIBLES, SMARTCONTRACTS, IDLE, PASSWORD}
 export var state = IDLE
 
 var wallet_check : int = 0
@@ -194,22 +194,6 @@ func check_Nodes() -> bool:
 
 	#*****************Wallet UI ************************************
 	# Undergoing upgrades
-
-	#**********UI************#
-	#dashboard_UI = $root/CanvasLayer/Dashboard_UI
-	#onready var dashboard_UI_amount_label = $CanvasLayer/Dashboard_UI/YSort/Label
-
-
-
-	#var account_address = $CanvasLayer/Dashboard_UI/YSort/Label2
-
-	#temporary placeholder
-	#var ingame_algos = $CanvasLayer/Dashboard_UI/YSort2/HBoxContainer/VBoxContainer2/Label2
-
-	#temporary placeholder
-	#var wallet_algos = $CanvasLayer/Dashboard_UI/YSort/Label
-
-
 	var withdraw_button = $wallet_ui/HBoxContainer/withdraw #connect to smartcontract
 	
 	var refresh_button= $wallet_ui/HBoxContainer/refresh
@@ -267,13 +251,9 @@ func __ready():
 	
 		#check if methods exist
 		if (self.state_controller.get_item_count() == 0):
-			#txn_ui_options.add_item('Transactions') 
-			#txn_ui_options.add_item('Assets') 
 			
 			#**********State Controller Options***********#
-			#add error checker so its not duplicated
-			#if _ready() is called multiple times
-			#sssss
+			
 			self.state_controller.add_item("Show Account")
 			self.state_controller.add_item("Check Account")
 			self.state_controller.add_item("New Account")
@@ -283,10 +263,6 @@ func __ready():
 			self.state_controller.add_item('NFT')
 		print ("HTTP REQUEST NODE: ",typeof(q))
 	
-
-	
-	#state_controller.select(4)
-
 	
 	
 	
@@ -308,19 +284,14 @@ func __ready():
 	"General Wallet Checks"
 	run_wallet_checks() #should be used sparingly?
 
-	#generating smart contract mnemonic
-	#generate_address('purity inner pilot suggest cave funny hip joke bean radar cheese moon sad depth book laundry pave lift robust length task fringe they abandon kitten')
 
 		#*******UI***********#
-#	setUp_UI()
+
 #Fixes Android Bug
 func _ready():
 	pass
 
 func _process(_delta):
-	#makes the state a global variable
-	#Globals.wallet_state = state #depreciated
-	
 	
 	# UI state Processing (works-ish)
 	if self.state_controller.get_selected() == 0:
@@ -372,8 +343,7 @@ func _process(_delta):
 				
 				#wallet_check += 1
 				'Gets the Users Wallet Address'
-				#Player_account =get_wallet_address_from_mnemonic(Player_account_details[1])
-				#Escrow_account =get_wallet_address_from_mnemonic(Escrow_account)
+				
 				address= Player_account_details[0]
 				mnemonic= Player_account_details[1]
 				
@@ -390,10 +360,8 @@ func _process(_delta):
 			if FileDirectory.file_exists(token_dir) :
 				state = SHOW_ACCOUNT
 				return
-	
-		#"Try running outside process funtion"
+				
 		CHECK_ACCOUNT:  #Works too well. Overprints texts
-			#if FileCheck1.file_exists("user://wallet/account_info.token") :
 			if wallet_check == 0:
 				#Make sure an algod node is running or connet to mainnet or testnet
 				if self.Algorand.algod == null:
@@ -422,10 +390,6 @@ func _process(_delta):
 				
 				self.dashboard_UI.show()
 				
-				#wallet_ui.show()
-				#mnemonic_ui.hide()
-				#transaction_ui.hide()
-				
 				load_account_info(false)
 				
 				show_account_info(true)
@@ -440,8 +404,6 @@ func _process(_delta):
 				
 				push_error('account info file does not exist, Import Wallet or generate New One')
 				self.state_controller.select(3) #rewrite as a method
-				#state = IMPORT_ACCOUNT  #rewrite as a method
-				#set_process(false)
 				#programmatically delete NFT
 			
 
@@ -455,8 +417,6 @@ func _process(_delta):
 			
 			self.mnemonic_ui.show()
 			
-			
-
 			if  imported_mnemonic:
 				#address=(Algorand.algod.get_address(mnemonic))
 				#var address : String
@@ -469,10 +429,7 @@ func _process(_delta):
 				
 				#*******Generates Address************#
 				address = generate_address(mnemonic) #works
-					
-
-
-
+				
 				'savins imported account info'
 				
 				#FIxes null parameters errors
@@ -537,13 +494,7 @@ func _process(_delta):
 						
 					txn_check += 1
 					return txn_check
-
-			#if txn_ui_options.get_selected() == 1:
-				#txn_amount.hide()
 				#uses two different buttons for assets and algo transactions
-			#	txn_assets_valid_button.show()
-			#	txn_txn_valid_button.hide()
-			#	nft_asset_id.show()
 				if asset_id_valid : # user selected asset transaction
 					#eee
 					_asset_id = int(self.nft_asset_id.text)
@@ -654,13 +605,26 @@ func _process(_delta):
 		IDLE:
 			set_process(false)
 			pass
-		
+		PASSWORD:
+			#should be the wallet pssword UI
+			#first UI once user logs in
+			#hide UI
+			hideUI()
+			
+			#connect password ui button signals
+			#should trigger password UI logic as a function
+			#should show passord UI
+			passward_UI.show()
+			# should trigger transaction valid once button is pressed
+			if transaction_valid: 
+			# should revert to dashboard state
+				self.state_controller.select(0)
+			pass
 
 
 # Uses Connection Health and internet health to check Account info
-#Rewrite to include local NFT images check and all checks
-func run_wallet_checks()-> bool: # works #run networking internet checks test before running this function
-#if wallet_check == 0:
+
+func run_wallet_checks()-> bool: # works 
 	#Make sure an algod node is running or connet to mainnet or testnet
 	if self.Algorand.algod == null:
 		self.Algorand.create_algod_node('TESTNET')
@@ -774,8 +738,7 @@ func save_account_info( info : Dictionary, number: int)-> bool:
 			
 		# encode mnemonic
 		save_dict.mnemonic = convert_string_to_binary(mnemonic)  #saves mnemonic as string error
-			
-		# Temporarily disabling
+		
 		
 		save_dict.asset_index =info["created-assets"][number]["index"] 
 		save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
@@ -955,39 +918,12 @@ func convert_binary_to_string(binary : PoolByteArray)-> String:
 	return string
 
 
-"UI Buttons" #disabled for debuggind
-#increases all UI parents scale for horizontal screens
-#func upscale_wallet_ui()-> void:
-#	var newScale = Vector2(0.08, 0.08)
-#	var newScale2 = Vector2(0.25,0.25)
-#	var newScale3 = Vector2(1.5,1.5)
-	
-#	self.wallet_ui.set_scale(newScale) 
-#	self.mnemonic_ui.set_scale(newScale2)
-#	self.transaction_ui.set_scale(newScale2)
-	
-	#upscale their childern
-	
-#	for i in self.wallet_ui.get_children():
-#		i.set_scale(newScale)
-	
-#	for t in self.mnemonic_ui.get_children():
-#		if not t is Timer:
-#			t.set_scale(newScale3)
-	
-	#transaction_ui.get_children().set_scale(newScale)
-	
-	#scale selection button
-#	self.state_controller.set_scale(newScale2) #doenst work. Using aniamtion player instead
-#	pass
 
 func _on_withdraw_pressed():
-	#Music.play_track(Music.ui_sfx[0])
 	_on_withraw()
 
 
 func _on_Main_menu_pressed():
-	#Music.play_track(Music.ui_sfx[0])
 	return Globals._go_to_title()
 
 
@@ -1103,15 +1039,12 @@ func _on_enter_asset_pressed(): #depreciated
 "UI methods for handling the new Wallet UI"
 func hideUI()-> void:
 	for i in canvas_layer.get_children():
-	#	if i.name != 'state_controller':
-			#if i.get_mouse_filter()  
 		i.set_mouse_filter(1)
 		i.focus_mode = 0
 		i.hide()
 
 func showUI()-> void:
 	for i in canvas_layer.get_children():
-	#	if i.name != 'state_controller':
 		i.focus_mode = 1
 		i.show()
 

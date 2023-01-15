@@ -26,10 +26,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -829.0
-margin_top = -513.0
-margin_right = 126.0
-margin_bottom = 82.0
+margin_left = -856.0
+margin_top = -510.0
+margin_right = 98.9999
+margin_bottom = 85.0
 grow_horizontal = 0
 grow_vertical = 0
 rect_scale = Vector2( 1.77854, 1.77854 )
@@ -50,29 +50,29 @@ mouse_filter = 1
 
 [node name="Password_UI" parent="CanvasLayer" instance=ExtResource( 9 )]
 visible = false
-margin_left = -482.0
-margin_top = 17.0
-margin_right = -482.0
-margin_bottom = -322.784
-rect_scale = Vector2( 1.56, 1.56 )
+margin_left = -696.0
+margin_top = -69.0
+margin_right = -696.0
+margin_bottom = -408.784
+rect_scale = Vector2( 1.87476, 1.87476 )
 mouse_filter = 1
 
 [node name="FundingSuccess" parent="CanvasLayer" instance=ExtResource( 10 )]
 visible = false
-margin_left = -552.0
-margin_top = 40.0
-margin_right = -552.0
-margin_bottom = -438.0
+margin_left = -635.0
+margin_top = -25.0
+margin_right = -635.0
+margin_bottom = -503.0
 rect_scale = Vector2( 1.79726, 1.79726 )
 mouse_filter = 1
 
 [node name="Transaction_UI" parent="CanvasLayer" instance=ExtResource( 11 )]
 visible = false
-margin_left = -417.0
-margin_top = 88.0
-margin_right = -417.0
-margin_bottom = -251.784
-rect_scale = Vector2( 1.65, 1.65 )
+margin_left = -409.0
+margin_top = 120.0
+margin_right = -409.0
+margin_bottom = -219.784
+rect_scale = Vector2( 1.36361, 1.36361 )
 mouse_filter = 1
 
 [node name="state_controller" type="OptionButton" parent="."]
