@@ -25,14 +25,18 @@ onready var submit_txn_button = get_parent().get_node("CanvasLayer/Transaction_U
 onready var submit_mnemonic_button = get_parent().get_node("CanvasLayer/Mnemonic_UI/Button")
 
 onready var Password_UI = get_parent().get_node("CanvasLayer/Password_UI")
-
+onready var App_Call_UI = get_parent().get_node("CanvasLayer/SmartContract_UI")
 onready var transaction_UI_address_lineEdit = get_parent().get_node("CanvasLayer/Transaction_UI/LineEdit")
 
 onready var transaction_UI_amount_lineEdit = get_parent().get_node("CanvasLayer/Transaction_UI/LineEdit2")
 onready var FundingSuccessUI = get_parent().get_node("CanvasLayer/FundingSuccess")
 onready var Funding_Success_Close_Button = get_parent().get_node("CanvasLayer/FundingSuccess/Button")
 
-#onready var fundingSuccess_UI
+
+onready var smartcontract_UI_Address = get_parent().get_node("CanvasLayer/SmartContract_UI/LineEdit")
+onready var smartcontract_UI_AppID = get_parent().get_node("CanvasLayer/SmartContract_UI/LineEdit2")
+onready var smartcontract_UI_AppArgs = get_parent().get_node("CanvasLayer/SmartContract_UI/LineEdit3")
+onready var smartcontract_UI_Button = get_parent().get_node("CanvasLayer/SmartContract_UI/Button")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Wallet.state_controller = self
@@ -59,19 +63,14 @@ func _ready():
 	Wallet.txn_addr = transaction_UI_address_lineEdit
 	Wallet.txn_amount = transaction_UI_amount_lineEdit
 	Wallet.funding_success_close_button = Funding_Success_Close_Button
+	Wallet.smart_contract_UI = App_Call_UI
+	Wallet.smartcontract_ui_address_lineEdit = smartcontract_UI_Address
+	Wallet.smartcontract_ui_appID_lineEdit = smartcontract_UI_AppID
+	Wallet.smartcontract_ui_args_lineEdit = smartcontract_UI_AppArgs
+	Wallet.smartcontract_UI_button = smartcontract_UI_Button
 	
-	# How to FIx
-	# Get All Node Items in this scene
-	# Structure Global variables properly
-	# Send them to the Wallet Singletons
-	# Run Wallet Checks
-	# If true, Node should begin working properly
-	
-	#Wallet.__ready()
-	#print (Wallet.state_controller)
-	
-	print("UI elemts OK: ",Wallet.check_Nodes())
-	print (Wallet.UI_Elements)
+	print("UI elemts OK: ",Wallet.check_Nodes()) #for debug purposes only
+	#print ("Wallet UI elemts: ",Wallet.UI_Elements) #for debug purposes only
 	Wallet.__ready()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Wallet/state_controller.gd" type="Script" id=1]
 [ext_resource path="res://addons/algodot/Algod.gd" type="Script" id=2]
+[ext_resource path="res://Wallet Scenes/AccountsSetupPage.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Wallet Scenes/AccountsDashboard1.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Wallet Scenes/Merchant ID Validation.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Wallet Scenes/Merchant Pin.tscn" type="PackedScene" id=9]
@@ -22,6 +23,7 @@ script = ExtResource( 2 )
 layer = -1
 
 [node name="Dashboard_UI" parent="CanvasLayer" instance=ExtResource( 7 )]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -58,7 +60,6 @@ rect_scale = Vector2( 1.87476, 1.87476 )
 mouse_filter = 1
 
 [node name="FundingSuccess" parent="CanvasLayer" instance=ExtResource( 10 )]
-visible = false
 margin_left = -635.0
 margin_top = -25.0
 margin_right = -635.0
@@ -74,6 +75,14 @@ margin_right = -409.0
 margin_bottom = -219.784
 rect_scale = Vector2( 1.36361, 1.36361 )
 mouse_filter = 1
+
+[node name="SmartContract_UI" parent="CanvasLayer" instance=ExtResource( 3 )]
+visible = false
+margin_left = -413.0
+margin_top = 110.0
+margin_right = -413.0
+margin_bottom = 110.0
+rect_scale = Vector2( 1.41437, 1.41437 )
 
 [node name="state_controller" type="OptionButton" parent="."]
 margin_left = 2.31318

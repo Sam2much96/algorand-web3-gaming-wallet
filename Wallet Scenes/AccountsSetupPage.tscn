@@ -40,7 +40,10 @@ margin_right = 494.0
 margin_bottom = 239.0
 rect_scale = Vector2( 1.89065, 2.27465 )
 theme = ExtResource( 2 )
-text = "  Name"
+text = "Address"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="LineEdit2" type="LineEdit" parent="."]
 margin_left = 342.0
@@ -49,7 +52,7 @@ margin_right = 492.0
 margin_bottom = 325.0
 rect_scale = Vector2( 1.89065, 2.27465 )
 theme = ExtResource( 2 )
-text = " Address"
+text = "App ID"
 
 [node name="LineEdit3" type="LineEdit" parent="."]
 margin_left = 341.0
@@ -58,7 +61,7 @@ margin_right = 491.0
 margin_bottom = 413.0
 rect_scale = Vector2( 1.89065, 2.27465 )
 theme = ExtResource( 2 )
-text = " Misc"
+text = "Args"
 
 [node name="Button" type="Button" parent="."]
 margin_left = 381.0

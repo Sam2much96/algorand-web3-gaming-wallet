@@ -100,7 +100,9 @@ var mnemonic : String
 var recievers_addr : String = '' #for transactions
 var _amount : int = 0#for transactions
 var _asset_id :int = 0
-
+var smart_contract_addr : String = ""
+var _app_id : int = 0
+var _app_args : String = ""
 var encoded_mnemonic : PoolByteArray
 var encrypted_mnemonic 
 
@@ -167,7 +169,7 @@ var state_controller : OptionButton
 var dashboard_UI : Control
 var passward_UI : Control
 var account_address : Label
-
+var smart_contract_UI : Control
 var wallet_algos : Label
 var ingame_algos : Label
 
@@ -175,7 +177,10 @@ var transaction_ui : Control
 var mnemonic_ui : Control
 var funding_success_ui : Control
 var mnemonic_ui_lineEdit : LineEdit
-
+var smartcontract_ui_address_lineEdit : LineEdit
+var smartcontract_ui_appID_lineEdit : LineEdit
+var smartcontract_ui_args_lineEdit : LineEdit
+var smartcontract_UI_button : Button 
 var txn_txn_valid_button : Button
 var funding_success_close_button : Button
 var imported_mnemonic_button : Button
@@ -235,7 +240,13 @@ func check_Nodes() -> bool:
 	var anim : AnimationPlayer = $AnimationPlayer
 
 	#UI_Elements = [Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
-	UI_Elements = [state_controller, Algorand, dashboard_UI, wallet_algos, ingame_algos, mnemonic_ui, mnemonic_ui_lineEdit, txn_txn_valid_button, imported_mnemonic_button, passward_UI, txn_addr, txn_amount, funding_success_ui, funding_success_close_button]#[Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
+	UI_Elements = [
+		state_controller, Algorand, dashboard_UI, wallet_algos, ingame_algos, mnemonic_ui,
+		mnemonic_ui_lineEdit, txn_txn_valid_button, imported_mnemonic_button, passward_UI, 
+		txn_addr, txn_amount, funding_success_ui, funding_success_close_button, smart_contract_UI, 
+		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
+		smartcontract_UI_button,
+	]
 	
 	var p : bool
 	#checks if any UI element is null
@@ -439,11 +450,9 @@ func _process(_delta):
 				
 				"saves more account info"
 				if save_account_info(account_info,0):
-				
-				
 					check_wallet_info()
-				
-				# show account
+					
+					# show account
 					self.state_controller.select(0)
 
 			return #self.set_process(false)
@@ -473,6 +482,7 @@ func _process(_delta):
 				if _amount  < 100_000:
 						
 						#should ideally be sent to the UI
+						# Use OS alert
 					push_error('Cannot send balance less tha 100_000 MicroAlgos')
 						
 						
@@ -582,23 +592,22 @@ func _process(_delta):
 			#use animation player to alter UI
 			#opt into counter smart contract deployed to host address
 			#try running in ready function
-			self.transaction_ui.show()
-			self.mnemonic_ui.hide()
-			self.wallet_ui.hide()
+			hideUI()
+			smart_contract_UI.show()
+			#dfsdfhfdh
 			
-			#transaction_hint.hide()
-			self.txn_amount.hide()
-			self.txn_assets_valid_button.hide()
-			self.nft_asset_id.hide()
-			self.txn_ui_options.hide()
+			#get parameters from smart contract UI
+
 			if transaction_valid: #buggy
 				#Would Require Compiling to Teal
 				print (" Opt into Smartcontract---Debugging")
-				
+				smart_contract_addr = smartcontract_ui_address_lineEdit.text 
+				_app_id = int(smartcontract_ui_appID_lineEdit.text)
+				_app_args = smartcontract_ui_args_lineEdit.text
 				#runs a smart contract deferred function in the ready function
 				__ready()
-
-					#change state to check success of app call
+				
+				
 				self.state_controller.select(0) #check account state 1,  show account state 0
 			pass
 		
@@ -613,10 +622,12 @@ func _process(_delta):
 			
 			#connect password ui button signals
 			#should trigger password UI logic as a function
+			trigger_password_UI_logic(true)
 			#should show passord UI
 			passward_UI.show()
 			# should trigger transaction valid once button is pressed
 			if transaction_valid: 
+				trigger_password_UI_logic(false)
 			# should revert to dashboard state
 				self.state_controller.select(0)
 			pass
@@ -966,6 +977,11 @@ func _input(_event):
 	if txn_txn_valid_button.pressed:
 		transaction_valid = true #works
 		print ("Txn button pressed: ",transaction_valid) #for debug purposes only
+
+	if smartcontract_UI_button.pressed: 
+		transaction_valid = true
+		print ("SmartContract button pressed: ",transaction_valid) #for debug purposes only
+
 	if imported_mnemonic_button.pressed:
 		imported_mnemonic = true
 	if funding_success_close_button.pressed :
@@ -1007,28 +1023,27 @@ func txn(): #runs presaved transactions once wallet is ready
 
 'Processes Smart Contract NoOp transactions'
 func smart_contract(): 
-	if transaction_valid:
-		var noop_txn = self.Algorand.algod.construct_app_call(params, '4KMRCP23JP4SM2L65WBLK6A3TPT723ILD27R7W755P7GAU5VCE7LJHAUEQ', 116639568,['4KMRCP23JP4SM2L65WBLK6A3TPT723ILD27R7W755P7GAU5VCE7LJHAUEQ'],["inc"])
+	if transaction_valid && _app_id != 0 && smart_contract_addr != "":
+		#check that the address string variable length is valid
+		var noOp_txn = self.Algorand.algod.construct_app_call(params, smart_contract_addr, _app_id,_app_args)
 	
-
+		print ("NoOp transcation: ",noOp_txn) 
 		#print ("opt in transcation: ",noop_txn) #for debug purposes only
 	
 		# Signs the Raw transaction
-		var stx = self.Algorand.raw_sign_transactions(noop_txn, mnemonic)
-	
-	#print ("Raw Signed Transaction: ",stx) #shouldn't be null
-
+		var stx = self.Algorand.algod.sign_transaction(noOp_txn, mnemonic)
+		print ("Signed Transaction: ",stx) #shouldn't be null
 		var txid = self.Algorand.algod.send_transaction(stx) # sends raw signed transaction to the network
-
 		txid = self.Algorand.algod.send_transaction(stx)
+		print ('Tx ID: ',txid)
+		
+		hideUI()
+		self.funding_success_ui.show()
 	
-	#print (txid)
 	
-	#wait for transaction to finish sending
-	#var wait= yield(Algorand.algod.wait_for_transaction(txid), "completed") 
-	
-	#print ('wait: ', wait)
 	transaction_valid = false
+	_app_id = 0
+	smart_contract_addr = ""
 	return transaction_valid
 
 func _on_enter_asset_pressed(): #depreciated
@@ -1054,4 +1069,8 @@ func reset_transaction_parameters():
 	transaction_valid = false
 	asset_id_valid = false
 	
-	
+
+#Self Explanatory
+func trigger_password_UI_logic(setting : bool)-> void:
+	push_warning('PlaceHolder Method for Password UI')
+	pass
