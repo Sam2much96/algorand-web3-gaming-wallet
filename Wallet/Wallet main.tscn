@@ -23,7 +23,6 @@ script = ExtResource( 2 )
 layer = -1
 
 [node name="Dashboard_UI" parent="CanvasLayer" instance=ExtResource( 7 )]
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -60,6 +59,7 @@ rect_scale = Vector2( 1.87476, 1.87476 )
 mouse_filter = 1
 
 [node name="FundingSuccess" parent="CanvasLayer" instance=ExtResource( 10 )]
+visible = false
 margin_left = -635.0
 margin_top = -25.0
 margin_right = -635.0

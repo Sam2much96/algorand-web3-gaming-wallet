@@ -31,12 +31,15 @@ onready var transaction_UI_address_lineEdit = get_parent().get_node("CanvasLayer
 onready var transaction_UI_amount_lineEdit = get_parent().get_node("CanvasLayer/Transaction_UI/LineEdit2")
 onready var FundingSuccessUI = get_parent().get_node("CanvasLayer/FundingSuccess")
 onready var Funding_Success_Close_Button = get_parent().get_node("CanvasLayer/FundingSuccess/Button")
-
-
+onready var fund_account_Button = get_parent().get_node("CanvasLayer/Dashboard_UI/Button")
+onready var make_payment_state_controller_button = get_parent().get_node("CanvasLayer/Dashboard_UI/Button2")
 onready var smartcontract_UI_Address = get_parent().get_node("CanvasLayer/SmartContract_UI/LineEdit")
 onready var smartcontract_UI_AppID = get_parent().get_node("CanvasLayer/SmartContract_UI/LineEdit2")
 onready var smartcontract_UI_AppArgs = get_parent().get_node("CanvasLayer/SmartContract_UI/LineEdit3")
 onready var smartcontract_UI_Button = get_parent().get_node("CanvasLayer/SmartContract_UI/Button")
+onready var transaction_UI_asset_id_LineEdit = get_parent().get_node("CanvasLayer/Transaction_UI/LineEdit3")
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Wallet.state_controller = self
@@ -68,7 +71,9 @@ func _ready():
 	Wallet.smartcontract_ui_appID_lineEdit = smartcontract_UI_AppID
 	Wallet.smartcontract_ui_args_lineEdit = smartcontract_UI_AppArgs
 	Wallet.smartcontract_UI_button = smartcontract_UI_Button
-	
+	Wallet.make_Payment_Button = make_payment_state_controller_button
+	Wallet.nft_asset_id = transaction_UI_asset_id_LineEdit
+	Wallet.fund_Acct_Button = fund_account_Button
 	print("UI elemts OK: ",Wallet.check_Nodes()) #for debug purposes only
 	#print ("Wallet UI elemts: ",Wallet.UI_Elements) #for debug purposes only
 	Wallet.__ready()

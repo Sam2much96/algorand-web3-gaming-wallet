@@ -120,7 +120,7 @@ margin_top = 256.0
 margin_right = 529.0
 margin_bottom = 292.0
 theme = ExtResource( 5 )
-text = "MM/YY"
+text = "0123"
 
 [node name="LineEdit4" type="LineEdit" parent="."]
 margin_left = 534.0

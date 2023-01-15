@@ -184,14 +184,15 @@ var smartcontract_UI_button : Button
 var txn_txn_valid_button : Button
 var funding_success_close_button : Button
 var imported_mnemonic_button : Button
-
+var fund_Acct_Button : Button
+var make_Payment_Button : Button
 var UI_Elements : Array
 
 var canvas_layer : CanvasLayer
 
 var txn_addr : LineEdit
 var txn_amount : LineEdit
-
+var nft_asset_id : LineEdit
 
 "Checks the Nodes connection Between Singleton & UI"
 func check_Nodes() -> bool:
@@ -203,20 +204,20 @@ func check_Nodes() -> bool:
 	
 	var refresh_button= $wallet_ui/HBoxContainer/refresh
 
-	var wallet_ui = $wallet_ui
+	#var wallet_ui = $wallet_ui
 	#var mnemonic_ui #= $CanvasLayer/Mnemonic_UI 
 	
 	#var transaction_ui = $CanvasLayer/Transaction_UI
 	
 	#var funding_success_ui = $CanvasLayer/FundingSuccess
 
-	var txn_ui_options = $transaction_ui/txn_ui_options
+	#var txn_ui_options = $transaction_ui/txn_ui_options
 
-	var address_ui_options = $mnemonic_ui/address_ui_options
+	#var address_ui_options = $mnemonic_ui/address_ui_options
 
 	#updating for the new ui
-
-	var nft_asset_id = $transaction_ui/nft
+#sdfss
+	#var nft_asset_id = $transaction_ui/nft
 
 
 	#var txn_amount = $transaction_ui/transaction_amount
@@ -245,7 +246,7 @@ func check_Nodes() -> bool:
 		mnemonic_ui_lineEdit, txn_txn_valid_button, imported_mnemonic_button, passward_UI, 
 		txn_addr, txn_amount, funding_success_ui, funding_success_close_button, smart_contract_UI, 
 		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
-		smartcontract_UI_button,
+		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button,
 	]
 	
 	var p : bool
@@ -938,7 +939,8 @@ func _on_Main_menu_pressed():
 	return Globals._go_to_title()
 
 
-func _on_testnetdispenser_pressed():
+func _on_testnetdispenser_pressed(): #connect to UI
+	_on_Copy_address_pressed() #copy address to clipboard
 	return OS.shell_open('https://testnet.algoexplorer.io/dispenser')
 
 
@@ -982,6 +984,10 @@ func _input(_event):
 		transaction_valid = true
 		print ("SmartContract button pressed: ",transaction_valid) #for debug purposes only
 
+	if fund_Acct_Button.pressed:
+		_on_testnetdispenser_pressed()
+	if make_Payment_Button.pressed:
+		self.state_controller.select(4)
 	if imported_mnemonic_button.pressed:
 		imported_mnemonic = true
 	if funding_success_close_button.pressed :
@@ -1063,12 +1069,13 @@ func showUI()-> void:
 		i.focus_mode = 1
 		i.show()
 
-"Resets All Transaction Boolean Parameters"
+"Resets All Transaction Boolean & String Parameters"
 #fixes double spend bug
 func reset_transaction_parameters():
 	transaction_valid = false
 	asset_id_valid = false
-	
+	smart_contract_addr = ''
+	recievers_addr = ""
 
 #Self Explanatory
 func trigger_password_UI_logic(setting : bool)-> void:
