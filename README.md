@@ -1,5 +1,15 @@
 # algorand-web3-gaming-wallet
 
+**AZA MAN**
+A - Algorand, 
+Z - Zenon, 
+A - Automated,
+ 
+M - Management, 
+A - Asset, 
+N - Network 
+
+
 ![Screenshot](https://github.com/Sam2much96/algorand-web3-gaming-wallet/blob/master/icon.png)
 
 **Demo Video**

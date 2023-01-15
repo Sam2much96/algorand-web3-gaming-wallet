@@ -241,8 +241,8 @@ func check_Nodes() -> bool:
 
 	#var txn_addr = $CanvasLayer/Transaction_UI/LineEdit
 
-	var txn_ui_options_button = $transaction_ui/txn_ui_options
-	var txn_assets_valid_button = $transaction_ui/enter_asset
+	#var txn_ui_options_button = $transaction_ui/txn_ui_options
+	#var txn_assets_valid_button = $transaction_ui/enter_asset
 
 	#Txn valid should use Passward UI
 	#var passward_UI = $CanvasLayer/Password_UI
@@ -296,7 +296,7 @@ func __ready():
 		print ("HTTP REQUEST NODE: ",typeof(q))
 		
 	#if user first boots app
-	if OS.get_ticks_msec() < 5000: 
+	if OS.get_ticks_msec() < 10_000: 
 		self.state_controller.select(7) #show password login
 
 
