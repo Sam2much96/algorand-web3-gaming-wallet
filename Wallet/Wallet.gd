@@ -323,6 +323,7 @@ func __ready():
 
 #Fixes Android Bug
 func _ready():
+	self.add_child(q) #add networking node to the scene tree
 	pass
 
 func _process(_delta):
@@ -398,6 +399,7 @@ func _process(_delta):
 				return
 				
 		CHECK_ACCOUNT:  #Works too well. Overprints texts
+			#currently buggy
 			if wallet_check == 0:
 				#Make sure an algod node is running or connet to mainnet or testnet
 				if self.Algorand.algod == null:
@@ -656,7 +658,9 @@ func _process(_delta):
 			# should revert to dashboard state
 				self.state_controller.select(0)
 			pass
-
+func check_internet():
+	if !good_internet:
+		Networking._check_if_device_is_online(q)
 
 # Uses Connection Health and internet health to check Account info
 
@@ -665,8 +669,7 @@ func run_wallet_checks()-> bool: # works
 	if self.Algorand.algod == null:
 		self.Algorand.create_algod_node('TESTNET')
 	
-	if !good_internet:
-		Networking._check_if_device_is_online(q)
+	check_internet()
 	
 	wallet_check_counter+= 1
 	#var status
@@ -775,11 +778,11 @@ func save_account_info( info : Dictionary, number: int)-> bool:
 		# encode mnemonic
 		save_dict.mnemonic = convert_string_to_binary(mnemonic)  #saves mnemonic as string error
 		
-		
-		save_dict.asset_index =info["created-assets"][number]["index"] 
-		save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
-		save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
-		save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
+		#Buggy
+		#	save_dict.asset_index =info["created-assets"][number]["index"] 
+		#	save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
+		#	save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
+		#	save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
 		
 		FileCheck1.store_line(to_json(save_dict))
 		FileCheck1.close()
@@ -827,9 +830,9 @@ func _restore_wallet_data(info: Dictionary):
 	#***********Assets Information*****************#
 	#might break if wallet has no assets. 
 	#Write proper fix for this function and save asset function which duplicates code
-	asset_name = str (info.asset_name) 
-	asset_url = str(info.asset_url) #asset url and asset meta data are different
-	asset_unit_name = str(info.asset_unit_name)
+	#asset_name = str (info.asset_name) 
+	#asset_url = str(info.asset_url) #asset url and asset meta data are different
+	#asset_unit_name = str(info.asset_unit_name)
 	
 	print ('wallet data restored from local database')
 	
@@ -883,17 +886,25 @@ func set_image_(texture):
 
 func check_wallet_info(): #works. Pass a variable check
 	#check if wallet token exits
+	# check if Internet is OK
 	#THen checks wallet account information
 	
-	if address != null && mnemonic != null && check_local_wallet_directory():
+	if address != null && mnemonic != null && check_local_wallet_directory() && good_internet: 
 		account_info = yield(self.Algorand.algod.account_information(address), "completed")
-		save_account_info(account_info, 0) #testing
-	else : 
-		push_error('Either address or mnemonic cannot be null')
-		push_error("Import Mnemonic or Generate New Account")
+		save_account_info(account_info, 0) #testing  
+		print ("acct info: ",account_info) #for debug purposes only 
+	if address == null:
 		print ("check info Address debug: ",address)
+		push_error('Either address  cannot be null')
+	if mnemonic == null:
+		push_error("mnemonic cannot be null Import Mnemonic or Generate New Account")
 		print ("check info Mnemonic debug: ", mnemonic)
-	print (account_info) #for debug purposes only 
+	
+	if !good_internet:
+		push_error(" Internet Connection Is Bad")
+		check_internet()
+	
+	
 	
 	emit_signal('completed')
 	#increases a wallet check timer
