@@ -210,6 +210,11 @@ var _0 : Button
 var zero : Button
 var delete_last_button : Button 
 
+
+# Processor Boolean
+var processing : bool
+
+
 "Checks the Nodes connection Between Singleton & UI"
 func check_Nodes() -> bool:
 	 
@@ -548,7 +553,7 @@ func _process(_delta):
 			pass
 			
 	
-		COLLECTIBLES: 
+		COLLECTIBLES: #buggy, needs debug
 			"Checks if the Image is avalable Locally and either downloads or loads it"
 			if wallet_check == 0:
 				if not FileCheck3.file_exists(local_image_path): #works
@@ -890,7 +895,7 @@ func check_wallet_info(): #works. Pass a variable check
 	#THen checks wallet account information
 	
 	if address != null && mnemonic != null && check_local_wallet_directory() && good_internet: 
-		account_info = yield(self.Algorand.algod.account_information(address), "completed")
+		account_info = self.Algorand.algod.account_information(address)
 		save_account_info(account_info, 0) #testing  
 		print ("acct info: ",account_info) #for debug purposes only 
 	if address == null:
@@ -1006,7 +1011,37 @@ func _on_Copy_address_pressed():
 "Parses Input frm UI buttons"
 #formerly txn valid signal
 #func _on_enter_transaction_pressed():
-func _input(_event):
+func _input(event):
+	
+	# Turns on and Off Wallet Processing with Single screen touches
+	# 
+	# Uses a Timer of 4 seconds to turn processing off
+	
+	if event is InputEventSingleScreenTouch:
+		Networking.start_check(4) #should take a timer as a parameter
+		#Turns processing off for 20 secs
+		if Networking.Timeout == false :
+			
+			print ('Stoping Wallet Processing')
+			Wallet.set_process(false)
+			processing = false
+			return processing
+		
+		if Networking.Timeout == true :
+			
+			print ('Wallet Processing')
+			Wallet.set_process(true)
+			processing = true
+			return processing
+
+	
+	
+	# Change State Controller either with screen swipes or with buttons
+	#if event is InputEventSingleScreenLongPress:
+	#	print ('Long press')
+	#	state_controller.select(int(0))
+	
+	
 	if txn_txn_valid_button.pressed:
 		transaction_valid = true #works
 		print ("Txn button pressed: ",transaction_valid) #for debug purposes only
@@ -1016,7 +1051,7 @@ func _input(_event):
 		print ("SmartContract button pressed: ",transaction_valid) #for debug purposes only
 	if password_Entered_Button.pressed:
 		password_valid = true
-		print ("Password Placeholder entered", transaction_valid)
+		print ("Password Placeholder entered", password_valid)
 		
 	if fund_Acct_Button.pressed:
 		_on_testnetdispenser_pressed()

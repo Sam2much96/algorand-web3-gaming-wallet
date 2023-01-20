@@ -84,7 +84,7 @@ onready var timer :Timer  = Timer.new()
 
 #**********Helper Booleans***********#
 var running_request : bool = false
-
+var Timeout : bool = false
 
 func _ready():
 	_init_timer()
@@ -107,8 +107,8 @@ func _process(_delta):
 	for child in _reference_to_self.get_children():
 		if child is Timer:
 			check_timer = child
-			if not child.is_connected("timeout",self, '_check_connection') :
-				child.connect("timeout",self, '_check_connection') # connects timeout signal to check connection 
+			if not child.is_connected("timeout",self, '_on_Timer2_timeout') :
+				child.connect("timeout",self, '_on_Timer2_timeout') # connects timeout signal to check connection 
 		if child is HTTPRequest:
 #checks connection status -> Force connect HTTP request's signals
 			if child.is_connected("connection_success",self, '_on_success') != true:
@@ -152,9 +152,11 @@ func stop_check()-> bool: #Stops timer check
 	else: return true
 
 "Starts a check using Timer Node for 3 Seconds"
-func start_check(): 
+func start_check(time: int): 
 	connection_debug = str('start check') # Debug Variable
 	print ("start check")
+	if time != null:
+		check_timer.start(time) 
 	check_timer.start()
 
 # Check http unsecured Url connection
@@ -354,6 +356,7 @@ static func download_image_(body: PoolByteArray, Save_path: String, node : HTTPR
 
 func _on_Timer2_timeout():
 	print ('check timer stopped')
+	Timeout = true
 	stop_check()
 
 	pass

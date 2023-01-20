@@ -115,7 +115,14 @@ func _ready():
 "Fixes Stuck Button Bug"
 # By toggling the Wallet's Processing on/off
 # replace state controller with swipe controls
+# Temporarily disabling to fix bugs
 func _on_state_controller_toggled(button_pressed):
 	if button_pressed:
-		Wallet.set_process(true)
-	else : Wallet.set_process(false)
+		pass
+		#Wallet.set_process(true)
+	else :
+		pass
+		# Wallet.set_process(false)
+	
+	
+	

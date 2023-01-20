@@ -157,6 +157,10 @@ window/stretch/aspect="keep_height"
 
 enabled=PoolStringArray( "res://addons/algodot/plugin.cfg" )
 
+[global]
+
+single_touch=false
+
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
