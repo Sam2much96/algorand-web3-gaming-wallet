@@ -1023,14 +1023,14 @@ func _input(event):
 		if Networking.Timeout == false :
 			
 			print ('Stoping Wallet Processing')
-			Wallet.set_process(false)
+			self.set_process(false)
 			processing = false
 			return processing
 		
 		if Networking.Timeout == true :
 			
 			print ('Wallet Processing')
-			Wallet.set_process(true)
+			self.set_process(true)
 			processing = true
 			return processing
 
