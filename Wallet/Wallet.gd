@@ -13,7 +13,9 @@
 # (4) Users should be able to copy wallet details (Done)
 # (5) Test transaction state for Tokens and Algos (Done)
 # (6) Compile Teal FOr SMartContract Testing (Depreciated)
-# (7) 
+# (7) Test UX
+		#- fix check account UX
+		#- fix collectibles state 
 #Logic
 # It uses the Networking singleton and Algorand library
 # to get an asset's url and download the image from
@@ -22,15 +24,16 @@
 
 #Features
 #(1) Curerntly implements on the ALgorand blockchain, other chains not supported
-# (2) Uses two states -a Accounts State & -Collectible state
+# (2) Uses state machine -a Accounts State & -Collectible state & Other states
 # (3) Implements Binary > Utf-8 encryption
 # (4) Networking Test for Algorand node health, Good internet connection and local img storage
 # *************************************************
 #Bugs:
 
 #(1) UI is not intuitive (fixed)
-#(2) NFT drag and Drop is buggy
-# (3)  Script disrupts UI input ( Turning Node's Process off fixes it)
+#(2) NFT drag and Drop is buggy 
+# (3)  Wallet Node's Process disrupts UI input ( fixed with state_controller and wallet _input() methods)
+
 
 # To-DO:
 # (1) Implement as State Machine (done)
@@ -57,6 +60,8 @@
 		#if asset_url ='' && local_image_texture exists
 		#delete local image texture
 # (18) Show Asset ID on NFT
+# (19) Transfer assets back to Creator Wallet
+# (20) Implement Gallery UI for wallet
 
 # Testing
 #(1) Image Downloder (works)
@@ -225,36 +230,6 @@ func check_Nodes() -> bool:
 	
 	var refresh_button= $wallet_ui/HBoxContainer/refresh
 
-	#var wallet_ui = $wallet_ui
-	#var mnemonic_ui #= $CanvasLayer/Mnemonic_UI 
-	
-	#var transaction_ui = $CanvasLayer/Transaction_UI
-	
-	#var funding_success_ui = $CanvasLayer/FundingSuccess
-
-	#var txn_ui_options = $transaction_ui/txn_ui_options
-
-	#var address_ui_options = $mnemonic_ui/address_ui_options
-
-	#updating for the new ui
-#sdfss
-	#var nft_asset_id = $transaction_ui/nft
-
-
-	#var txn_amount = $transaction_ui/transaction_amount
-
-
-	#var txn_addr = $CanvasLayer/Transaction_UI/LineEdit
-
-	#var txn_ui_options_button = $transaction_ui/txn_ui_options
-	#var txn_assets_valid_button = $transaction_ui/enter_asset
-
-	#Txn valid should use Passward UI
-	#var passward_UI = $CanvasLayer/Password_UI
-
-	#var txn_txn_valid_button = $CanvasLayer/Transaction_UI/Button
-
-	#onready var transaction_hint= $transaction_ui/Label #depreciated
 
 
 	var NFT : TextureRect #=  get_tree().get_nodes_in_group('NFT')#$Control/TextureRect
@@ -423,8 +398,10 @@ func _process(_delta):
 				state = SHOW_ACCOUNT
 				
 
-				
-		SHOW_ACCOUNT: #buggy with state controller
+		#Loads all wallet details into Memory
+		# Entering any other derivative states without 
+		# entering show account previously would present new bugs
+		SHOW_ACCOUNT: 
 			"it's always load account details when ready"
 			if FileCheck1.file_exists(token_write_path)  :
 				#use animation player to alter UI
@@ -553,7 +530,7 @@ func _process(_delta):
 			pass
 			
 	
-		COLLECTIBLES: #buggy, needs debug
+		COLLECTIBLES: 
 			"Checks if the Image is avalable Locally and either downloads or loads it"
 			if wallet_check == 0:
 				if not FileCheck3.file_exists(local_image_path): #works
@@ -895,7 +872,8 @@ func check_wallet_info(): #works. Pass a variable check
 	#THen checks wallet account information
 	
 	if address != null && mnemonic != null && check_local_wallet_directory() && good_internet: 
-		account_info = self.Algorand.algod.account_information(address)
+		#print (Algorand.algod)
+		account_info = yield(self.Algorand.algod.account_information(address), "completed")
 		save_account_info(account_info, 0) #testing  
 		print ("acct info: ",account_info) #for debug purposes only 
 	if address == null:
