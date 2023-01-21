@@ -84,7 +84,6 @@ margin_bottom = 110.0
 rect_scale = Vector2( 1.41437, 1.41437 )
 
 [node name="state_controller" type="OptionButton" parent="."]
-visible = false
 margin_left = 2.31318
 margin_top = 31.5724
 margin_right = 130.313
