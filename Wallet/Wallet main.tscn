@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Wallet/state_controller.gd" type="Script" id=1]
 [ext_resource path="res://addons/algodot/Algod.gd" type="Script" id=2]
 [ext_resource path="res://Wallet Scenes/AccountsSetupPage.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Wallet Scenes/GalleryUI.tscn" type="PackedScene" id=4]
+[ext_resource path="res://themes/option+button.tres" type="Theme" id=5]
 [ext_resource path="res://Wallet Scenes/AccountsDashboard1.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Wallet Scenes/Merchant ID Validation.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Wallet Scenes/Merchant Pin.tscn" type="PackedScene" id=9]
@@ -51,6 +52,7 @@ rect_scale = Vector2( 1.78005, 1.78005 )
 mouse_filter = 1
 
 [node name="Password_UI" parent="CanvasLayer" instance=ExtResource( 9 )]
+visible = false
 margin_left = -696.0
 margin_top = -69.0
 margin_right = -696.0
@@ -85,6 +87,7 @@ margin_bottom = 110.0
 rect_scale = Vector2( 1.41437, 1.41437 )
 
 [node name="Collectibles_UI" parent="CanvasLayer" instance=ExtResource( 4 )]
+visible = false
 margin_left = -236.0
 margin_top = 44.0
 margin_right = -236.0
@@ -98,6 +101,7 @@ margin_bottom = 51.5724
 rect_scale = Vector2( 0.2, 0.2 )
 focus_mode = 0
 mouse_filter = 1
+theme = ExtResource( 5 )
 enabled_focus_mode = 0
 text = "State Controller"
 script = ExtResource( 1 )

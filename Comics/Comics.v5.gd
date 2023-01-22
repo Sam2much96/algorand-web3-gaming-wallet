@@ -521,7 +521,8 @@ func prev_panel():
 	print ('prev panel')
 	
 	# Buggy
-	
+	# Resets to import mnemonic state
+	#should cycle through all states
 	return Wallet.state_controller.select(Wallet.state_controller.get_index() + 1)
 	
 	#emit signals

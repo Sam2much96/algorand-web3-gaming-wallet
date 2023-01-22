@@ -601,10 +601,10 @@ func _process(_delta):
 							wallet_check += 1
 							
 							# selet a random IPFS web 2.0 Gateway
-							Networking.genrate_random_gateway()
+							#Networking.genrate_random_gateway()
 							
 							# implement vaid gateways ass array link
-							Networking. _connect_to_ipfs_gateway(Networking.url, Networking.selected_gateway, q2)  
+							Networking. _connect_to_ipfs_gateway(Networking.url, Networking.gateway[0], q2)  
 							#run this download in the __ready function
 							__ready()
 							return wallet_check
@@ -812,11 +812,24 @@ func save_account_info( info : Dictionary, number: int)-> bool:
 		#Buggy
 		# Bug arises from accounts that have no created-assets
 		# Is required to debug NFT collectibles
+		# Error Catchers
+	
+	# saves if address has assets
+	# doesnt account for multiple assets
+		if info.has("assets") :
+			save_dict.asset_index =  info['assets'][1].get('asset-id')  #info["created-assets"][number]["index"] 
+			save_dict.asset_amount = info['assets'][1].get('amount')
 		
-		save_dict.asset_index =info["created-assets"][number]["index"] 
+		# saves if address has created assets
+	if info.has("created-assets"):
 		save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
 		save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
 		save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
+		
+		#save_dict.asset_index =info["created-assets"][number]["index"] 
+		#save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
+		#save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
+		#save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
 		
 		FileCheck1.store_line(to_json(save_dict))
 		FileCheck1.close()
@@ -858,9 +871,17 @@ func _restore_wallet_data(info: Dictionary):
 	
 	#***********Assets Information*****************#
 	
-	asset_name=info.asset_name
-	asset_index=info.asset_index
-	asset_url=info.asset_url
+	#asset_name=info.asset_name
+	#asset_index=info.asset_index
+	#asset_url=info.asset_url
+	
+	if info.has('asset_index'):
+		#asset_amount = int (info.asset_amount)
+		asset_index = info.asset_index
+	if info.has('asset_name'):
+		asset_name = str (info.asset_name) 
+		asset_url = str(info.asset_url) #asset url and asset meta data are different
+		asset_unit_name = str(info.asset_unit_name)
 	
 	print ('wallet data restored from local database')
 	
