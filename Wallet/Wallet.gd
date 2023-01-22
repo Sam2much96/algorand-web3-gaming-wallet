@@ -404,8 +404,8 @@ func _process(_delta):
 				state = SHOW_ACCOUNT
 				return
 				
-		CHECK_ACCOUNT:  #Works too well. Overprints texts
-			#currently buggy
+		CHECK_ACCOUNT:  #Works 
+			
 			if wallet_check == 0:
 				#Make sure an algod node is running or connet to mainnet or testnet
 				if self.Algorand.algod == null:
@@ -449,11 +449,8 @@ func _process(_delta):
 				self.state_controller.select(3) #rewrite as a method
 				#programmatically delete NFT
 			
-
-
 			return
-		IMPORT_ACCOUNT: #works ish. But kinda broken too 
-
+		IMPORT_ACCOUNT: #works 
 			
 			hideUI()
 			
@@ -461,9 +458,6 @@ func _process(_delta):
 			self.mnemonic_ui.show()
 			
 			if  imported_mnemonic:
-				#address=(Algorand.algod.get_address(mnemonic))
-				#var address : String
-				
 				
 				'Cannot convert argument error'
 				
@@ -521,9 +515,9 @@ func _process(_delta):
 					self.state_controller.select(0)
 				if _amount > 100_000 && txn_check == 0:
 						
-						#txn_check += 1
 						
-						#should save the transaction files to be done
+						
+						#Saves the transaction files to be done
 						
 						#goes to the title screen to reset ready function
 						#state = SHOW_ACCOUNT 
@@ -613,27 +607,13 @@ func _process(_delta):
 							
 					#***************************************************************
 				if FileCheck3.file_exists(local_image_file) or is_image_available_at_local_storage:
-					#print ('adfbsdjfbasdfjsdfs') #works
-					#load_local_image_texture()
 					wallet_check += 1
 					
-					#calls NFT from a class #depreciated
-					#NFT.load_local_image_texture(local_image_path) #loop error 
-					
-					
-					#calls NFT from comics node
-					#NFT is a call to the SceneTree's Texture react
-					#sfshdhd
 					#connect to wallet NFT logic
-					NFT_index_label.text = "Asset ID: "+ str(asset_index)
+					NFT_index_label.text = "ID: "+ str(asset_index) + "/" + str(asset_name)
 					# Disabling Collectibes UI thumbnails
 					return Comics.load_local_image_texture_from_global(self.NFT, local_image_file)
 					
-					#change states
-					# temporarily disabling
-					#self.state_controller.select(0)
-				 #duplicate of above for bug catching
-					#load_local_image_texture()
 				else: return
 		#opts into smart contracts with wallet
 		SMARTCONTRACTS: # doesnt work 
@@ -1135,8 +1115,6 @@ func _input(event):
 
 'Processes Algo and Asset Transactions'
 func txn(): #runs presaved transactions once wallet is ready
-	
-	
 	if recievers_addr != '' && _amount >= 100_000:
 		print ('Transaction Debug: ',recievers_addr, '/','amount: ',_amount, '/', 'txn check', txn_check)
 		

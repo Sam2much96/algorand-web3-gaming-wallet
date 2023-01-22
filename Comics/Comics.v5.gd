@@ -503,9 +503,9 @@ func center_page(): #
 func next_panel():
 	print ('Next Panel')
 	
-	# Buggy
 	
-	return Wallet.state_controller.select(Wallet.state_controller.get_index() + 1)
+	print ("changing to Show account State")
+	return Wallet.state_controller.select(0) #show dashboard
 	
 	#emit_signal("next_panel")
 	#if loaded_comics == true :
@@ -520,10 +520,8 @@ func next_panel():
 func prev_panel():
 	print ('prev panel')
 	
-	# Buggy
-	# Resets to import mnemonic state
-	#should cycle through all states
-	return Wallet.state_controller.select(Wallet.state_controller.get_index() + 1)
+	print ("changing to Show account State")
+	return Wallet.state_controller.select(0) #show dashboard
 	
 	#emit signals
 	#emit_signal("previous_panel")
