@@ -36,10 +36,14 @@ class_name Comics
 signal comics_showing
 signal loaded_comics 
 signal freed_comics
-signal panel_change
+#signal panel_change
 signal swiped(direction)
 signal swiped_canceled(start_position)
  
+
+#Placeholder signals
+#signal next_panel
+#signal previous_panel
 
 export (PackedScene) var current_comics 
 
@@ -498,6 +502,12 @@ func center_page(): #
 
 func next_panel():
 	print ('Next Panel')
+	
+	# Buggy
+	
+	return Wallet.state_controller.select(Wallet.state_controller.get_index() + 1)
+	
+	#emit_signal("next_panel")
 	#if loaded_comics == true :
 	#	current_frame = current_frame + 1
 	#	emit_signal("panel_change") 
@@ -509,8 +519,13 @@ func next_panel():
 
 func prev_panel():
 	print ('prev panel')
-	#emit signals
 	
+	# Buggy
+	
+	return Wallet.state_controller.select(Wallet.state_controller.get_index() + 1)
+	
+	#emit signals
+	#emit_signal("previous_panel")
 	#if loaded_comics == true :
 	#	current_frame =abs(current_frame - 1 )
 	#	emit_signal("panel_change")  

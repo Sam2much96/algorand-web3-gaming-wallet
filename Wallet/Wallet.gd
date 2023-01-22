@@ -771,6 +771,14 @@ func connect_signals(): #connects all required signals in the parent node
 		return q2.connect("request_completed", self, "_http_request_completed_2")
 
 
+	# Connect Comics swipe signals
+	#if not Comics_v5.is_connected("previous_panel", self, "prev_UI"):
+	#	Comics_v5.connect("previous_panel", self, "prev_UI")
+
+	#if not Comics_v5.is_connected("next_panel", self, "next_UI"):
+	#	Comics_v5.connect("next_panel", self, "next_UI")
+
+
 
 func debug_signal_connections()->void:
 	#debuggers
@@ -1201,3 +1209,5 @@ func _NFT():
 	# Implement Drag and Drop mechanics
 	#fdgsdfgnfldgndlfgn
 	pass
+
+
