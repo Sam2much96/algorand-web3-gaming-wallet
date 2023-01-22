@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Wallet/state_controller.gd" type="Script" id=1]
 [ext_resource path="res://addons/algodot/Algod.gd" type="Script" id=2]
 [ext_resource path="res://Wallet Scenes/AccountsSetupPage.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Wallet Scenes/GalleryUI.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Wallet Scenes/AccountsDashboard1.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Wallet Scenes/Merchant ID Validation.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Wallet Scenes/Merchant Pin.tscn" type="PackedScene" id=9]
@@ -82,6 +83,12 @@ margin_top = 110.0
 margin_right = -413.0
 margin_bottom = 110.0
 rect_scale = Vector2( 1.41437, 1.41437 )
+
+[node name="Collectibles_UI" parent="CanvasLayer" instance=ExtResource( 4 )]
+margin_left = -236.0
+margin_top = 44.0
+margin_right = -236.0
+margin_bottom = 44.0
 
 [node name="state_controller" type="OptionButton" parent="."]
 margin_left = 2.31318

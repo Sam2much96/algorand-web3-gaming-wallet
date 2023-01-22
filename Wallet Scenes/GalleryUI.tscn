@@ -1,0 +1,81 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = 288.0
+margin_top = -31.0
+margin_right = 694.0
+margin_bottom = 610.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="."]
+visible = false
+margin_left = 324.0
+margin_top = 29.0
+margin_right = 456.0
+margin_bottom = 161.0
+rect_scale = Vector2( 2.5, 2.5 )
+columns = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButton" type="TextureButton" parent="GridContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="GridContainer/TextureButton"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "01"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButton2" type="TextureButton" parent="GridContainer"]
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="GridContainer/TextureButton2"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "02"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButton3" type="TextureButton" parent="GridContainer"]
+margin_top = 68.0
+margin_right = 64.0
+margin_bottom = 132.0
+texture_normal = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="GridContainer/TextureButton3"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "03"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = 298.0
+margin_top = -15.0
+margin_right = 666.0
+margin_bottom = 587.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

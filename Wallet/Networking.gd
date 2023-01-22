@@ -179,29 +179,39 @@ func _check_connection_secured(url): # Check http secured Url connection
 	connection_debug = str (' making request  ')  + str (' Request Error: ',error)
 	print (' Networking Request Error: ',error) #for debug purposes only
 
+# List of valid IPFS web 2.0 Gateways
+# An array may be a better fit
+#https://ipfs.github.io/public-gateway-checker/
 static func _connect_to_ipfs_gateway(url : String, request_node: HTTPRequest): # Check http secured Url connection
 	#Ignore Warning
 	#if not running_request :
 		url = _parse(url) 
+		
+		
 		#url =url.http_escape()
 
 		# uses ipfs web 2 gateway
-		url = "https://ipfs.io/ipfs/" + url
+		#url is down
+		url = "https://gateway.ipfs.io/ipfs/" + url
+		
+		#print ("NFT Url: ",url) #for debug purposes only
+		
 		var t=StreamPeerSSL.new()
+	
 		var error = request_node.request(url,PoolStringArray(),false,HTTPClient.METHOD_GET) 
 		 
 		print (' Networking Request Error: ',error) #for debug purposes only
-	#elif running_request:
+		print ("Final Url: ", url)
 		return
 
-'Removes IPFS Domain from Asset url'
+
 'Removes IPFS Domain from Asset url'
 static func _parse(_url : String)-> String: #works
 	_url=_url.replace('ipfs://', '')
 	#print (_url) # for debug purposes only
 	return _url
 
-'Internet COnnectivity Check'
+
 'Internet COnnectivity Check'
 static func _check_if_device_is_online(node: HTTPRequest):
 	

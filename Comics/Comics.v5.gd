@@ -255,7 +255,7 @@ func _input(event):
 		#target = event.get_position()
 		#print ("sglgnlngakdfnl")
 		#return drag(target, Kinematic_2d.position, Kinematic_2d)
-		Networking.start_check()
+		Networking.start_check(1)
 		#while not Networking.stop_check():
 		
 		#	_start_detection(target)

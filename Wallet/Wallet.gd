@@ -114,6 +114,7 @@ var encrypted_mnemonic
 var _wallet_algos: int
 var asset_name : String
 var asset_url : String
+var asset_index : int
 var asset_unit_name : String
 
 #************NFT variables**************#
@@ -136,6 +137,8 @@ var token_write_path : String = "user://wallet/account_info.token" #creating dir
 var token_dir : String = "user://wallet"
 
 export (String) var local_image_path ="user://wallet/img0.png" #Loads the image file path from a folder to prevent redownloads (depreciated)
+var local_image_file : String = "user://wallet/img0.png.png" 
+
 
 #************Wallet Password & Keys **********************#
 #var keys_path : String = "user://wallet/wallet_keys.cfg"
@@ -169,6 +172,9 @@ signal transaction
 #**********************************#
 #onready var timer = $Timer #depreciated
 onready var q = HTTPRequest.new()
+onready var q2 = HTTPRequest.new()
+
+
 
 var Algorand : Algodot
 var state_controller : OptionButton
@@ -187,6 +193,7 @@ var smartcontract_ui_address_lineEdit : LineEdit
 var smartcontract_ui_appID_lineEdit : LineEdit
 var smartcontract_ui_args_lineEdit : LineEdit
 var smartcontract_UI_button : Button 
+var collectibles_UI : Control
 var txn_txn_valid_button : Button
 var funding_success_close_button : Button
 var imported_mnemonic_button : Button
@@ -199,6 +206,10 @@ var canvas_layer : CanvasLayer
 var txn_addr : LineEdit
 var txn_amount : LineEdit
 var nft_asset_id : LineEdit
+
+#*****Collectible UI*******#
+var NFT : TextureRect
+
 
 #*****PasswordUI******#
 var password_LineEdit : LineEdit
@@ -226,15 +237,15 @@ func check_Nodes() -> bool:
 
 	#*****************Wallet UI ************************************
 	# Undergoing upgrades
-	var withdraw_button = $wallet_ui/HBoxContainer/withdraw #connect to smartcontract
+	#var withdraw_button = $wallet_ui/HBoxContainer/withdraw #connect to smartcontract
 	
 	var refresh_button= $wallet_ui/HBoxContainer/refresh
 
 
 
-	var NFT : TextureRect #=  get_tree().get_nodes_in_group('NFT')#$Control/TextureRect
+	#var NFT : TextureRect #=  get_tree().get_nodes_in_group('NFT')#$Control/TextureRect
 	#var state_controller : OptionButton #= get_node_or_null("root/Node/state_controller")
-	var anim : AnimationPlayer = $AnimationPlayer
+	#var anim : AnimationPlayer = $AnimationPlayer
 
 	#UI_Elements = [Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
 	UI_Elements = [
@@ -243,7 +254,7 @@ func check_Nodes() -> bool:
 		txn_addr, txn_amount, funding_success_ui, funding_success_close_button, smart_contract_UI, 
 		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
-		password_LineEdit,
+		password_LineEdit, collectibles_UI, NFT
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
@@ -291,19 +302,28 @@ func __ready():
 	connect_signals()
 	debug_signal_connections()
 
-	#connect_buttons() depreciated
-	'NFT checks'
+
+
 	print ("NFT debug: ", NFT)
 
 	"General Wallet Checks"
 	run_wallet_checks() #should be used sparingly?
 
 
+	#connect_buttons() depreciated
+	'NFT checks'
+	
+	"NFT Downloads"
+	#if asset_url != "":
+	#Networking. _connect_to_ipfs_gateway("ipfs://QmXYApu5uDsfQHMx149LWJy3x5XRssUeiPzvqPJyLV2ABx", q2) 
+	
+
 		#*******UI***********#
 
 #Fixes Android Bug
 func _ready():
 	self.add_child(q) #add networking node to the scene tree
+	self.add_child(q2) #add networking node to the scene tree
 	pass
 
 func _process(_delta):
@@ -384,9 +404,6 @@ func _process(_delta):
 				#Make sure an algod node is running or connet to mainnet or testnet
 				if self.Algorand.algod == null:
 					self.Algorand.create_algod_node('TESTNET')
-
-					
-					#var status
 				var status : bool
 				status= yield(self.Algorand.algod.health(), "completed")
 				
@@ -453,8 +470,6 @@ func _process(_delta):
 				'savins imported account info'
 				
 				#FIxes null parameters errors
-				#account_info = {'address': address, 'amount': 0, 'mnemonic': mnemonic, 'asset_index': 0,'asset_name': '','asset_unit_name': '', 'asset_url': '',  "created-assets": [{}],}
-				
 				account_info = {"address":address, "amount":0, "mnemonic": mnemonic , "created-assets": [{"index": 0, "params":{"clawback":'', "creator":"", "decimals":0, "default-frozen": '', "freeze": '', "manager":"", "name":"Punk_001", "reserve":"", "total":1, "unit-name": 'XYZ', "url":""}}]}
 				
 				"saves more account info"
@@ -493,8 +508,8 @@ func _process(_delta):
 						#should ideally be sent to the UI
 						# Use OS alert
 					push_error('Cannot send balance less tha 100_000 MicroAlgos')
-						
-						
+					
+					
 					'Error Catcher 1'
 						# return to show account
 					self.state_controller.select(0)
@@ -533,7 +548,9 @@ func _process(_delta):
 		COLLECTIBLES: 
 			"Checks if the Image is avalable Locally and either downloads or loads it"
 			if wallet_check == 0:
-				if not FileCheck3.file_exists(local_image_path): #works
+				hideUI() 
+				collectibles_UI.show()
+				if not FileCheck3.file_exists(local_image_file): #works
 					
 					
 					#print('NFT image is not available locally, Downloading now') 
@@ -543,20 +560,19 @@ func _process(_delta):
 						#Make sure an algod node is running or connet to mainnet or testnet
 						if self.Algorand.algod == null:
 							self.Algorand.create_algod_node('TESTNET')
-
-							
 							#var status
 						var status : bool
 						status= yield(self.Algorand.algod.health(), "completed")
 						
 						print ("Status debug: ", status,' ',wallet_check_counter)
+						
+						#duplicates check wallet state function
 						check_wallet_info()#saves account info with assets details
 						
 
 						# show account
-						self.state_controller.select(0)
+						#self.state_controller.select(0) #Temporarily Disabling
 					if asset_url && asset_name != '':
-
 						
 						'theres a problem with the network connection'
 						'my server isnt serving the json file to godot properly'
@@ -565,19 +581,29 @@ func _process(_delta):
 						#image url should be gotten from asset-id
 						# some hosted assets might be meta data, 
 						#thats why image url is different fromasset-url
+						
+						#print ("asset url: ", asset_url) #for debug purposes only
+						
 						image_url=asset_url 
 						
 						print ('nft host site',image_url) #image_url should not be null
 						Networking.url=image_url #disabling for now
-						 
+						
 						#makes a https request to download image from local server
+						Networking.start_check(5)
+						if not Networking.Timeout && wallet_check == 0 :
+							wallet_check += 1
+							
+							# implement vaid gateways ass array link
+							Networking. _connect_to_ipfs_gateway(Networking.url, q2)  
+							#run this download in the __ready function
+							__ready()
+							return wallet_check
+						#<asfa<sfa
 						
-						Networking. _connect_to_ipfs_gateway(image_url, q)  
-						
-						
-						wallet_check += 1
+							
 					#***************************************************************
-				if FileCheck3.file_exists(local_image_path) or is_image_available_at_local_storage:
+				if FileCheck3.file_exists(local_image_file) or is_image_available_at_local_storage:
 					#print ('adfbsdjfbasdfjsdfs') #works
 					#load_local_image_texture()
 					wallet_check += 1
@@ -588,10 +614,14 @@ func _process(_delta):
 					
 					#calls NFT from comics node
 					#NFT is a call to the SceneTree's Texture react
-					Comics.load_local_image_texture_from_global(self.NFT, local_image_path)
+					#sfshdhd
+					#connect to wallet NFT logic
+					# Disabling Collectibes UI thumbnails
+					return Comics.load_local_image_texture_from_global(self.NFT, local_image_file)
 					
 					#change states
-					self.state_controller.select(0)
+					# temporarily disabling
+					#self.state_controller.select(0)
 				 #duplicate of above for bug catching
 					#load_local_image_texture()
 				else: return
@@ -629,15 +659,11 @@ func _process(_delta):
 			#hide UI
 			hideUI()
 			
-			#connect password ui button signals
-			#should trigger password UI logic as a function
-			#trigger_password_UI_logic(true)
-			#should show passord UI
 			passward_UI.show()
-			# should trigger transaction valid once button is pressed
+			
 			if password_valid: 
-				#trigger_password_UI_logic(false)
-			# should revert to dashboard state
+			
+			# Revert to dashboard state
 				self.state_controller.select(0)
 			pass
 func check_internet():
@@ -681,7 +707,7 @@ func run_wallet_checks()-> bool: # works
 	#should delete is assert url is empty string
 	if local_image_path != '':
 		#"Checks if image file is available"
-		is_image_available_at_local_storage = FileCheck4.file_exists(local_image_path)
+		is_image_available_at_local_storage = FileCheck4.file_exists(local_image_file)
 		print ("Is local image available: ", is_image_available_at_local_storage) #for debug purposes only
 		 #= _r
 	#return is_image_available_at_local_storage
@@ -707,8 +733,6 @@ func run_wallet_checks()-> bool: # works
 func show_account_info(load_from_local_wallet: bool): 
 	"load from local wallet"
 	if load_from_local_wallet == true && loaded_wallet == false: 
-		#account_address.text = str(Globals.address)
-		#looping bug : fix is bolean
 		self.account_address.text = str(address)
 		self.ingame_algos.text = str (Globals.algos)
 		self.wallet_algos.text = "Algo: "+ str(_wallet_algos)
@@ -728,8 +752,15 @@ func show_account_info(load_from_local_wallet: bool):
 
 func connect_signals(): #connects all required signals in the parent node
 	print ("Connect Networking Signls please")
+	#checks internet connectivity
 	if not q.is_connected("request_completed", self, "_http_request_completed"):
 		return q.connect("request_completed", self, "_http_request_completed")
+
+	#checks Image downloader
+	if not q2.is_connected("request_completed", self, "_http_request_completed_2"):
+		return q2.connect("request_completed", self, "_http_request_completed_2")
+
+
 
 func debug_signal_connections()->void:
 	#debuggers
@@ -761,10 +792,13 @@ func save_account_info( info : Dictionary, number: int)-> bool:
 		save_dict.mnemonic = convert_string_to_binary(mnemonic)  #saves mnemonic as string error
 		
 		#Buggy
-		#	save_dict.asset_index =info["created-assets"][number]["index"] 
-		#	save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
-		#	save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
-		#	save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
+		# Bug arises from accounts that have no created-assets
+		# Is required to debug NFT collectibles
+		
+		save_dict.asset_index =info["created-assets"][number]["index"] 
+		save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
+		save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
+		save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
 		
 		FileCheck1.store_line(to_json(save_dict))
 		FileCheck1.close()
@@ -780,54 +814,50 @@ func save_account_info( info : Dictionary, number: int)-> bool:
 
 func load_account_info(check_only=false):
 	if !loaded_wallet:
-		#var save_game = File.new()
-		
 		if not FileCheck2.file_exists(token_write_path):
 			return false
 		
 		FileCheck2.open(token_write_path, File.READ)
 		
 		var save_dict = parse_json(FileCheck2.get_line())
-
 		if typeof(save_dict) != TYPE_DICTIONARY:
 			return false
 		if not check_only:
 			_restore_wallet_data(save_dict)
 	
 
+"Loads Wallet Variables into Scene Tree Memory"
 func _restore_wallet_data(info: Dictionary):
 	# JSON numbers are always parsed as floats. In this case we need to turn them into ints
 	address = str(info.address)
-
 	
 	Globals.address = info.address
 	
-	#decode mnemonic
-	#fixes string conversion error with regex
-	
+	"decode mnemonic"
 	
 	mnemonic = convert_binary_to_string(info.mnemonic)
 	_wallet_algos = info.amount 
 	
 	#***********Assets Information*****************#
-	#might break if wallet has no assets. 
-	#Write proper fix for this function and save asset function which duplicates code
-	#asset_name = str (info.asset_name) 
-	#asset_url = str(info.asset_url) #asset url and asset meta data are different
-	#asset_unit_name = str(info.asset_unit_name)
+	
+	asset_name=info.asset_name
+	asset_index=info.asset_index
+	asset_url=info.asset_url
 	
 	print ('wallet data restored from local database')
 	
 	print ("mnemonic load debug: ",mnemonic) #for debug purposes only
-
+	print ("asset url debug: ",asset_url) # for debug purposes only
 
 
 
 'Performs a Bunch of HTTP requests'
+#(1) To Check if internet connection is good (works)
+# (2) To download Images from IPFS (buggy)
 func _http_request_completed(result, response_code, headers, body): #works with https connection
-	print (" request done: ", result) #********for debug purposes only
-	print (" headers: ", headers)#*************for debug purposes only
-	print (" response code: ", response_code) #for debug purposes only
+	print (" request done 1: ", result) #********for debug purposes only
+	print (" headers 1: ", headers)#*************for debug purposes only
+	print (" response code 1: ", response_code) #for debug purposes only
 	
 	if not body.empty():
 		good_internet = true
@@ -838,19 +868,28 @@ func _http_request_completed(result, response_code, headers, body): #works with 
 		good_internet = false
 		#Networking.stop_check()
 	
-	if not is_image_available_at_local_storage: 
+
+			
+	else: return
+
+
+func _http_request_completed_2(result, response_code, headers, body): 
+	print (" response code 2: ", response_code) #for debug purposes only
+	if !body.empty() && !is_image_available_at_local_storage:
+	
+	#if not is_image_available_at_local_storage: 
 		"Should Parse the NFT's meta-data to get the image ink"
-		#if body.empty() != true:
 		print ('request successful')
 			
 		"Downloads the NFT image"
-		print (" request successful")
+		print (" request successful", typeof(body))
 			
-			#disabling for now
-		set_image_(Networking.download_image_(body, "user://wallet/img0",q)) #works
-			
-	else: return
-	#Networking.cancel_request()
+		
+		#check if body is image type
+		set_image_(Networking.download_image_(body, local_image_path,q2)) #works
+	if body.empty():
+		push_error("Problem downloading Image ")
+
 
 func set_image_(texture):
 	if FileCheck3.file_exists(local_image_path):#use file check
@@ -859,9 +898,6 @@ func set_image_(texture):
 		"update Local image"
 		print("Image Tex: ",NFT.texture)
 		print("Image Format: ",NFT.texture.get_format() )
-		#local_image_path = "user://wallet/img0.png"
-
-		
 		print ("Is stored locally: ",is_image_available_at_local_storage)
 
 
@@ -871,7 +907,7 @@ func check_wallet_info(): #works. Pass a variable check
 	# check if Internet is OK
 	#THen checks wallet account information
 	
-	if address != null && mnemonic != null && check_local_wallet_directory() && good_internet: 
+	if address != null && mnemonic != null && check_local_wallet_directory() && good_internet : 
 		#print (Algorand.algod)
 		account_info = yield(self.Algorand.algod.account_information(address), "completed")
 		save_account_info(account_info, 0) #testing  
@@ -893,10 +929,6 @@ func check_wallet_info(): #works. Pass a variable check
 	#increases a wallet check timer
 	wallet_check += 1
 
-func _on_withraw(): #withdraws Algos from wallet data into my test algorand wallet
-	#var status
-	# Connect to Box Escrow SmartContrac
-	pass
 
 func _on_reset():
 	#should deleta all account details
@@ -913,9 +945,6 @@ func _on_reset():
 			print ('Deleting Wallet Details')
 	return __ready()
 
-#func error_checkers()-> void:
-
-#			return
 
 func check_local_wallet_directory()-> bool:
 	return FileDirectory. dir_exists("user://wallet")
@@ -944,11 +973,6 @@ func convert_binary_to_string(binary : PoolByteArray)-> String:
 	return string
 
 
-
-func _on_withdraw_pressed():
-	_on_withraw()
-
-
 func _on_Main_menu_pressed():
 	return Globals._go_to_title()
 
@@ -966,7 +990,7 @@ func _on_refresh_pressed(): #disabling refresh button
 		check_wallet_info()
 	
 	pass
-	#
+	
 
 
 #Deletes Local Account Info
@@ -981,10 +1005,6 @@ func _on_Copy_address_pressed():
 
 
 
-'For Importing Mnemonic and Address'
-#connected with via signals
-#func _on_enter_mnemonic_pressed():dsfsdfdfd
-#	
 
 "Parses Input frm UI buttons"
 #formerly txn valid signal
@@ -1131,19 +1151,17 @@ func reset_transaction_parameters():
 	smart_contract_addr = ''
 	recievers_addr = ""
 
-#Self Explanatory
-#func trigger_password_UI_logic(setting : bool)-> void:
-#	push_warning('PlaceHolder Method for Password UI')
-	# connect Password UI buttons
-	
-	#if not button connected
-#	if not passward_UI_Buttons[0].is_connected("pressed",self, ): #is_connected("request_completed", self, "_http_request_completed"):
-#	for i in passward_UI_Buttons:
-		#connect all buttons
-		
-	# update Password linedit to button
-	#fakfank
-#	pass
 
-#func password_buttons_pressed():
-#	pass
+"NFT controller Logic"
+# drag and Drop
+# comics node implemented
+# link with collectibles state
+func _NFT():
+	# create and hide buttons depending on the amount of Assets counted
+	# Set gallery UI testure button to Asset NFT texture downloaded
+	# load NFT script as child of Collectubles UI texture react
+	
+	# load, show and hide NFT's on Button clicks
+	# Implement Drag and Drop mechanics
+	#fdgsdfgnfldgndlfgn
+	pass

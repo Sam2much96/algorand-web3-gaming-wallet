@@ -17,13 +17,13 @@ onready var ingame_algos = get_parent().get_node("CanvasLayer/Dashboard_UI/YSort
 onready var wallet_algos = get_parent().get_node("CanvasLayer/Dashboard_UI/YSort/Label")
 
 onready var mnemonic_UI = get_parent().get_node("CanvasLayer/Mnemonic_UI")
-
+onready var Collectibles_UI = get_parent().get_node("CanvasLayer/Collectibles_UI")
 onready var mnemonic_UI_LineEdit = get_parent().get_node("CanvasLayer/Mnemonic_UI/LineEdit")
 
 onready var submit_txn_button = get_parent().get_node("CanvasLayer/Transaction_UI/Button")
 
 onready var submit_mnemonic_button = get_parent().get_node("CanvasLayer/Mnemonic_UI/Button")
-
+onready var image_texture_holder = get_parent().get_node("CanvasLayer/Collectibles_UI/TextureRect")
 onready var Password_UI = get_parent().get_node("CanvasLayer/Password_UI")
 onready var App_Call_UI = get_parent().get_node("CanvasLayer/SmartContract_UI")
 onready var transaction_UI_address_lineEdit = get_parent().get_node("CanvasLayer/Transaction_UI/LineEdit")
@@ -64,13 +64,16 @@ func _ready():
 	Wallet.passward_UI = Password_UI
 	Wallet.funding_success_ui = FundingSuccessUI
 	Wallet.mnemonic_ui = mnemonic_UI
-	
+	Wallet.collectibles_UI = Collectibles_UI
 	Wallet.mnemonic_ui_lineEdit = mnemonic_UI_LineEdit
 	#print (dashboard_UI.get_children())
 	
 	###Setting this variables bug out the UI input system
 	Wallet.wallet_algos = wallet_algos
 	Wallet.ingame_algos = ingame_algos
+	
+	#Collectibles
+	Wallet.NFT = image_texture_holder
 	
 	#Buttons
 	Wallet.txn_txn_valid_button = submit_txn_button
