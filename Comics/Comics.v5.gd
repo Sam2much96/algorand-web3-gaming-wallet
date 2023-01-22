@@ -39,8 +39,7 @@ signal freed_comics
 signal panel_change
 signal swiped(direction)
 signal swiped_canceled(start_position)
-#export(float,1.0,1.5) var MAX_DIAGONAL_SLOPE = 1.3  
-export(float,0.5,1.5) var MAX_DIAGONAL_SLOPE  = 0.5
+ 
 
 export (PackedScene) var current_comics 
 
@@ -96,8 +95,13 @@ var target_memory_y: Array = [] #stores vector 2 of previous targets
 
 
 var enabled : bool 
-#export (String, 'no', 'yes') var _enabled
 
+#**********Swipe Detection Direction Calculation Parameters************#
+var swipe_target_memory_x : Array = [] # for swipe direction x calculation
+var swipe_target_memory_y : Array = [] # for swipe direction y calculation
+var direction : Vector2
+var swipe_parameters : int = 0.9 # is 1 in Dystopia-App
+export(float,0.5,1.5) var MAX_DIAGONAL_SLOPE  = 1.3
 
 func _ready():
 	#wordbubble() #for debug purposes only
@@ -213,7 +217,7 @@ func _input(event):
 
 	"Controller for Joypad"
 	if event is InputEventJoypadButton && self.visible == true:
-		if event.is_action_pressed("ui_select"): _zoom()
+		if event.is_action_pressed("ui_select"): _zoom(comics_placeholder)
 
 
 	if event is InputEventJoypadMotion and self.visible == true:
@@ -256,7 +260,7 @@ func _input(event):
 		#target = event.get_position()
 		#print ("sglgnlngakdfnl")
 		#return drag(target, Kinematic_2d.position, Kinematic_2d)
-		Networking.start_check(1)
+		#Networking.start_check(1)
 		#while not Networking.stop_check():
 		
 		#	_start_detection(target)
@@ -272,7 +276,7 @@ func _input(event):
 
 	if event is InputEventMouseButton && event.doubleclick && loaded_comics == true:
 		
-		_zoom() #disabled for debugging, enable when done debugging
+		_zoom(comics_placeholder) #disabled for debugging, enable when done debugging
 		return
 
 
@@ -381,7 +385,7 @@ func drag(_target : Vector2, _position : Vector2, _body : KinematicBody2D)-> voi
 
 		"If Distance is less than 200"
 		#for small size drags
-		#Buggy 
+		#Works
 		if abs(_position.distance_to(_target)) < 200 : #if its close
 				#_body.move_and_slide(target)
 				#how to fix
@@ -400,8 +404,9 @@ func drag(_target : Vector2, _position : Vector2, _body : KinematicBody2D)-> voi
 			# Rejects buggy input targets
 			# Save both x & y inputs in similar array to properly debug
 			if abs(target_memory_x[target_memory_x.size() - 2] - x) > 3: #if more than 3 buggy inputs have been saved
-				print ('Error x axis') #for debug purposes only
-				print ('x axis size debug: ' ,target_memory_x.size()) #for debug purposes only
+				
+				#print ('Error x axis') #for debug purposes only
+				#print ('x axis size debug: ' ,target_memory_x.size()) #for debug purposes only
 				#print (target_memory_x) #temporarily disabling for debug purposes
 				
 				
@@ -424,14 +429,10 @@ func drag(_target : Vector2, _position : Vector2, _body : KinematicBody2D)-> voi
 				
 				return
 			if abs(target_memory_y[target_memory_y.size() - 2] - x) > 3:
-				print ('Error y axis')
-				print ('y axis size debug: ' ,target_memory_y.size()) 
-				print (target_memory_y)
 				
-				#rejects drag method
-				#can_drag = false #doenst work
-				#potential target fix
-				#print ("Y : ",target_memory_y) #for debug purposes only
+				#print ('Error y axis')
+				#print ('y axis size debug: ' ,target_memory_y.size()) 
+				#print (target_memory_y) #For debug purposes only
 				
 				
 				
@@ -466,19 +467,19 @@ func drag(_target : Vector2, _position : Vector2, _body : KinematicBody2D)-> voi
 
 """
 
-func _zoom()-> bool:
+func _zoom(_comics_placeholder : Control)-> bool:
 	
 	if loaded_comics == true:
-		var scale =comics_placeholder.get_scale()
+		var scale =_comics_placeholder.get_scale()
 		if scale == Vector2(1,1)  :
 			#print ('zoom in') #for debug purposes only
-			comics_placeholder.set_scale(scale * 2) 
+			_comics_placeholder.set_scale(scale * 2) 
 			zoom = true
 			return true 
 		if scale > Vector2(1,1):
 			#print ('zoom out') #for debug purposes only
-			scale = comics_placeholder.get_scale()
-			comics_placeholder.set_scale(scale / 2) 
+			scale = _comics_placeholder.get_scale()
+			_comics_placeholder.set_scale(scale / 2) 
 			zoom = false
 	return zoom 
 
@@ -560,31 +561,117 @@ func _handle_swipe_detection(event)-> void:
 #Buggy swipe direction
 # Use an Array to store the first position and all end positions
 # Difference between both extremes is the swipe position
+func clear_memory()-> void:
+	swipe_target_memory_x.clear()
+	swipe_target_memory_y.clear()
+
+
+
 func _start_detection(_position): #for swipe detection
 	if enabled == true:
-		swipe_start_position = _position
+		
+
+		
+		#swipe_start_position = _position
+		if not swipe_target_memory_x.has(_position.x): 
+			swipe_target_memory_x.append(_position.x)
+		if not swipe_target_memory_y.has(_position.y):
+			swipe_target_memory_y.append(_position.y)
+		
+		
 		_e.start()
 		print ('start swipe detection :') #for debug purposes delete later
 
 
 func _end_detection(__position):
-
+	# Saves swipe direction details to memory
+	# It'll improve start position - end position calculation
+	if not swipe_target_memory_x.has(__position.x) && __position.x != null: 
+		swipe_target_memory_x.append(__position.x)
+	if not swipe_target_memory_y.has(__position.y) && __position.y != null:
+		swipe_target_memory_y.append(__position.y)
 	_e.stop()
-	var direction = (__position - swipe_start_position).normalized()
-	print ('end detection: ','direction: ',direction ,'position',__position, 'swipe position: ',swipe_start_position, "max diag slope", MAX_DIAGONAL_SLOPE) #for debug purposes only
-	if abs (direction.x) + abs(direction.y) >= MAX_DIAGONAL_SLOPE:
-		return
-	if abs (direction.x) > abs(direction.y):
-		emit_signal('swiped',Vector2(-sign(direction.x), 0.0))
-		print ('Direction on X: ', direction.x) #horizontal swipe debug purposs
-		if round(direction.x) == -1:
+	
+	# rewriting to work with memory
+	#var direction = (__position - swipe_start_position).normalized()
+	
+	#Kind works
+	if swipe_target_memory_x.size() && swipe_target_memory_y.size() >= 3 && swipe_target_memory_x.pop_back() != null:
+		var x1 = swipe_target_memory_x.pop_front()
+		var x2  = swipe_target_memory_x.pop_back()
+		
+		var y1 = swipe_target_memory_y.pop_front()
+		var y2  = swipe_target_memory_y.pop_back()
+		
+		print ("Swipe Detection Debug: ",x1,"/",x2,"/",y1,"/",y2,"/", swipe_target_memory_x.size()) #For Debug purposes only 
+		
+		#separate x & y position calculations for x and y swipes
+		#adgsgasdfgga
+		
+		"Horizontal Swipe"
+		if x1 && x2  != null && swipe_target_memory_x.size() > 2:
+			
+			#calculate averages got x and y
+			
+			var x_average: int = Globals.calc_average(swipe_target_memory_x)
+			
+			print ("X average: ",x_average)
+			print (x1, "/",x2)
+			direction.x  = (x1-x2)/x_average
+			
+			print ("direction x: ",direction.x)
+			
+			print ('end detection: ','direction: ',direction ,'position',__position, "max diag slope", MAX_DIAGONAL_SLOPE) #for debug purposes only
+			print ("X: ",swipe_target_memory_x)#*********For Debug purposes only
+			#print ("Y: ",swipe_target_memory_x)#*********For Debug purposes only
+		
+		"Vertical Swipe"
+		if y1 && y2 != null && swipe_target_memory_y.size() > 2:
+			var y_average: int = Globals.calc_average(swipe_target_memory_y)
+			
+			print ("Y average: ",y_average)
+			print (y1, "/",y2)
+			direction.y  = (y1-y2)/y_average
+			
+			print ("direction y: ",direction.y)
+			
+			print ('end detection: ','direction: ',direction ,'position',__position, "max diag slope", MAX_DIAGONAL_SLOPE) #for debug purposes only
+			#print ("X: ",swipe_target_memory_x)#*********For Debug purposes only
+			print ("Y: ",swipe_target_memory_x)#*********For Debug purposes only
+		
+
+
+
+		if abs (direction.x) + abs(direction.y) >= MAX_DIAGONAL_SLOPE:
+			return
+		if abs (direction.x) > abs(direction.y):
+			emit_signal('swiped',Vector2(-sign(direction.x), 0.0))
+			print ('Direction on X: ', direction.x) #horizontal swipe debug purposs
+		if abs (direction.y) > abs(direction.x):
+			emit_signal('swiped',Vector2(-sign(direction.x), 0.0))
+			print ('Direction on Y: ', direction.x) #horizontal swipe debug purposs
+		
+		#Directions is a bit buggy
+		
+		if round(direction.x) <= -swipe_parameters:
 			print('left swipe') #for debug purposes
 			next_panel() 
-		if round(direction.x) == 1:
+		if round(direction.x) >= swipe_parameters:
 			print('right swipe') #for debug purposes
 			prev_panel()
+		if round(direction.y) <= -swipe_parameters:
+			print('down swipe') #for debug purposes
+			next_panel() 
+		if round(direction.y) >= swipe_parameters:
+			print('up swipe') #for debug purposes
+			prev_panel()
 		emit_signal('swiped', Vector2(0.0,-sign(direction.y))) #vertical swipe
-		#	print ('poot poot poot') 
+			#	print ('poot poot poot') 
+	# temporarily disabling
+	#if swipe_target_memory_x.size() && swipe_target_memory_y.size() > 40:
+	#	clear_memory()
+
+	else: return
 
 func _on_Timer_timeout():
 	if self.visible : # Only Swipe Detect once visible
@@ -644,7 +731,7 @@ func _on_chap_3_pressed(): #Simplify this function
 
 
 func _on_Zoom_pressed(): #temporary zoom funtion for android #connect code  with code
-	_zoom()
+	_zoom(comics_placeholder)
 
 """
 load chapter function 

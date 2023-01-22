@@ -327,9 +327,8 @@ func _ready():
 	self.add_child(q) #add networking node to the scene tree
 	self.add_child(q2) #add networking node to the scene tree
 	
-	#self.add_child(kinematic2d)
-	#kinematic2d.add_child(self.NFT)
-	#self.NFT.add_child(kinematic2d)
+	#works
+	#print(Globals.calc_average([1,2,3,4,5,6,7,8,9,10])) # For debug purposes only 
 	
 	pass
 
@@ -601,8 +600,11 @@ func _process(_delta):
 						if not Networking.Timeout && wallet_check == 0 :
 							wallet_check += 1
 							
+							# selet a random IPFS web 2.0 Gateway
+							Networking.genrate_random_gateway()
+							
 							# implement vaid gateways ass array link
-							Networking. _connect_to_ipfs_gateway(Networking.url, q2)  
+							Networking. _connect_to_ipfs_gateway(Networking.url, Networking.selected_gateway, q2)  
 							#run this download in the __ready function
 							__ready()
 							return wallet_check
@@ -1040,8 +1042,13 @@ func _input(event):
 		"NFT drag and drop"
 		#works
 		if self.NFT.visible:
-			print ("NFT visible: ",self.NFT.visible)
+			#print ("NFT visible: ",self.NFT.visible)
+			
 			Comics_v5.can_drag = self.NFT.visible
+			
+			# Activates Zoom
+			Comics_v5.loaded_comics = self.NFT.visible
+			Comics_v5.comics_placeholder = self.NFT
 			Comics_v5.drag(event.position, event.position, kinematic2d)
 		
 	# Turns on and Off Wallet Processing with Single screen touches

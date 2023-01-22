@@ -86,6 +86,13 @@ onready var timer :Timer  = Timer.new()
 var running_request : bool = false
 var Timeout : bool = false
 
+
+#*********IPFS Gateway***************#
+# from https://ipfs.github.io/public-gateway-checker/
+var gateway : Array = ['gateway.ipfs.io', "dweb.link", "ipfs.runfission.com", "jorropo.net", "via0.com", "cloudflare-ipfs.com", "hardbin.com"]
+var random : int
+var selected_gateway : String
+
 func _ready():
 	_init_timer()
 	
@@ -184,20 +191,26 @@ func _check_connection_secured(url): # Check http secured Url connection
 	connection_debug = str (' making request  ')  + str (' Request Error: ',error)
 	print (' Networking Request Error: ',error) #for debug purposes only
 
+func genrate_random_gateway():
+	randomize()
+	random = int(rand_range(-1,gateway.size())) #selects a random track number
+	selected_gateway = gateway[random]
+
+
+
 # List of valid IPFS web 2.0 Gateways
 # An array may be a better fit
 #https://ipfs.github.io/public-gateway-checker/
-static func _connect_to_ipfs_gateway(url : String, request_node: HTTPRequest): # Check http secured Url connection
+static func _connect_to_ipfs_gateway(url : String, selected_gateway: String ,request_node: HTTPRequest): # Check http secured Url connection
 	#Ignore Warning
 	#if not running_request :
 		url = _parse(url) 
 		
-		
-		#url =url.http_escape()
 
-		# uses ipfs web 2 gateway
-		#url is down
-		url = "https://gateway.ipfs.io/ipfs/" + url
+		# uses ipfs web 2 gateway Array
+		#url = "https://gateway.ipfs.io/ipfs/" + url
+		
+		url = "https://" + selected_gateway + "/ipfs/" + url
 		
 		#print ("NFT Url: ",url) #for debug purposes only
 		
