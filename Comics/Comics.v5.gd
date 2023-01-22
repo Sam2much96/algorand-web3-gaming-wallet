@@ -660,16 +660,16 @@ func _end_detection(__position):
 			
 			
 		if abs (direction.y) > abs(direction.x):
-			emit_signal('swiped',Vector2(-sign(direction.x), 0.0))
+			emit_signal('swiped',Vector2(-sign(direction.y), 0.0))
 			print ('Direction on Y: ', direction.x) #horizontal swipe debug purposs
 			#print (2222)
 			
 			#Kinda Works
 		
-		if -sign(direction.x) < -swipe_parameters:
+		if -sign(direction.y) < -swipe_parameters:
 			print('down swipe') #for debug purposes
 			next_panel() 
-		if -sign(direction.x)  > swipe_parameters:
+		if -sign(direction.y)  > swipe_parameters:
 			print('up swipe') #for debug purposes
 			prev_panel()
 		emit_signal('swiped', Vector2(0.0,-sign(direction.y))) #vertical swipe
