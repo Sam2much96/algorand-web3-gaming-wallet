@@ -509,6 +509,8 @@ func next_panel():
 
 func prev_panel():
 	print ('prev panel')
+	#emit signals
+	
 	#if loaded_comics == true :
 	#	current_frame =abs(current_frame - 1 )
 	#	emit_signal("panel_change")  
@@ -646,24 +648,27 @@ func _end_detection(__position):
 			return
 		if abs (direction.x) > abs(direction.y):
 			emit_signal('swiped',Vector2(-sign(direction.x), 0.0))
+			#print (-sign(direction.x)) -1
 			print (1111)
 			print ('Direction on X: ', direction.x, "/", direction.y) #horizontal swipe debug purposs
-		if direction.x < -swipe_parameters:
+		if -sign(direction.x) < -swipe_parameters:
 			print('left swipe') #for debug purposes
 			next_panel() 
-		if direction.x > swipe_parameters:
+		if -sign(direction.x) > swipe_parameters:
 			print('right swipe') #for debug purposes
 			prev_panel()
+			
+			
 		if abs (direction.y) > abs(direction.x):
 			emit_signal('swiped',Vector2(-sign(direction.x), 0.0))
 			print ('Direction on Y: ', direction.x) #horizontal swipe debug purposs
 			print (2222)
 		#Directions is a bit buggy
 		
-		if round(direction.y) <= -swipe_parameters:
+		if -sign(direction.x) < -swipe_parameters:
 			print('down swipe') #for debug purposes
 			next_panel() 
-		if round(direction.y) >= swipe_parameters:
+		if -sign(direction.x)  > swipe_parameters:
 			print('up swipe') #for debug purposes
 			prev_panel()
 		emit_signal('swiped', Vector2(0.0,-sign(direction.y))) #vertical swipe
