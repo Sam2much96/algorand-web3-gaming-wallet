@@ -100,7 +100,11 @@ var enabled : bool
 var swipe_target_memory_x : Array = [] # for swipe direction x calculation
 var swipe_target_memory_y : Array = [] # for swipe direction y calculation
 var direction : Vector2
-var swipe_parameters : int = 0.9 # is 1 in Dystopia-App
+var swipe_parameters : float = 0.1 # is 1 in Dystopia-App
+var x1 #: float
+var x2 #: float
+var y1 #: float
+var y2 #: float
 export(float,0.5,1.5) var MAX_DIAGONAL_SLOPE  = 1.3
 
 func _ready():
@@ -592,22 +596,18 @@ func _end_detection(__position):
 		swipe_target_memory_y.append(__position.y)
 	_e.stop()
 	
-	# rewriting to work with memory
-	#var direction = (__position - swipe_start_position).normalized()
-	
-	#Kind works
+	#Kinda works
 	if swipe_target_memory_x.size() && swipe_target_memory_y.size() >= 3 && swipe_target_memory_x.pop_back() != null:
-		var x1 = swipe_target_memory_x.pop_front()
-		var x2  = swipe_target_memory_x.pop_back()
+		x1 = swipe_target_memory_x.pop_front()
+		x2  = swipe_target_memory_x.pop_back()
 		
-		var y1 = swipe_target_memory_y.pop_front()
-		var y2  = swipe_target_memory_y.pop_back()
+		y1 = swipe_target_memory_y.pop_front()
+		y2  = swipe_target_memory_y.pop_back()
 		
-		print ("Swipe Detection Debug: ",x1,"/",x2,"/",y1,"/",y2,"/", swipe_target_memory_x.size()) #For Debug purposes only 
+		#print ("Swipe Detection Debug: ",x1,"/",x2,"/",y1,"/",y2,"/", swipe_target_memory_x.size()) #For Debug purposes only 
 		
 		#separate x & y position calculations for x and y swipes
-		#adgsgasdfgga
-		
+		#
 		"Horizontal Swipe"
 		if x1 && x2  != null && swipe_target_memory_x.size() > 2:
 			
@@ -622,7 +622,7 @@ func _end_detection(__position):
 			print ("direction x: ",direction.x)
 			
 			print ('end detection: ','direction: ',direction ,'position',__position, "max diag slope", MAX_DIAGONAL_SLOPE) #for debug purposes only
-			print ("X: ",swipe_target_memory_x)#*********For Debug purposes only
+			#print ("X: ",swipe_target_memory_x)#*********For Debug purposes only
 			#print ("Y: ",swipe_target_memory_x)#*********For Debug purposes only
 		
 		"Vertical Swipe"
@@ -635,9 +635,9 @@ func _end_detection(__position):
 			
 			print ("direction y: ",direction.y)
 			
-			print ('end detection: ','direction: ',direction ,'position',__position, "max diag slope", MAX_DIAGONAL_SLOPE) #for debug purposes only
+			#print ('end detection: ','direction: ',direction ,'position',__position, "max diag slope", MAX_DIAGONAL_SLOPE) #for debug purposes only
 			#print ("X: ",swipe_target_memory_x)#*********For Debug purposes only
-			print ("Y: ",swipe_target_memory_x)#*********For Debug purposes only
+			#print ("Y: ",swipe_target_memory_x)#*********For Debug purposes only
 		
 
 
@@ -646,19 +646,20 @@ func _end_detection(__position):
 			return
 		if abs (direction.x) > abs(direction.y):
 			emit_signal('swiped',Vector2(-sign(direction.x), 0.0))
-			print ('Direction on X: ', direction.x) #horizontal swipe debug purposs
+			print (1111)
+			print ('Direction on X: ', direction.x, "/", direction.y) #horizontal swipe debug purposs
+		if direction.x < -swipe_parameters:
+			print('left swipe') #for debug purposes
+			next_panel() 
+		if direction.x > swipe_parameters:
+			print('right swipe') #for debug purposes
+			prev_panel()
 		if abs (direction.y) > abs(direction.x):
 			emit_signal('swiped',Vector2(-sign(direction.x), 0.0))
 			print ('Direction on Y: ', direction.x) #horizontal swipe debug purposs
-		
+			print (2222)
 		#Directions is a bit buggy
 		
-		if round(direction.x) <= -swipe_parameters:
-			print('left swipe') #for debug purposes
-			next_panel() 
-		if round(direction.x) >= swipe_parameters:
-			print('right swipe') #for debug purposes
-			prev_panel()
 		if round(direction.y) <= -swipe_parameters:
 			print('down swipe') #for debug purposes
 			next_panel() 

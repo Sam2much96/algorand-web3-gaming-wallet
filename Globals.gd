@@ -294,17 +294,7 @@ func _restore_data(save_dict):
 	######################################################
 	print ("Loaded gameplay")
 
-func update_curr_scene(): 
-	curr_scene= get_tree().get_current_scene().get_name() 
-	
-func _go_to_title():
-	'Quits if already at title screen'
-	if get_tree().get_current_scene().get_name() == 'Menu':
-		get_tree().quit()
-#	Music.play_track(Music.ui_sfx[1])
-	
-	'changes scene to title_screen'
-	return get_tree().change_scene_to(title_screen)
+
 
 func _go_to_cinematics():
 	return get_tree().change_scene('res://scenes/cinematics/cinematics.tscn') 
