@@ -209,7 +209,7 @@ var nft_asset_id : LineEdit
 
 #*****Collectible UI*******#
 var NFT : TextureRect
-
+var kinematic2d : KinematicBody2D #= KinematicBody2D.new() # for NFT dragNdrop
 
 #*****PasswordUI******#
 var password_LineEdit : LineEdit
@@ -254,7 +254,7 @@ func check_Nodes() -> bool:
 		txn_addr, txn_amount, funding_success_ui, funding_success_close_button, smart_contract_UI, 
 		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
-		password_LineEdit, collectibles_UI, NFT
+		password_LineEdit, collectibles_UI, NFT, kinematic2d
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
@@ -324,6 +324,11 @@ func __ready():
 func _ready():
 	self.add_child(q) #add networking node to the scene tree
 	self.add_child(q2) #add networking node to the scene tree
+	
+	#self.add_child(kinematic2d)
+	#kinematic2d.add_child(self.NFT)
+	#self.NFT.add_child(kinematic2d)
+	
 	pass
 
 func _process(_delta):
@@ -1007,16 +1012,43 @@ func _on_Copy_address_pressed():
 
 
 "Parses Input frm UI buttons"
-#formerly txn valid signal
-#func _on_enter_transaction_pressed():
 func _input(event):
 	
+	
+	
+	
+	"Swipe Direction Debug"
+	if event is InputEventScreenDrag : #kinda works, for NFT Drag & Drop
+		#Networking.start_check(4) #should take a timer as a parameter
+		#if Networking.Timeout == false:
+		
+		
+		Networking.start_check(4)
+		
+		# should save event positions to an array and 
+		# run calculations using the first and last array positions
+		# fix swipe position detector and implement it as state controller changer
+		Comics_v5._start_detection(event.position)
+		
+		#if Networking.Timeout == true :
+		Comics_v5._end_detection(event.position)
+			#Networking.Timeout = false
+		
+		"NFT drag and drop"
+		#works
+		if self.NFT.visible:
+			print ("NFT visible: ",self.NFT.visible)
+			Comics_v5.can_drag = self.NFT.visible
+			Comics_v5.drag(event.position, event.position, kinematic2d)
+		
 	# Turns on and Off Wallet Processing with Single screen touches
 	# 
 	# Uses a Timer of 4 seconds to turn processing off
 	
 	if event is InputEventSingleScreenTouch:
 		Networking.start_check(4) #should take a timer as a parameter
+		
+		
 		#Turns processing off for 20 secs
 		if Networking.Timeout == false :
 			
@@ -1028,16 +1060,10 @@ func _input(event):
 		if Networking.Timeout == true :
 			
 			print ('Wallet Processing')
+			
 			self.set_process(true)
 			processing = true
 			return processing
-
-	
-	
-	# Change State Controller either with screen swipes or with buttons
-	#if event is InputEventSingleScreenLongPress:
-	#	print ('Long press')
-	#	state_controller.select(int(0))
 	
 	
 	if txn_txn_valid_button.pressed:

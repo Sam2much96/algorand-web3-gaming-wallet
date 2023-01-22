@@ -84,11 +84,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/GDTIM-Demo-v2_1_2/CustomInputEvents/InputEventSingleScreenTouch.gd"
 }, {
-"base": "TextureRect",
-"class": "NFT",
-"language": "GDScript",
-"path": "res://Wallet/NFT.gd"
-}, {
 "base": "InputEventAction",
 "class": "RawGesture",
 "language": "GDScript",
@@ -120,7 +115,6 @@ _global_script_class_icons={
 "InputEventSingleScreenSwipe": "",
 "InputEventSingleScreenTap": "",
 "InputEventSingleScreenTouch": "",
-"NFT": "",
 "RawGesture": "",
 "ReferenceCollector": "",
 "wallet": ""
@@ -143,6 +137,7 @@ Globals="*res://Globals.gd"
 Wallet="*res://Wallet/Wallet.gd"
 InputManager="*res://addons/GDTIM-Demo-v2_1_2/InputManager.gd"
 Networking="*res://Wallet/Networking.gd"
+Comics_v5="*res://Comics/Comics.v5.gd"
 
 [display]
 

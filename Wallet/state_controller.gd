@@ -23,7 +23,8 @@ onready var mnemonic_UI_LineEdit = get_parent().get_node("CanvasLayer/Mnemonic_U
 onready var submit_txn_button = get_parent().get_node("CanvasLayer/Transaction_UI/Button")
 
 onready var submit_mnemonic_button = get_parent().get_node("CanvasLayer/Mnemonic_UI/Button")
-onready var image_texture_holder = get_parent().get_node("CanvasLayer/Collectibles_UI/TextureRect")
+onready var image_texture_holder = get_parent().get_node("CanvasLayer/Collectibles_UI/KinematicBody2D/TextureRect")
+onready var kinematic2d = get_parent().get_node("CanvasLayer/Collectibles_UI/KinematicBody2D")
 onready var Password_UI = get_parent().get_node("CanvasLayer/Password_UI")
 onready var App_Call_UI = get_parent().get_node("CanvasLayer/SmartContract_UI")
 onready var transaction_UI_address_lineEdit = get_parent().get_node("CanvasLayer/Transaction_UI/LineEdit")
@@ -74,6 +75,7 @@ func _ready():
 	
 	#Collectibles
 	Wallet.NFT = image_texture_holder
+	Wallet.kinematic2d = kinematic2d
 	
 	#Buttons
 	Wallet.txn_txn_valid_button = submit_txn_button

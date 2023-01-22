@@ -39,7 +39,8 @@ signal freed_comics
 signal panel_change
 signal swiped(direction)
 signal swiped_canceled(start_position)
-export(float,1.0,1.5) var MAX_DIAGONAL_SLOPE =1.3  
+#export(float,1.0,1.5) var MAX_DIAGONAL_SLOPE = 1.3  
+export(float,0.5,1.5) var MAX_DIAGONAL_SLOPE  = 0.5
 
 export (PackedScene) var current_comics 
 
@@ -556,7 +557,9 @@ func _handle_swipe_detection(event)-> void:
 		_end_detection(event.position)
 
 " Swipe Direction Detection"
-
+#Buggy swipe direction
+# Use an Array to store the first position and all end positions
+# Difference between both extremes is the swipe position
 func _start_detection(_position): #for swipe detection
 	if enabled == true:
 		swipe_start_position = _position
@@ -565,9 +568,10 @@ func _start_detection(_position): #for swipe detection
 
 
 func _end_detection(__position):
+
 	_e.stop()
 	var direction = (__position - swipe_start_position).normalized()
-	print ('end detection: ','direction: ',direction ,'position',__position, 'swipe position: ',swipe_start_position) #for debug purposes only
+	print ('end detection: ','direction: ',direction ,'position',__position, 'swipe position: ',swipe_start_position, "max diag slope", MAX_DIAGONAL_SLOPE) #for debug purposes only
 	if abs (direction.x) + abs(direction.y) >= MAX_DIAGONAL_SLOPE:
 		return
 	if abs (direction.x) > abs(direction.y):
@@ -580,7 +584,7 @@ func _end_detection(__position):
 			print('right swipe') #for debug purposes
 			prev_panel()
 		emit_signal('swiped', Vector2(0.0,-sign(direction.y))) #vertical swipe
-	#	print ('poot poot poot') 
+		#	print ('poot poot poot') 
 
 func _on_Timer_timeout():
 	if self.visible : # Only Swipe Detect once visible

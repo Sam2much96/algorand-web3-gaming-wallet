@@ -153,10 +153,15 @@ func stop_check()-> bool: #Stops timer check
 
 "Starts a check using Timer Node for 3 Seconds"
 func start_check(time: int): 
+	
+	
 	connection_debug = str('start check') # Debug Variable
 	print ("start check")
 	if time != null:
 		check_timer.start(time) 
+	
+	# Reset Timeout parameter
+	#Timeout = false 
 	check_timer.start()
 
 # Check http unsecured Url connection
