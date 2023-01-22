@@ -209,7 +209,9 @@ var nft_asset_id : LineEdit
 
 #*****Collectible UI*******#
 var NFT : TextureRect
-var kinematic2d : KinematicBody2D #= KinematicBody2D.new() # for NFT dragNdrop
+var kinematic2d : KinematicBody2D  # for NFT dragNdrop
+var NFT_index_label : Label #Displays Asset Index
+
 
 #*****PasswordUI******#
 var password_LineEdit : LineEdit
@@ -254,7 +256,7 @@ func check_Nodes() -> bool:
 		txn_addr, txn_amount, funding_success_ui, funding_success_close_button, smart_contract_UI, 
 		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
-		password_LineEdit, collectibles_UI, NFT, kinematic2d
+		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
@@ -621,6 +623,7 @@ func _process(_delta):
 					#NFT is a call to the SceneTree's Texture react
 					#sfshdhd
 					#connect to wallet NFT logic
+					NFT_index_label.text = "Asset ID: "+ str(asset_index)
 					# Disabling Collectibes UI thumbnails
 					return Comics.load_local_image_texture_from_global(self.NFT, local_image_file)
 					
