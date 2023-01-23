@@ -27,18 +27,18 @@ margin_bottom = 364.0
 theme = SubResource( 1 )
 
 [node name="Button" type="Button" parent="."]
-margin_left = 364.0
-margin_top = 408.0
-margin_right = 578.0
-margin_bottom = 452.0
+margin_left = 369.0
+margin_top = 445.0
+margin_right = 583.0
+margin_bottom = 489.0
 theme = ExtResource( 2 )
 text = "Send Algos"
 
 [node name="Button2" type="Button" parent="."]
-margin_left = 363.0
-margin_top = 481.0
-margin_right = 577.0
-margin_bottom = 525.0
+margin_left = 368.0
+margin_top = 518.0
+margin_right = 582.0
+margin_bottom = 562.0
 theme = ExtResource( 2 )
 text = "Send Assets"
 
