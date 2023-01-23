@@ -125,8 +125,8 @@ _global_script_class_icons={
 config/name="Algowallet_GameFi"
 config/description="A Demo Test Project for GHH03, showcasing the capabilities of Algodot Plugin."
 run/main_scene="res://Wallet/Wallet main.tscn"
-boot_splash/fullsize=false
-boot_splash/bg_color=Color( 1, 1, 1, 1 )
+boot_splash/image="res://Splash.png"
+boot_splash/bg_color=Color( 0.0862745, 0.462745, 0.827451, 1 )
 config/icon="res://icon.png"
 
 [autoload]
