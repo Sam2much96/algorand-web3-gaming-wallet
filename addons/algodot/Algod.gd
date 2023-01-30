@@ -9,6 +9,9 @@
 # (1) Can create transactions between different accounts
 # (2) Can transfer assets between accounts
 # (3) Can check account information
+# (4) Swipe Gestures as a State changer controller.
+# (5) Swipe UI options
+
 
 #Bugs:
 # (1) Calling multiple yield functions sequentially breaks on testnet

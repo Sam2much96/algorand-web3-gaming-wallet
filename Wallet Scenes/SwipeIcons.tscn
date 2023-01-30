@@ -1,0 +1,26 @@
+[gd_scene format=2]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2( 98, 589 )
+points = PoolVector2Array( 98, 57, 99, 100, 145, 100, 195, 100, 196, 70, 197, 44, 214, 24, 224, -3, 226, -79, 223, -95, 219, -101, 214, -104, 207, -102, 201, -98, 193, -81, 192, -97, 188, -109, 184, -114, 176, -117, 164, -115, 160, -109, 157, -82, 152, -119, 148, -131, 135, -134, 124, -130, 120, -125, 119, -80, 115, -122, 112, -188, 107, -196, 104, -202, 94, -205, 86, -201, 80, -190, 79, -179, 80, -39, 52, -76, 39, -83, 27, -83, 21, -74, 20, -65, 33, -45, 53, 15, 93, 47, 101, 62 )
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="YSort" type="YSort" parent="."]
+position = Vector2( 197, 354 )
+
+[node name="Line2D2" type="Line2D" parent="YSort"]
+position = Vector2( -180, -95 )
+points = PoolVector2Array( 149, 79, 181, 44, 205, 81 )
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="Line2D3" type="Line2D" parent="YSort"]
+position = Vector2( -181, -136 )
+points = PoolVector2Array( 149, 79, 181, 44, 210, 77 )
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="Line2D4" type="Line2D" parent="YSort"]
+position = Vector2( -182, -185 )
+points = PoolVector2Array( 149, 79, 181, 44, 215, 80 )
+default_color = Color( 0, 0, 0, 1 )

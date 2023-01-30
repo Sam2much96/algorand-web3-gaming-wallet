@@ -369,10 +369,8 @@ DRAG FUNCTION
 func drag(_target : Vector2, _position : Vector2, _body : KinematicBody2D)-> void: #pass this method some parmeters
 	#add more parameters
  # Input manager from https://github.com/Federico-Ciuffardi/Godot-Touch-Input-Manager/releases 
-		
-	#if loaded_comics == true:
-	#target #= target  
-	#_position = Kinematic_2d.position 
+	
+	
 	if can_drag:
 		center = restaVectores(_target, _position)
 		_body.set_position(_target)
@@ -604,6 +602,27 @@ func _start_detection(_position): #for swipe detection
 
 
 func _end_detection(__position):
+#_e.stop()
+	direction = (__position - swipe_start_position).normalized()
+	"Left and Right "
+		
+	if round(direction.x) == -1:
+		print('left swipe 1') #for debug purposes
+		next_panel()
+	if round(direction.x) == 1:
+		print('right swipe 1') #for debug purposes
+		prev_panel()
+	
+	"Up and Down"
+	
+	if -sign(direction.y) < -swipe_parameters:
+		print('down swipe 1') #for debug purposes
+		#next_panel() 
+		
+	if -sign(direction.y)  > swipe_parameters:
+		print('up swipe 1') #for debug purposes
+		#prev_panel()
+		
 	# Saves swipe direction details to memory
 	# It'll improve start position - end position calculation
 	if not swipe_target_memory_x.has(__position.x) && __position.x != null: 
@@ -645,11 +664,11 @@ func _end_detection(__position):
 		if y1 && y2 != null && swipe_target_memory_y.size() > 2:
 			var y_average: int = Globals.calc_average(swipe_target_memory_y)
 			
-			print ("Y average: ",y_average)
-			print (y1, "/",y2)
-			direction.y  = (y1-y2)/y_average
+			#print ("Y average: ",y_average) #*********For Debug purposes only
+			#print (y1, "/",y2) #*********For Debug purposes only
+			#direction.y  = (y1-y2)/y_average #*********For Debug purposes only
 			
-			print ("direction y: ",direction.y)
+			#print ("direction y: ",direction.y) #*********For Debug purposes only
 			
 			#print ('end detection: ','direction: ',direction ,'position',__position, "max diag slope", MAX_DIAGONAL_SLOPE) #for debug purposes only
 			#print ("X: ",swipe_target_memory_x)#*********For Debug purposes only
@@ -665,7 +684,7 @@ func _end_detection(__position):
 			
 			#print (1111)
 			print ('Direction on X: ', direction.x, "/", direction.y) #horizontal swipe debug purposs
-		if -sign(direction.x) < -swipe_parameters:
+		if -sign(direction.x) < swipe_parameters:
 			print('left swipe') #for debug purposes
 			next_panel() 
 		if -sign(direction.x) > swipe_parameters:
@@ -678,13 +697,13 @@ func _end_detection(__position):
 			print ('Direction on Y: ', direction.x) #horizontal swipe debug purposs
 			#print (2222)
 			
-			#Kinda Works
+		"Up & Down"
 		
 		if -sign(direction.y) < -swipe_parameters:
-			print('down swipe') #for debug purposes
+			print('up swipe 2') #for debug purposes
 			next_panel() 
 		if -sign(direction.y)  > swipe_parameters:
-			print('up swipe') #for debug purposes
+			print('down swipe 2') #for debug purposes
 			prev_panel()
 		emit_signal('swiped', Vector2(0.0,-sign(direction.y))) #vertical swipe
 			#	print ('poot poot poot') 
