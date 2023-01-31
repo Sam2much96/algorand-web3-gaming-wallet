@@ -348,7 +348,6 @@ margin_bottom = 110.0
 rect_scale = Vector2( 1.41437, 1.41437 )
 
 [node name="Collectibles_UI" parent="CanvasLayer" instance=ExtResource( 4 )]
-visible = false
 margin_left = -236.0
 margin_top = 44.0
 margin_right = -236.0

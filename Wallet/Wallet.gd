@@ -62,6 +62,7 @@
 # (18) Show Asset ID on NFT
 # (19) Transfer assets back to Creator Wallet
 # (20) Implement Gallery UI for wallet
+		#-Collectibles UI logic
 
 # Testing
 #(1) Image Downloder (works)
@@ -1208,10 +1209,14 @@ func reset_transaction_parameters():
 	recievers_addr = ""
 
 
-"NFT controller Logic"
-# drag and Drop
-# comics node implemented
+"Collectibles UI Logic"
+# drag and Drop (done)
+# comics node implemented (done)
 # link with collectibles state
+# Gallery View
+# Multigesture Swipes for Collectibles Zoom in
+# Implement Asset ID UI for Transactions
+# Implement Asset Optin UX
 func _NFT():
 	# create and hide buttons depending on the amount of Assets counted
 	# Set gallery UI testure button to Asset NFT texture downloaded
