@@ -209,6 +209,11 @@ var _Create_Acct_button : Button
 var CreatAccountSuccessful_UI : Control
 var CreatAccountSuccessful_Mnemonic_Label : Label
 
+
+
+var CreatAccountSuccessful_Copy_Mnemonic_button : Button
+var CreatAccountSuccessful_Proceed_home_button : Button
+
 var txn_addr : LineEdit
 var txn_amount : LineEdit
 var nft_asset_id : LineEdit
@@ -268,7 +273,8 @@ func check_Nodes() -> bool:
 		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
 		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation, _Create_Acct_button,
-		 CreatAccountSuccessful_UI, CreatAccountSuccessful_Mnemonic_Label
+		CreatAccountSuccessful_UI, CreatAccountSuccessful_Mnemonic_Label, CreatAccountSuccessful_Copy_Mnemonic_button,
+		CreatAccountSuccessful_Proceed_home_button 
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
@@ -1045,6 +1051,13 @@ func _on_Copy_address_pressed():
 
 
 
+'Copies Wallet Addresss to Clipboard'
+func _on_Copy_mnemonic_pressed():
+	print ("copied wallet mnemonic to clipboard")
+	OS.set_clipboard(mnemonic) 
+
+
+
 
 "Parses Input frm UI buttons"
 func _input(event):
@@ -1120,7 +1133,12 @@ func _input(event):
 	if password_Entered_Button.pressed:
 		password_valid = true
 		print ("Password Placeholder entered", password_valid)
-		
+	if CreatAccountSuccessful_Copy_Mnemonic_button.pressed:
+		return _on_Copy_mnemonic_pressed()
+	if CreatAccountSuccessful_Proceed_home_button.pressed:
+		return self.state_controller.select(0) # Show Account
+	
+	
 	if fund_Acct_Button.pressed:
 		_on_testnetdispenser_pressed()
 	if make_Payment_Button.pressed:
