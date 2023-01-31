@@ -24,6 +24,7 @@
 # (1) it has a wierd updatable bug that's visible in the debug panel
 # (2) Center Page is buggy
 # (3) Drag and Drop across small distances is buggy
+# (4) Calibrate Swipe Gestures
 # *************************************************
 
 
@@ -609,20 +610,40 @@ func _end_detection(__position):
 	if round(direction.x) == -1:
 		print('left swipe 1') #for debug purposes
 		next_panel()
+		
+		
+		
+		# Play Animation
+		return Wallet._Animation.play("SWIPE_LEFT")
+		
+		
 	if round(direction.x) == 1:
 		print('right swipe 1') #for debug purposes
 		prev_panel()
+		
+		
+		# Play Animation
+		return Wallet._Animation.play("SWIPE_RIGHT")
+		
 	
 	"Up and Down"
 	
 	if -sign(direction.y) < -swipe_parameters:
 		print('down swipe 1') #for debug purposes
-		#next_panel() 
+		next_panel() 
+		
+		# Play Animation
+		return Wallet._Animation.play("SWIPE_DOWN")
 		
 	if -sign(direction.y)  > swipe_parameters:
 		print('up swipe 1') #for debug purposes
-		#prev_panel()
+		prev_panel()
 		
+		
+		# Play Animation
+		return Wallet._Animation.play("SWIPE_UP")
+	
+	
 	# Saves swipe direction details to memory
 	# It'll improve start position - end position calculation
 	if not swipe_target_memory_x.has(__position.x) && __position.x != null: 
@@ -687,10 +708,20 @@ func _end_detection(__position):
 		if -sign(direction.x) < swipe_parameters:
 			print('left swipe') #for debug purposes
 			next_panel() 
+			
+			
+			# Play Animation
+			return Wallet._Animation.play("SWIPE_LEFT")
+		
 		if -sign(direction.x) > swipe_parameters:
 			print('right swipe') #for debug purposes
 			prev_panel()
 			
+			
+			
+			# Play Animation
+			return Wallet._Animation.play("SWIPE_RIGHT")
+		
 			
 		if abs (direction.y) > abs(direction.x):
 			emit_signal('swiped',Vector2(-sign(direction.y), 0.0))
@@ -702,9 +733,18 @@ func _end_detection(__position):
 		if -sign(direction.y) < -swipe_parameters:
 			print('up swipe 2') #for debug purposes
 			next_panel() 
+			
+			# Play Animation
+			return Wallet._Animation.play("SWIPE_UP")
+		
+			
 		if -sign(direction.y)  > swipe_parameters:
 			print('down swipe 2') #for debug purposes
 			prev_panel()
+			
+			# Play Animation
+			return Wallet._Animation.play("SWIPE_DOWN")
+			
 		emit_signal('swiped', Vector2(0.0,-sign(direction.y))) #vertical swipe
 			#	print ('poot poot poot') 
 	# temporarily disabling
@@ -721,7 +761,7 @@ func _on_Timer_timeout():
 
 
 
-# Itnuses a camera 2d to simulate guided view. Should not be used when running the game
+# It uses a camera 2d to simulate guided view. Should not be used when running the game
 func guided_view()-> void: #Unwriten code
 	#It's supposed tobe a controlled zoom
 	pass

@@ -233,6 +233,10 @@ var delete_last_button : Button
 var processing : bool
 
 
+#*****Animation Player******#
+var _Animation : AnimationPlayer 
+
+
 "Checks the Nodes connection Between Singleton & UI"
 func check_Nodes() -> bool:
 	 
@@ -241,7 +245,8 @@ func check_Nodes() -> bool:
 	# Undergoing upgrades
 	#var withdraw_button = $wallet_ui/HBoxContainer/withdraw #connect to smartcontract
 	
-	var refresh_button= $wallet_ui/HBoxContainer/refresh
+	
+	#var refresh_button= $wallet_ui/HBoxContainer/refresh # depreciated. Use Swipe Gestures instead
 
 
 
@@ -256,7 +261,7 @@ func check_Nodes() -> bool:
 		txn_addr, txn_amount, funding_success_ui, funding_success_close_button, smart_contract_UI, 
 		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
-		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label
+		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]

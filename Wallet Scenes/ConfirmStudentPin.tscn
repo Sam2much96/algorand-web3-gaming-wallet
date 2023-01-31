@@ -28,15 +28,23 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="."]
-margin_left = 452.0
-margin_top = 131.0
-margin_right = 550.0
-margin_bottom = 167.0
+margin_left = 375.0
+margin_top = 56.0
+margin_right = 539.0
+margin_bottom = 92.0
+rect_scale = Vector2( 1.64318, 1.64318 )
 theme = ExtResource( 1 )
-text = "User ID"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+text = "Confirm Pin"
+
+[node name="Label2" type="Label" parent="."]
+margin_left = 395.0
+margin_top = 122.0
+margin_right = 789.0
+margin_bottom = 212.0
+rect_scale = Vector2( 0.6, 0.6 )
+theme = ExtResource( 2 )
+text = "Type your pin again"
+align = 1
 
 [node name="GridContainer" type="GridContainer" parent="."]
 margin_left = 413.0
@@ -157,34 +165,3 @@ margin_right = 607.0
 margin_bottom = 560.0
 theme = ExtResource( 3 )
 text = "Confirm"
-
-[node name="YSort" type="YSort" parent="."]
-position = Vector2( -260, -3 )
-scale = Vector2( 1.49671, 1.49671 )
-
-[node name="Line2D" type="Line2D" parent="YSort"]
-position = Vector2( 73.8356, -19 )
-scale = Vector2( 0.863014, 1 )
-points = PoolVector2Array( 502, 47, 492.76, 47.0616, 485.793, 49.0659, 478.825, 53.7429, 474.18, 58.4198, 471.083, 67.7736, 471, 75, 471.857, 81.1363, 475, 87, 480.373, 92.4945, 487, 96, 495.083, 98.5077, 503, 99, 511.341, 98.5077, 519, 96, 526.05, 92.4945, 530, 87, 533.018, 79.8, 534, 74, 533.018, 65.7692, 529.73, 59, 525.276, 53.0747, 518, 49, 509.792, 47.0616, 502, 47 )
-width = 3.0
-default_color = Color( 1, 1, 1, 1 )
-joint_mode = 2
-begin_cap_mode = 2
-
-[node name="Line2D3" type="Line2D" parent="YSort"]
-position = Vector2( 344, 18 )
-scale = Vector2( 0.325539, 0.377211 )
-points = PoolVector2Array( 502, 47, 486, 50, 474.111, 59, 471, 75, 475, 87, 487, 96, 503, 99, 519, 96, 530, 87, 534, 74, 529.73, 59, 518, 49, 502, 47 )
-width = 5.0
-default_color = Color( 1, 1, 1, 1 )
-joint_mode = 1
-begin_cap_mode = 2
-
-[node name="Line2D2" type="Line2D" parent="YSort"]
-position = Vector2( 9, -33 )
-points = PoolVector2Array( 480, 106, 485, 97, 499, 96, 512, 97, 516, 106 )
-width = 3.0
-default_color = Color( 1, 1, 1, 1 )
-joint_mode = 1
-begin_cap_mode = 2
-end_cap_mode = 2

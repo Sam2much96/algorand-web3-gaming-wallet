@@ -55,7 +55,12 @@ onready var button_8 = get_parent().get_node("CanvasLayer/Password_UI/GridContai
 onready var button_9 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button9")
 onready var button_11 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button11")
 onready var button_12 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button12")
-# Called when the node enters the scene tree for the first time.
+
+
+onready var AnimationPlayer_ = get_parent().get_node("AnimationPlayer")
+
+
+
 func _ready():
 	Wallet.state_controller = self
 	Wallet.Algorand = Algorand
@@ -110,6 +115,8 @@ func _ready():
 	Wallet.zero = button_11
 	Wallet.delete_last_button = button_12
 	
+	#*****Animation ******#
+	Wallet._Animation = AnimationPlayer_
 	
 	
 	

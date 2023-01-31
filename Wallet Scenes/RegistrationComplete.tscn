@@ -24,7 +24,7 @@ text = "Go Back"
 
 [node name="Line2D" type="Line2D" parent="."]
 position = Vector2( 0, 2 )
-points = PoolVector2Array( 441, 98, 415, 103, 404, 114, 399, 136, 404, 151, 415, 157, 443, 159, 579, 158, 589, 156, 597, 145, 597, 127, 587, 117, 576, 113, 547, 111, 546, 90, 537, 76, 520, 62, 497, 57, 471, 66, 459, 76, 455, 88, 453, 99, 430, 100 )
+points = PoolVector2Array( 432, 100, 421, 106, 410, 116, 399, 136, 404, 151, 417, 166, 442, 169, 546, 170, 584, 167, 595, 155, 598, 131, 587, 117, 576, 113, 547, 111, 546, 90, 537, 76, 520, 62, 497, 57, 471, 66, 459, 76, 455, 88, 453, 99, 446, 98, 439.687, 98.7891, 430, 100 )
 width = 17.0
 default_color = Color( 1, 1, 1, 1 )
 joint_mode = 2
@@ -35,7 +35,7 @@ round_precision = 9
 antialiased = true
 
 [node name="Line2D2" type="Line2D" parent="."]
-position = Vector2( 11, -8 )
+position = Vector2( 16, -3 )
 points = PoolVector2Array( 449, 125, 464, 147, 478, 135, 513, 111 )
 width = 15.0
 default_color = Color( 1, 1, 1, 1 )
