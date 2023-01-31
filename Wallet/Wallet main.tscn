@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Wallet/state_controller.gd" type="Script" id=1]
 [ext_resource path="res://addons/algodot/Algod.gd" type="Script" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://Wallet Scenes/FundingSuccess.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Wallet Scenes/ChoosePaymentOption.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Wallet Scenes/SuccessfullStudentUpload.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Wallet Scenes/RequestPage.tscn" type="PackedScene" id=13]
 
 [sub_resource type="Animation" id=2]
 length = 0.001
@@ -302,6 +303,7 @@ rect_scale = Vector2( 1.77854, 1.77854 )
 mouse_filter = 1
 
 [node name="Mnemonic_UI" parent="CanvasLayer" instance=ExtResource( 8 )]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -357,10 +359,18 @@ margin_bottom = 4.0
 rect_scale = Vector2( 1.76, 1.76 )
 
 [node name="Collectibles_UI" parent="CanvasLayer" instance=ExtResource( 4 )]
+visible = false
 margin_left = -236.0
 margin_top = 44.0
 margin_right = -236.0
 margin_bottom = 44.0
+
+[node name="Asset_UI" parent="CanvasLayer" instance=ExtResource( 13 )]
+margin_left = -473.0
+margin_top = 47.0
+margin_right = -473.0
+margin_bottom = 47.0
+rect_scale = Vector2( 1.46754, 1.46754 )
 
 [node name="state_controller" type="OptionButton" parent="."]
 margin_left = 2.31318

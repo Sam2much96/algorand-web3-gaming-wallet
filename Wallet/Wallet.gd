@@ -7,15 +7,11 @@
 # Parses an image from an NFT url, ising a Networking singleton
 # NFT "Non FUungible Token
 # To Do:
-#(1) Fix Hacky Spagetti Code (Done)
-#(2) Implement NFT subcode. (Done)
-# (3) Unimplement Networking Singleton i.e. script should run it's own networking node (Done)
-# (4) Users should be able to copy wallet details (Done)
-# (5) Test transaction state for Tokens and Algos (Done)
-# (6) Compile Teal FOr SMartContract Testing (Depreciated)
+# (1) Implement Request Page as Asset Optin UI
+# (2) Finish implementing Gallery UI + thumbnails
 # (7) Test UX
 		#- fix check account UX
-		#- fix collectibles state 
+		#- fix collectibles state (done 1/2) 
 #Logic
 # It uses the Networking singleton and Algorand library
 # to get an asset's url and download the image from
@@ -36,31 +32,21 @@
 
 
 # To-DO:
-# (1) Implement as State Machine (done)
-# (2) Update transaction logic (done)
-# (3) Test Smart Contracts 
-		#Test counter smart contract (buggy)
-# (4) Implement Proper wallet security (needs encryption and decryption algorithm) (step 1 done)
-# (5) Copy and Paste Wallet Address (done)
-# (6) Use time timeout to transition btw states (depreciated)
-# (7) Import wallet (done)
-# (8) Implement IPFS web 2 Gateway as a callale Networking SIngleton function (done)
 # 
 # (10) IMplement Tokenized characters (player_v2)
 # (11) Implement cryptographic encryption and decryption
 # (12) Implement show mnemonic button and UI
-#welrwrlwerk;l
-# (13) Improve UI (done)
 		#alter UI scale for mobiles (done)
 		#use animation player to alter UI (depreciated. Functions work faster)
-# (14) Implement SHow mnemonic button
+
 # (15) Implement Comic book interface for interractible NFT (done)
-# (16) Implement better NFT UI (buggy)
+# (16) Implement better NFT UI 
 # (17) Delete local NFT's if token is sent
 		#logic
 		#if asset_url ='' && local_image_texture exists
 		#delete local image texture
 # (18) Show Asset ID on NFT
+		#- Implement Asset UI
 # (19) Transfer assets back to Creator Wallet
 # (20) Implement Gallery UI for wallet
 		#-Collectibles UI logic
@@ -183,6 +169,7 @@ var Algorand : Algodot
 var state_controller : OptionButton
 var dashboard_UI : Control
 var passward_UI : Control
+var Asset_UI : Control
 var account_address : Label
 var smart_contract_UI : Control
 var wallet_algos : Label
@@ -274,7 +261,7 @@ func check_Nodes() -> bool:
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
 		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation, _Create_Acct_button,
 		CreatAccountSuccessful_UI, CreatAccountSuccessful_Mnemonic_Label, CreatAccountSuccessful_Copy_Mnemonic_button,
-		CreatAccountSuccessful_Proceed_home_button 
+		CreatAccountSuccessful_Proceed_home_button, Asset_UI
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
@@ -1255,6 +1242,7 @@ func reset_transaction_parameters():
 func _NFT():
 	# create and hide buttons depending on the amount of Assets counted
 	# Set gallery UI testure button to Asset NFT texture downloaded
+	
 	# load NFT script as child of Collectubles UI texture react
 	
 	# load, show and hide NFT's on Button clicks
