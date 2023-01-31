@@ -50,6 +50,8 @@ onready var create_account_succcessful_Label = get_parent().get_node("CanvasLaye
 onready var copy_mnemonic_button = get_parent().get_node("CanvasLayer/CreateAccountSuccess/Button") 
 onready var proceed_home_button = get_parent().get_node("CanvasLayer/CreateAccountSuccess/Button2")
 
+onready var asset_optin_UI = get_parent().get_node("CanvasLayer/Asset_UI")
+
 
 
 onready var button_0  = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button10")
@@ -116,6 +118,8 @@ func _ready():
 	Wallet.CreatAccountSuccessful_Copy_Mnemonic_button = copy_mnemonic_button
 	Wallet.CreatAccountSuccessful_Proceed_home_button = proceed_home_button
 	
+	
+	Wallet.Asset_UI = asset_optin_UI
 	
 	
 	print("UI elemts OK: ",Wallet.check_Nodes()) #for debug purposes only

@@ -549,14 +549,22 @@ func _process(_delta):
 					txn_check += 1
 					return txn_check
 				#uses two different buttons for assets and algo transactions
+				
+				# Remap asset_id_valid to Asset UI
+				#fdsdsfgfg
+				# Implement UX for Asset Optin Txn
 				if asset_id_valid : # user selected asset transaction
 					#eee
 					_asset_id = int(self.nft_asset_id.text)
 					recievers_addr = self.txn_addr.text
 					
+					
+					#Asset_UI.show()
+					
 					#change wallet state
 					#state = SHOW_ACCOUNT 
-					self.state_controller.select(0) 
+					
+					#self.state_controller.select(0) 
 
 					
 					#calls the transaction function which is a subprocess of _ready() function
