@@ -202,6 +202,9 @@ var make_Payment_Button : Button
 var UI_Elements : Array
 var passward_UI_Buttons : Array
 var canvas_layer : CanvasLayer
+var _Create_Acct_button : Button
+
+
 
 var txn_addr : LineEdit
 var txn_amount : LineEdit
@@ -261,7 +264,7 @@ func check_Nodes() -> bool:
 		txn_addr, txn_amount, funding_success_ui, funding_success_close_button, smart_contract_UI, 
 		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
-		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation
+		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation, _Create_Acct_button
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
@@ -1090,6 +1093,10 @@ func _input(event):
 			return processing
 	
 	
+	"BUTTON PRESSES"
+	
+	if _Create_Acct_button.pressed:
+		self.state_controller.select(2) #Create Account 
 	if txn_txn_valid_button.pressed:
 		transaction_valid = true #works
 		print ("Txn button pressed: ",transaction_valid) #for debug purposes only
@@ -1110,6 +1117,7 @@ func _input(event):
 	if funding_success_close_button.pressed :
 		reset_transaction_parameters()# fixes double spend buy
 		state_controller.select(0) #show account dashboard
+
 
 		#************PassWord UI**********#
 	if state == PASSWORD:

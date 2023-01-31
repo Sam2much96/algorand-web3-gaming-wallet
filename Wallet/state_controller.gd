@@ -42,6 +42,11 @@ onready var smartcontract_UI_Button = get_parent().get_node("CanvasLayer/SmartCo
 onready var transaction_UI_asset_id_LineEdit = get_parent().get_node("CanvasLayer/Transaction_UI/LineEdit3")
 onready var enter_wallet_PassWord_Button = get_parent().get_node("CanvasLayer/Password_UI/Button")
 onready var password_Enter_LineEdit = get_parent().get_node("CanvasLayer/Password_UI/LineEdit")
+onready var create_new_acct_button = get_parent().get_node("CanvasLayer/Mnemonic_UI/Button2")
+
+
+
+
 
 onready var button_0  = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button10")
 onready var button_1 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button")
@@ -100,6 +105,8 @@ func _ready():
 	Wallet.nft_asset_id = transaction_UI_asset_id_LineEdit
 	Wallet.fund_Acct_Button = fund_account_Button
 	Wallet.password_LineEdit = password_Enter_LineEdit
+	Wallet._Create_Acct_button = create_new_acct_button
+	
 	print("UI elemts OK: ",Wallet.check_Nodes()) #for debug purposes only
 	
 	Wallet._1 = button_1
