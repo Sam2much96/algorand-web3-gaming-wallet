@@ -45,6 +45,9 @@ onready var password_Enter_LineEdit = get_parent().get_node("CanvasLayer/Passwor
 onready var create_new_acct_button = get_parent().get_node("CanvasLayer/Mnemonic_UI/Button2")
 
 
+onready var create_account_succcessful_UI = get_parent().get_node("CanvasLayer/CreateAccountSuccess")
+onready var create_account_succcessful_Label = get_parent().get_node("CanvasLayer/CreateAccountSuccess/Label2")
+
 
 
 
@@ -106,6 +109,13 @@ func _ready():
 	Wallet.fund_Acct_Button = fund_account_Button
 	Wallet.password_LineEdit = password_Enter_LineEdit
 	Wallet._Create_Acct_button = create_new_acct_button
+	
+	Wallet.CreatAccountSuccessful_UI = create_account_succcessful_UI
+	Wallet.CreatAccountSuccessful_Mnemonic_Label = create_account_succcessful_Label
+	
+	
+	
+	
 	
 	print("UI elemts OK: ",Wallet.check_Nodes()) #for debug purposes only
 	

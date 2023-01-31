@@ -48,7 +48,8 @@
 # 
 # (10) IMplement Tokenized characters (player_v2)
 # (11) Implement cryptographic encryption and decryption
-# (12) Implement show mnemonic button
+# (12) Implement show mnemonic button and UI
+#welrwrlwerk;l
 # (13) Improve UI (done)
 		#alter UI scale for mobiles (done)
 		#use animation player to alter UI (depreciated. Functions work faster)
@@ -63,6 +64,7 @@
 # (19) Transfer assets back to Creator Wallet
 # (20) Implement Gallery UI for wallet
 		#-Collectibles UI logic
+
 
 # Testing
 #(1) Image Downloder (works)
@@ -204,8 +206,8 @@ var UI_Elements : Array
 var passward_UI_Buttons : Array
 var canvas_layer : CanvasLayer
 var _Create_Acct_button : Button
-
-
+var CreatAccountSuccessful_UI : Control
+var CreatAccountSuccessful_Mnemonic_Label : Label
 
 var txn_addr : LineEdit
 var txn_amount : LineEdit
@@ -265,7 +267,8 @@ func check_Nodes() -> bool:
 		txn_addr, txn_amount, funding_success_ui, funding_success_close_button, smart_contract_UI, 
 		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
-		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation, _Create_Acct_button
+		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation, _Create_Acct_button,
+		 CreatAccountSuccessful_UI, CreatAccountSuccessful_Mnemonic_Label
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
@@ -485,8 +488,23 @@ func _process(_delta):
 				if save_account_info(account_info,0):
 					check_wallet_info()
 					
-					# show account
-					self.state_controller.select(0)
+					
+					
+					## show account
+					#self.state_controller.select(0) # depreciated
+
+
+
+				#sdsdfsdfsdf
+				# Show CreatAccountSuccessful UI
+				CreatAccountSuccessful_UI.show()
+				# Display Mnemonic in UI label
+				
+				CreatAccountSuccessful_Mnemonic_Label.text = "Mnemmonic : "+ mnemonic
+				# connect Create AccountSuccessful buttons
+
+
+
 
 			return #self.set_process(false)
 		#Saves transactions to be processed in the ready function
@@ -642,6 +660,7 @@ func _process(_delta):
 				smart_contract_addr = smartcontract_ui_address_lineEdit.text 
 				_app_id = int(smartcontract_ui_appID_lineEdit.text)
 				_app_args = smartcontract_ui_args_lineEdit.text
+				
 				#runs a smart contract deferred function in the ready function
 				__ready()
 				
@@ -798,8 +817,6 @@ func save_account_info( info : Dictionary, number: int)-> bool:
 		# encode mnemonic
 		save_dict.mnemonic = convert_string_to_binary(mnemonic)  #saves mnemonic as string error
 		
-		#Buggy
-		# Bug arises from accounts that have no created-assets
 		# Is required to debug NFT collectibles
 		# Error Catchers
 	
@@ -814,11 +831,6 @@ func save_account_info( info : Dictionary, number: int)-> bool:
 		save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
 		save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
 		save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
-		
-		#save_dict.asset_index =info["created-assets"][number]["index"] 
-		#save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
-		#save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
-		#save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
 		
 		FileCheck1.store_line(to_json(save_dict))
 		FileCheck1.close()
@@ -1217,6 +1229,7 @@ func reset_transaction_parameters():
 # Multigesture Swipes for Collectibles Zoom in
 # Implement Asset ID UI for Transactions
 # Implement Asset Optin UX
+#sdfksdlfnskdfnglk
 func _NFT():
 	# create and hide buttons depending on the amount of Assets counted
 	# Set gallery UI testure button to Asset NFT texture downloaded
