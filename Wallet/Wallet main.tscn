@@ -348,19 +348,19 @@ margin_right = -413.0
 margin_bottom = 110.0
 rect_scale = Vector2( 1.41437, 1.41437 )
 
-[node name="Collectibles_UI" parent="CanvasLayer" instance=ExtResource( 4 )]
-visible = false
-margin_left = -236.0
-margin_top = 44.0
-margin_right = -236.0
-margin_bottom = 44.0
-
 [node name="CreateAccountSuccess" parent="CanvasLayer" instance=ExtResource( 12 )]
+visible = false
 margin_left = -641.0
 margin_top = 4.0
 margin_right = -641.0
 margin_bottom = 4.0
 rect_scale = Vector2( 1.76, 1.76 )
+
+[node name="Collectibles_UI" parent="CanvasLayer" instance=ExtResource( 4 )]
+margin_left = -236.0
+margin_top = 44.0
+margin_right = -236.0
+margin_bottom = 44.0
 
 [node name="state_controller" type="OptionButton" parent="."]
 margin_left = 2.31318

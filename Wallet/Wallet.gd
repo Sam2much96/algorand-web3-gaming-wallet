@@ -1133,10 +1133,14 @@ func _input(event):
 	if password_Entered_Button.pressed:
 		password_valid = true
 		print ("Password Placeholder entered", password_valid)
+
+
 	if CreatAccountSuccessful_Copy_Mnemonic_button.pressed:
 		return _on_Copy_mnemonic_pressed()
 	if CreatAccountSuccessful_Proceed_home_button.pressed:
 		return self.state_controller.select(0) # Show Account
+	
+	
 	
 	
 	if fund_Acct_Button.pressed:
@@ -1146,7 +1150,7 @@ func _input(event):
 	if imported_mnemonic_button.pressed:
 		imported_mnemonic = true
 	if funding_success_close_button.pressed :
-		reset_transaction_parameters()# fixes double spend buy
+		reset_transaction_parameters()# fixes double spend bug
 		state_controller.select(0) #show account dashboard
 
 

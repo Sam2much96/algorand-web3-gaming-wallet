@@ -47,7 +47,8 @@ onready var create_new_acct_button = get_parent().get_node("CanvasLayer/Mnemonic
 
 onready var create_account_succcessful_UI = get_parent().get_node("CanvasLayer/CreateAccountSuccess")
 onready var create_account_succcessful_Label = get_parent().get_node("CanvasLayer/CreateAccountSuccess/Label2")
-
+onready var copy_mnemonic_button = get_parent().get_node("CanvasLayer/CreateAccountSuccess/Button") 
+onready var proceed_home_button = get_parent().get_node("CanvasLayer/CreateAccountSuccess/Button2")
 
 
 
@@ -112,8 +113,8 @@ func _ready():
 	
 	Wallet.CreatAccountSuccessful_UI = create_account_succcessful_UI
 	Wallet.CreatAccountSuccessful_Mnemonic_Label = create_account_succcessful_Label
-	
-	
+	Wallet.CreatAccountSuccessful_Copy_Mnemonic_button = copy_mnemonic_button
+	Wallet.CreatAccountSuccessful_Proceed_home_button = proceed_home_button
 	
 	
 	
