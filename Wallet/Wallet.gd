@@ -567,6 +567,7 @@ func _process(_delta):
 				
 					recievers_addr = address
 				
+					asset_id_valid = true
 				# Sends Asset Transactions
 				
 				#Parameters : 
@@ -577,6 +578,8 @@ func _process(_delta):
 					_asset_id = int(self.nft_asset_id.text)
 					recievers_addr = self.txn_addr.text
 					
+					
+					asset_id_valid = true
 					
 					#Asset_UI.show()
 					
@@ -1142,9 +1145,11 @@ func _input(event):
 	if asset_optin_txn_valid_button.pressed:
 		asset_optin = true
 	if asset_optin_txn_reject_button.pressed:
+		print ("asset optin cancelled")
 		return self.state_controller.select(4) # Return to Transaction UI
 	if _Create_Acct_button.pressed:
 		self.state_controller.select(2) #Create Account 
+		print ("Create Acct button pressed")
 	if txn_txn_valid_button.pressed:
 		transaction_valid = true #works
 		print ("Txn button pressed: ",transaction_valid) #for debug purposes only
