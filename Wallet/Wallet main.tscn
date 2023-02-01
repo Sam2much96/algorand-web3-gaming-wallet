@@ -325,7 +325,6 @@ rect_scale = Vector2( 1.87476, 1.87476 )
 mouse_filter = 1
 
 [node name="FundingSuccess" parent="CanvasLayer" instance=ExtResource( 10 )]
-visible = false
 margin_left = -635.0
 margin_top = -25.0
 margin_right = -635.0
@@ -334,6 +333,7 @@ rect_scale = Vector2( 1.79726, 1.79726 )
 mouse_filter = 1
 
 [node name="Transaction_UI" parent="CanvasLayer" instance=ExtResource( 11 )]
+visible = false
 margin_left = -409.0
 margin_top = 120.0
 margin_right = -409.0
@@ -365,7 +365,6 @@ margin_right = -236.0
 margin_bottom = 44.0
 
 [node name="Asset_UI" parent="CanvasLayer" instance=ExtResource( 13 )]
-visible = false
 margin_left = -473.0
 margin_top = 47.0
 margin_right = -473.0
@@ -373,6 +372,7 @@ margin_bottom = 47.0
 rect_scale = Vector2( 1.46754, 1.46754 )
 
 [node name="state_controller" type="OptionButton" parent="."]
+visible = false
 margin_left = 2.31318
 margin_top = 31.5724
 margin_right = 130.313

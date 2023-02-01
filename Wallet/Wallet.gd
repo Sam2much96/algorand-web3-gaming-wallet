@@ -565,6 +565,8 @@ func _process(_delta):
 					self.asset_UI_amountLabel. text = amount
 					self.asset_UI_ID_Label.text = asset_index
 				
+					recievers_addr = address
+				
 				# Sends Asset Transactions
 				
 				#Parameters : 
@@ -583,14 +585,11 @@ func _process(_delta):
 					
 					#self.state_controller.select(0) 
 
-					
+				if asset_id_valid:
 					#calls the transaction function which is a subprocess of _ready() function
 					__ready()
 					
 					
-					# show Txn successfull Landing Paging
-					
-				else : push_error("Somethings Wrong in Transaction State")
 			pass
 			
 	
@@ -1186,6 +1185,7 @@ func _input(event):
 
 'Processes Algo and Asset Transactions'
 func txn(): #runs presaved transactions once wallet is ready
+	"MicroAlgo Transactions"
 	if recievers_addr != '' && _amount >= 100_000:
 		print ('Transaction Debug: ',recievers_addr, '/','amount: ',_amount, '/', 'txn check', txn_check)
 		
@@ -1195,25 +1195,57 @@ func txn(): #runs presaved transactions once wallet is ready
 		recievers_addr = ''
 		_amount = 0
 		
-		transaction_valid = false
-		
+		reset_transaction_parameters()
 		hideUI()
 		self.funding_success_ui.show()
 	
-	if _asset_id != 0 && asset_id_valid :
-		print (' Asset Txn Debug: ',recievers_addr, '/','asset id: ',_asset_id, '/', 'txn check', txn_check)
+	"Asset Transactions"
+	# Sends Asset Transactions
+	
+	#Parameters : 
+	# Asset Transaction take 1 or more as an amount parameter
+	# THe wallet address is different from the users address
+	
+	if _asset_id != 0 && asset_id_valid  && _amount > 0:
 		
-		#can be used to send both NFT's and Tokens
-		yield(self.Algorand.transferAssets(params,mnemonic, recievers_addr,_asset_id, _amount), "completed")
+		# Parameters
+		if recievers_addr != address:
+			print (' Asset Txn Debug: ',recievers_addr, '/','asset id: ',_asset_id, '/', 'txn check', txn_check)
 		
-		#reset transaction details
-		recievers_addr = ''
-		_asset_id = 0
-		asset_id_valid = false
+			#can be used to send both NFT's and Tokens
+			yield(self.Algorand.transferAssets(params,mnemonic, recievers_addr,_asset_id, _amount), "completed")
+			
+			#reset transaction details
+			reset_transaction_parameters()
+			hideUI()
+			self.funding_success_ui.show()
+		
+	"Asset Optin Transactions"
+	# Asset Optin Txn
+	
+	#Parameters : 
+	# Asset optin Txn take 0 Amount as a Parameter with asset ID
+	# The wallet address is same as users address & UI linedit is empty
+	
+	if _asset_id != 0 && asset_id_valid && _amount == 0:
+		
+		
+		# Parameters
+		if recievers_addr == address:
+			
+			print (' Asset Txn Debug: ',recievers_addr, '/','asset id: ',_asset_id, '/', 'txn check', txn_check)
+			
+			#can be used to send both NFT's and Tokens
+			yield(self.Algorand.transferAssets(params,mnemonic, recievers_addr,_asset_id, _amount), "completed")
+			
+			#reset transaction details
+			reset_transaction_parameters()
+			hideUI()
+			self.funding_success_ui.show()
+	
 
-		hideUI()
-		self.funding_success_ui.show()
-	
+
+
 
 'Processes Smart Contract NoOp transactions'
 func smart_contract(): 
