@@ -550,17 +550,23 @@ func _process(_delta):
 				
 				# Remap asset_id_valid to Asset UI
 				
-				# Implement UX for Asset Optin Txn
+				#
 				
 				# Asset Optin Txn
+				
+				#Parameters : 
 				# Asset optin Txn take 0 Amount as a Parameter with asset ID
+				# The wallet address is same as users address & UI linedit is empty
 				if asset_optin:
 					self.Asset_UI.show()
 					self.asset_UI_amountLabel. text = amount
 					self.asset_UI_ID_Label.text = asset_index
 				
 				# Sends Asset Transactions
+				
+				#Parameters : 
 				# Asset Transaction take 1 or more as an amount parameter
+				# THe wallet address is different from the users address
 				if asset_txn : # user selected asset transaction
 					#eee
 					_asset_id = int(self.nft_asset_id.text)
