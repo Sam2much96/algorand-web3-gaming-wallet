@@ -205,7 +205,7 @@ var CreatAccountSuccessful_Mnemonic_Label : Label
 
 var asset_txn_valid_button : Button
 var asset_optin_txn_valid_button : Button
-
+var asset_optin_txn_reject_button : Button
 var CreatAccountSuccessful_Copy_Mnemonic_button : Button
 var CreatAccountSuccessful_Proceed_home_button : Button
 
@@ -258,7 +258,8 @@ func check_Nodes() -> bool:
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
 		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation, _Create_Acct_button,
 		CreatAccountSuccessful_UI, CreatAccountSuccessful_Mnemonic_Label, CreatAccountSuccessful_Copy_Mnemonic_button,
-		CreatAccountSuccessful_Proceed_home_button, Asset_UI, asset_txn_valid_button
+		CreatAccountSuccessful_Proceed_home_button, Asset_UI, asset_txn_valid_button, asset_optin_txn_valid_button,
+		asset_optin_txn_reject_button
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
@@ -558,6 +559,8 @@ func _process(_delta):
 				# Asset optin Txn take 0 Amount as a Parameter with asset ID
 				# The wallet address is same as users address & UI linedit is empty
 				if asset_optin:
+					
+					hideUI()
 					self.Asset_UI.show()
 					self.asset_UI_amountLabel. text = amount
 					self.asset_UI_ID_Label.text = asset_index
@@ -567,7 +570,7 @@ func _process(_delta):
 				#Parameters : 
 				# Asset Transaction take 1 or more as an amount parameter
 				# THe wallet address is different from the users address
-				if asset_txn : # user selected asset transaction
+				if asset_txn && _amount >= 1: # user selected asset transaction
 					#eee
 					_asset_id = int(self.nft_asset_id.text)
 					recievers_addr = self.txn_addr.text
@@ -584,6 +587,10 @@ func _process(_delta):
 					#calls the transaction function which is a subprocess of _ready() function
 					__ready()
 					
+					
+					# show Txn successfull Landing Paging
+					
+				else : push_error("Somethings Wrong in Transaction State")
 			pass
 			
 	
@@ -1130,11 +1137,13 @@ func _input(event):
 	
 	"BUTTON PRESSES"
 	
-	
+	#fadhdsfhsdhs
 	if asset_txn_valid_button.pressed:
 		asset_txn = true
 	if asset_optin_txn_valid_button.pressed:
 		asset_optin = true
+	if asset_optin_txn_reject_button.pressed:
+		return self.state_controller.select(4) # Return to Transaction UI
 	if _Create_Acct_button.pressed:
 		self.state_controller.select(2) #Create Account 
 	if txn_txn_valid_button.pressed:

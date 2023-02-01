@@ -50,9 +50,10 @@ onready var create_account_succcessful_Label = get_parent().get_node("CanvasLaye
 onready var copy_mnemonic_button = get_parent().get_node("CanvasLayer/CreateAccountSuccess/Button") 
 onready var proceed_home_button = get_parent().get_node("CanvasLayer/CreateAccountSuccess/Button2")
 
-onready var asset_optin_UI = get_parent().get_node("CanvasLayer/Asset_UI")
-
-
+onready var asset__UI = get_parent().get_node("CanvasLayer/Asset_UI")
+onready var asset_Txn_valid_Button = get_parent().get_node("CanvasLayer/Transaction_UI/Button2")
+onready var asset_Optin_Txn_valid_Button = get_parent().get_node("CanvasLayer/Asset_UI/Button")
+onready var asset_Optin_Txn_reject_Button = get_parent().get_node("CanvasLayer/Asset_UI/Button2")
 
 onready var button_0  = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button10")
 onready var button_1 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button")
@@ -119,9 +120,10 @@ func _ready():
 	Wallet.CreatAccountSuccessful_Proceed_home_button = proceed_home_button
 	
 	
-	Wallet.Asset_UI = asset_optin_UI
-	
-	
+	Wallet.Asset_UI = asset__UI
+	Wallet.asset_txn_valid_button = asset_Txn_valid_Button
+	Wallet.asset_optin_txn_valid_button =asset_Optin_Txn_valid_Button
+	Wallet.asset_optin_txn_reject_button = asset_Optin_Txn_reject_Button
 	print("UI elemts OK: ",Wallet.check_Nodes()) #for debug purposes only
 	
 	Wallet._1 = button_1
