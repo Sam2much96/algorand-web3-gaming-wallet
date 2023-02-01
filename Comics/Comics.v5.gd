@@ -2,7 +2,7 @@
 # godot3-Dystopia-game by INhumanity_arts
 # Released under MIT License
 # *************************************************
-# Comics 4.1.1
+# Comics 5.1.1
 # This is a plugin containing the comics bool page logic
 # A comic book module for Godot game engine.
 # I implemented A touch input manager here

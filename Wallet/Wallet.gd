@@ -11,7 +11,7 @@
 # (2) Finish implementing Gallery UI + thumbnails
 # (7) Test UX
 		#- fix check account UX
-		#- fix collectibles state (done 1/2) 
+		#- fix collectibles state (done 2/3) 
 #Logic
 # It uses the Networking singleton and Algorand library
 # to get an asset's url and download the image from
@@ -23,6 +23,8 @@
 # (2) Uses state machine -a Accounts State & -Collectible state & Other states
 # (3) Implements Binary > Utf-8 encryption
 # (4) Networking Test for Algorand node health, Good internet connection and local img storage
+# (5) Drag and Drop Mechanics using custom comics script
+# (6) Swipe Gestures using custom comics script
 # *************************************************
 #Bugs:
 
@@ -1081,9 +1083,16 @@ func _on_Copy_mnemonic_pressed():
 func _input(event):
 	
 	
-	
+	"Collectibles multitouch"
+	# (1) Rewrite Zoom to take parameters like drag()
+	# (2) Map Pinch , Twist and Tap iput actions in Comics script
+	# (3) Upgrade Comics v 5.1 to implement proper gestures and global Swipe Dir indicator
+	# (4) Depreciate Wallet Animation for Comics Animation Structure
+
 	
 	"Swipe Direction Debug"
+	# Should Ideally be in COmics script. Requires rewrite for better structure
+	# The current implementation is a fast hack
 	if event is InputEventScreenDrag : #kinda works, for NFT Drag & Drop
 		#Networking.start_check(4) #should take a timer as a parameter
 		#if Networking.Timeout == false:
@@ -1322,7 +1331,6 @@ func _NFT():
 	
 	# load, show and hide NFT's on Button clicks
 	# Implement Drag and Drop mechanics
-	#fdgsdfgnfldgndlfgn
 	pass
 
 
