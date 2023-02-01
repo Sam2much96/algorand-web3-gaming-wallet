@@ -9,7 +9,22 @@
 
 [![**Demo Video**](https://img.youtube.com/vi/0LVXwbE1EsQ/hqdefault.jpg)](https://youtu.be/0LVXwbE1EsQ)
 
+
+
+[![**Demo Video2**](https://img.youtube.com/vi/tceXSKs3Wn4/hqdefault.jpg)](https://youtu.be/tceXSKs3Wn4)
+
+
+[![**Demo Video3**](https://img.youtube.com/vi/cFz3mgPvvdg/hqdefault.jpg)](https://youtu.be/cFz3mgPvvdg)
+
+
 An implemented Open source Web 3.0 Gaming Wallet for Algorand in Godot Game Engine 
+
+# Uses
+
+**(1) Wallet UI** https://github.com/Sam2much96/Wallet_UI
+**(2) Algodot** https://github.com/Sam2much96/algodot
+**(3) Godot Game Engine** https://github.com/godotengine/godot
+
 
 # Features
 **(1) Works on Testnet & Sandbox environment**
