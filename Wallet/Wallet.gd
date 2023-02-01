@@ -93,7 +93,8 @@ var mnemonic : String
 
 var recievers_addr : String = '' #for transactions
 var _amount : int = 0#for transactions
-var _asset_id :int = 0
+
+var _asset_id :int = 0 # used for asset transactions
 var smart_contract_addr : String = ""
 var _app_id : int = 0
 var _app_args : String = ""
@@ -148,6 +149,12 @@ var algod_node_health_is_good: bool
 var imported_mnemonic : bool = false
 var transaction_valid: bool =false
 var asset_id_valid : bool = false
+var asset_optin : bool = false
+var asset_txn : bool = false
+
+
+
+
 var password_valid : bool = false
 var loaded_wallet: bool= false #fixes looping loading bug
 var good_internet : bool #debugs user's internet
@@ -196,7 +203,8 @@ var _Create_Acct_button : Button
 var CreatAccountSuccessful_UI : Control
 var CreatAccountSuccessful_Mnemonic_Label : Label
 
-
+var asset_txn_valid_button : Button
+var asset_optin_txn_valid_button : Button
 
 var CreatAccountSuccessful_Copy_Mnemonic_button : Button
 var CreatAccountSuccessful_Proceed_home_button : Button
@@ -235,24 +243,13 @@ var processing : bool
 var _Animation : AnimationPlayer 
 
 
+
 "Checks the Nodes connection Between Singleton & UI"
 func check_Nodes() -> bool:
 	 
-
+	
 	#*****************Wallet UI ************************************
-	# Undergoing upgrades
-	#var withdraw_button = $wallet_ui/HBoxContainer/withdraw #connect to smartcontract
 	
-	
-	#var refresh_button= $wallet_ui/HBoxContainer/refresh # depreciated. Use Swipe Gestures instead
-
-
-
-	#var NFT : TextureRect #=  get_tree().get_nodes_in_group('NFT')#$Control/TextureRect
-	#var state_controller : OptionButton #= get_node_or_null("root/Node/state_controller")
-	#var anim : AnimationPlayer = $AnimationPlayer
-
-	#UI_Elements = [Algorand, dashboard_UI, account_address, ingame_algos, wallet_algos, withdraw_button, refresh_button, wallet_ui, mnemonic_ui, transaction_ui, funding_success_ui, txn_ui_options, txn_ui_options_button, address_ui_options, nft_asset_id, txn_amount, txn_addr, txn_assets_valid_button, passward_UI, txn_txn_valid_button, state_controller, anim ]
 	UI_Elements = [
 		state_controller, Algorand, dashboard_UI, wallet_algos, ingame_algos, mnemonic_ui,
 		mnemonic_ui_lineEdit, txn_txn_valid_button, imported_mnemonic_button, passward_UI, 
@@ -261,7 +258,7 @@ func check_Nodes() -> bool:
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
 		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation, _Create_Acct_button,
 		CreatAccountSuccessful_UI, CreatAccountSuccessful_Mnemonic_Label, CreatAccountSuccessful_Copy_Mnemonic_button,
-		CreatAccountSuccessful_Proceed_home_button, Asset_UI
+		CreatAccountSuccessful_Proceed_home_button, Asset_UI, asset_txn_valid_button
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
@@ -504,13 +501,14 @@ func _process(_delta):
 		# Saves the Transaction parameters and runs the txn() function
 		#as a subprocess of the _ready() function
 		#check https://github.com/lucasvanmol/algodot/issues/20 for more clarifications
-		TRANSACTIONS: #works
+		TRANSACTIONS: #Debugging
 			#hide other ui states
 			#use animation player to alter UI
 			hideUI()
 			self.transaction_ui.show()
 			self.transaction_ui.focus_mode = 2
 
+			
 			#transaction_hint.show()
 			
 			" Swtiches Between Assets and Normal Transactions UI"
@@ -551,9 +549,19 @@ func _process(_delta):
 				#uses two different buttons for assets and algo transactions
 				
 				# Remap asset_id_valid to Asset UI
-				#fdsdsfgfg
+				
 				# Implement UX for Asset Optin Txn
-				if asset_id_valid : # user selected asset transaction
+				
+				# Asset Optin Txn
+				# Asset optin Txn take 0 Amount as a Parameter with asset ID
+				if asset_optin:
+					self.Asset_UI.show()
+					self.asset_UI_amountLabel. text = amount
+					self.asset_UI_ID_Label.text = asset_index
+				
+				# Sends Asset Transactions
+				# Asset Transaction take 1 or more as an amount parameter
+				if asset_txn : # user selected asset transaction
 					#eee
 					_asset_id = int(self.nft_asset_id.text)
 					recievers_addr = self.txn_addr.text
@@ -1070,12 +1078,12 @@ func _input(event):
 		
 		# should save event positions to an array and 
 		# run calculations using the first and last array positions
-		# fix swipe position detector and implement it as state controller changer
+		# Swipe position detector implemented it as state controller changer
 		Comics_v5._start_detection(event.position)
 		
-		#if Networking.Timeout == true :
+		
 		Comics_v5._end_detection(event.position)
-			#Networking.Timeout = false
+		
 		
 		"NFT drag and drop"
 		#works
@@ -1116,6 +1124,11 @@ func _input(event):
 	
 	"BUTTON PRESSES"
 	
+	
+	if asset_txn_valid_button.pressed:
+		asset_txn = true
+	if asset_optin_txn_valid_button.pressed:
+		asset_optin = true
 	if _Create_Acct_button.pressed:
 		self.state_controller.select(2) #Create Account 
 	if txn_txn_valid_button.pressed:
@@ -1236,7 +1249,9 @@ func reset_transaction_parameters():
 	asset_id_valid = false
 	smart_contract_addr = ''
 	recievers_addr = ""
-
+	asset_optin = false
+	asset_txn = false
+	#smdslfksf
 
 "Collectibles UI Logic"
 # drag and Drop (done)

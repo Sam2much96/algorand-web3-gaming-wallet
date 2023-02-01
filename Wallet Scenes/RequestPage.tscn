@@ -105,6 +105,7 @@ theme = ExtResource( 1 )
 text = "$3000"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="YSort/VBoxContainer"]
+visible = false
 
 [node name="Line2D" type="Line2D" parent="YSort/VBoxContainer/CanvasLayer"]
 position = Vector2( -6, 12 )
