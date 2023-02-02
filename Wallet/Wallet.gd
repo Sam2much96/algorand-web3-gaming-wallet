@@ -378,8 +378,8 @@ func _process(_delta):
 			
 			# Buggy
 			# Bug Details: It bugs up when saving New Account Details Generated 
-			# And then Gets Stuck in a generation loop
-			# It also returns a false wallet check
+			# Suggested Solutions: Debug Save Account Parameters for New Accounts
+			# Work Around: SHow Mnemonic State
 			
 			
 			# Runs Wallet Checks
@@ -425,8 +425,9 @@ func _process(_delta):
 				
 				
 				# Exit Process Loop
-				#
-				return self.state_controller.select(8)
+				self.state_controller.select(8)
+				
+				return self.set_process(false)
 				#state = SHOW_ACCOUNT
 				#wallet_check += 1
 			if FileDirectory.file_exists(token_dir) :
@@ -734,7 +735,7 @@ func _process(_delta):
 			CreatAccountSuccessful_Mnemonic_Label.text = "Mnemmonic : "+ mnemonic
 			
 			
-				# connect Create AccountSuccessful buttons
+			self.set_process(false)
 
 
 func check_internet():
