@@ -327,7 +327,6 @@ func __ready():
 
 		#*******UI***********#
 
-#Fixes Android Bug
 func _ready():
 	self.add_child(q) #add networking node to the scene tree
 	self.add_child(q2) #add networking node to the scene tree
@@ -412,7 +411,7 @@ func _process(_delta):
 				var dict = {'address': address, 'amount': 0, 'mnemonic': mnemonic, 'asset_index': '','asset_name': '','asset_unit_name': '', 'asset_url': '' }
 				
 				"saves more account info"
-				save_account_info(dict,1)
+				print (" Save account Info: ",save_account_info(dict,1))
 				
 				
 				# Exit Process Loop
@@ -866,9 +865,9 @@ func save_account_info( info : Dictionary, number: int)-> bool:
 	
 	# saves if address has assets
 	# doesnt account for multiple assets
-		if info.has("assets") :
-			save_dict.asset_index =  info['assets'][1].get('asset-id')  #info["created-assets"][number]["index"] 
-			save_dict.asset_amount = info['assets'][1].get('amount')
+	if info.has("assets") :
+		save_dict.asset_index =  info['assets'][1].get('asset-id')  #info["created-assets"][number]["index"] 
+		save_dict.asset_amount = info['assets'][1].get('amount')
 		
 		# saves if address has created assets
 	if info.has("created-assets"):
