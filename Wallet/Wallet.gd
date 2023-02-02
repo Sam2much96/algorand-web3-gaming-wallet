@@ -502,15 +502,10 @@ func _process(_delta):
 				# Saves acct info, Debugs it to Output
 				print ("Saved Acct Info: ",save_account_info(account_info,0)) 
 				check_wallet_info()
-					#sfdgsg
-					
-					
-					## show account
-				#return self.state_controller.select(0) # depreciated
 
 
 
-				#sdsdfsdfsdf
+				#Should Ideally be a seoarate state
 				# Show CreatAccountSuccessful UI
 				CreatAccountSuccessful_UI.show()
 				# Display Mnemonic in UI label
@@ -524,7 +519,7 @@ func _process(_delta):
 				return self.set_process(false)
 		#Saves transactions to be processed in the ready function
 		# Saves the Transaction parameters and runs the txn() function
-		#as a subprocess of the _ready() function
+		# as a subprocess of the _ready() function
 		#check https://github.com/lucasvanmol/algodot/issues/20 for more clarifications
 		TRANSACTIONS: #Debugging
 			#hide other ui states
