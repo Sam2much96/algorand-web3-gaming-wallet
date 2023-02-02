@@ -630,7 +630,7 @@ func _end_detection(__position):
 		
 	if round(direction.x) == -1:
 		print('left swipe 1') #for debug purposes
-		next_panel()
+		#next_panel()
 		
 		
 		
@@ -640,7 +640,7 @@ func _end_detection(__position):
 		
 	if round(direction.x) == 1:
 		print('right swipe 1') #for debug purposes
-		prev_panel()
+		#prev_panel()
 		
 		
 		# Play Animation
@@ -650,15 +650,15 @@ func _end_detection(__position):
 	"Up and Down"
 	
 	if -sign(direction.y) < -swipe_parameters:
-		print('down swipe 1') #for debug purposes
-		next_panel() 
+		print('down swipe 1 = wrong calibration error ') #for debug purposes
+		#next_panel()  # Lef
 		
 		# Play Animation
-		return Wallet._Animation.play("SWIPE_DOWN")
+		return Wallet._Animation.play("SWIPE_LEFT")
 		
 	if -sign(direction.y)  > swipe_parameters:
 		print('up swipe 1') #for debug purposes
-		prev_panel()
+		#prev_panel()
 		
 		
 		# Play Animation

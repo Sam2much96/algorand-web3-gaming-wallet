@@ -380,11 +380,11 @@ func _process(_delta):
 			run_wallet_checks()
 			
 			# Creates Algod node
-			if not algod_node_exists:
-				#Make sure an algod node is running or connet to mainnet or testnet
-				self.Algorand.create_algod_node('TESTNET')
-				self.Algorand._test_algod_connection()
-				algod_node_exists= true
+			#if not algod_node_exists:
+			#	#Make sure an algod node is running or connet to mainnet or testnet
+			#	self.Algorand.create_algod_node('TESTNET')
+			#	self.Algorand._test_algod_connection()
+			#	algod_node_exists= true
 		
 			
 			'Generates New Account'
