@@ -498,14 +498,15 @@ func _process(_delta):
 				#FIxes null parameters errors
 				account_info = {"address":address, "amount":0, "mnemonic": mnemonic , "created-assets": [{"index": 0, "params":{"clawback":'', "creator":"", "decimals":0, "default-frozen": '', "freeze": '', "manager":"", "name":"Punk_001", "reserve":"", "total":1, "unit-name": 'XYZ', "url":""}}]}
 				
-				"saves more account info"
-				if save_account_info(account_info,0):
-					check_wallet_info()
-					
+				#"saves more account info"
+				# Saves acct info, Debugs it to Output
+				print ("Saved Acct Info: ",save_account_info(account_info,0)) 
+				check_wallet_info()
+					#sfdgsg
 					
 					
 					## show account
-					#self.state_controller.select(0) # depreciated
+				#return self.state_controller.select(0) # depreciated
 
 
 
@@ -520,7 +521,7 @@ func _process(_delta):
 
 
 
-			return #self.set_process(false)
+				return self.set_process(false)
 		#Saves transactions to be processed in the ready function
 		# Saves the Transaction parameters and runs the txn() function
 		#as a subprocess of the _ready() function
@@ -1015,6 +1016,7 @@ func check_wallet_info(): #works. Pass a variable check
 	emit_signal('completed')
 	#increases a wallet check timer
 	wallet_check += 1
+	return wallet_check
 
 
 func _on_reset():

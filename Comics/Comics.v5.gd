@@ -506,6 +506,12 @@ func next_panel():
 	
 	#********Wallet State Controller Logic*******#
 	#print ("changing to Show account State")
+	
+	
+		# Bug: Adds up number too rapidly
+
+		# Solutions
+		# (1) Change the Current Frame Data Structure to Array, for comparisons
 	var q : int = Wallet.state_controller.get_index()
 	var p : int =  Wallet.state_controller.get_item_count()
 	if q < p :
