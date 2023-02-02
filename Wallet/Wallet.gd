@@ -138,7 +138,7 @@ var local_image_file : String = "user://wallet/img0.png.png"
 
 "State Machine"
 
-enum {NEW_ACCOUNT,CHECK_ACCOUNT, SHOW_ACCOUNT, IMPORT_ACCOUNT, TRANSACTIONS ,COLLECTIBLES, SMARTCONTRACTS, IDLE, PASSWORD}
+enum {NEW_ACCOUNT,CHECK_ACCOUNT, SHOW_ACCOUNT, IMPORT_ACCOUNT, TRANSACTIONS ,COLLECTIBLES, SMARTCONTRACTS, IDLE, PASSWORD, SHOW_MNEMONIC}
 export var state = IDLE
 
 var wallet_check : int = 0
@@ -285,13 +285,15 @@ func __ready():
 			
 			self.state_controller.add_item("Show Account")
 			self.state_controller.add_item("Check Account")
-			self.state_controller.add_item("New Account")
+			self.state_controller.add_item("New Account") # remove from state controller control. Has been mapped to UI button
 			self.state_controller.add_item("Import Account")
 			self.state_controller.add_item("Transactions")
 			self.state_controller.add_item("SmartContacts") #should be a sub of Transactions
 			self.state_controller.add_item('Collectibles')
 			self.state_controller.add_item('Login')
+			self.state_controller.add_item('Show Mnemonic')
 		print ("HTTP REQUEST NODE: ",typeof(q))
+		
 		
 	#if user first boots app
 	if OS.get_ticks_msec() < 10_000: 
@@ -364,6 +366,10 @@ func _process(_delta):
 	elif self.state_controller.get_selected() == 7:
 		wallet_check = 0
 		state = PASSWORD
+	elif self.state_controller.get_selected() == 8:
+		wallet_check = 0
+		state = SHOW_MNEMONIC
+	
 	
 	"Constantly Running Process Introduces a Text UI Bug"
 	
@@ -419,7 +425,8 @@ func _process(_delta):
 				
 				
 				# Exit Process Loop
-				return self.state_controller.select(0)
+				#
+				return self.state_controller.select(8)
 				#state = SHOW_ACCOUNT
 				#wallet_check += 1
 			if FileDirectory.file_exists(token_dir) :
@@ -482,6 +489,7 @@ func _process(_delta):
 			
 			
 			self.mnemonic_ui.show()
+			self.set_process(false)
 			
 			if  imported_mnemonic:
 				
@@ -499,24 +507,16 @@ func _process(_delta):
 				account_info = {"address":address, "amount":0, "mnemonic": mnemonic , "created-assets": [{"index": 0, "params":{"clawback":'', "creator":"", "decimals":0, "default-frozen": '', "freeze": '', "manager":"", "name":"Punk_001", "reserve":"", "total":1, "unit-name": 'XYZ', "url":""}}]}
 				
 				#"saves more account info"
-				# Saves acct info, Debugs it to Output
+				# Saves acct info & Debugs it to Output
 				print ("Saved Acct Info: ",save_account_info(account_info,0)) 
 				check_wallet_info()
 
 
 
-				#Should Ideally be a seoarate state
-				# Show CreatAccountSuccessful UI
-				CreatAccountSuccessful_UI.show()
-				# Display Mnemonic in UI label
-				
-				CreatAccountSuccessful_Mnemonic_Label.text = "Mnemmonic : "+ mnemonic
-				# connect Create AccountSuccessful buttons
+				#state = SHOW_MNEMONIC
 
-
-
-
-				return self.set_process(false)
+				#return self.set_process(false)
+				return self.state_controller.select(8)
 		#Saves transactions to be processed in the ready function
 		# Saves the Transaction parameters and runs the txn() function
 		# as a subprocess of the _ready() function
@@ -544,8 +544,9 @@ func _process(_delta):
 				if _amount  < 100_000:
 						
 						#should ideally be sent to the UI
-						# Use OS alert
-					push_error('Cannot send balance less tha 100_000 MicroAlgos')
+					# Use OS alert
+					OS.alert("Cannot send balance less than 100_000 MicroAlgos","Alert")
+					push_error('Cannot send balance less than 100_000 MicroAlgos')
 					
 					
 					'Error Catcher 1'
@@ -569,9 +570,6 @@ func _process(_delta):
 				#uses two different buttons for assets and algo transactions
 				
 				# Remap asset_id_valid to Asset UI
-				
-				#
-				
 				# Asset Optin Txn
 				
 				#Parameters : 
@@ -715,9 +713,8 @@ func _process(_delta):
 			set_process(false)
 			pass
 		PASSWORD:
-			#should be the wallet pssword UI
-			#first UI once user logs in
-			#hide UI
+			#Shows Password UI once app is booted first
+			
 			hideUI()
 			
 			passward_UI.show()
@@ -727,6 +724,19 @@ func _process(_delta):
 			# Revert to dashboard state
 				self.state_controller.select(0)
 			pass
+		SHOW_MNEMONIC:
+			
+			hideUI()
+			# Show CreatAccountSuccessful UI
+			CreatAccountSuccessful_UI.show()
+			
+			# Display Mnemonic in UI label
+			CreatAccountSuccessful_Mnemonic_Label.text = "Mnemmonic : "+ mnemonic
+			
+			
+				# connect Create AccountSuccessful buttons
+
+
 func check_internet():
 	if !good_internet:
 		Networking._check_if_device_is_online(q)
