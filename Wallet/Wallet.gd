@@ -340,6 +340,7 @@ func _ready():
 func _process(_delta):
 	
 	# UI state Processing (works-ish)
+	# Remove New Account State. It has a new UI mapping
 	if self.state_controller.get_selected() == 0:
 		state = SHOW_ACCOUNT #only loads wallet once
 		
@@ -372,7 +373,10 @@ func _process(_delta):
 			
 			# Buggy
 			
+			# Runs Wallet Checks
 			run_wallet_checks()
+			
+			# Creates Algod node
 			if not algod_node_exists:
 				#Make sure an algod node is running or connet to mainnet or testnet
 				self.Algorand.create_algod_node('TESTNET')
@@ -383,8 +387,12 @@ func _process(_delta):
 			'Generates New Account'
 			# if account info directory doesn't exist
 			if not FileDirectory.file_exists(token_dir) : 
+				print ("File director" + token_dir + " doesn't exist") # for debug purposes only
+				
 				
 				"Creates Wallet Directory if it doesn't exist"
+				
+				
 				create_wallet_directory()
 				
 
@@ -406,11 +414,16 @@ func _process(_delta):
 				"saves more account info"
 				save_account_info(dict,1)
 				
-				state = SHOW_ACCOUNT
+				
+				# Exit Process Loop
+				return self.state_controller.select(0)
+				#state = SHOW_ACCOUNT
 				#wallet_check += 1
 			if FileDirectory.file_exists(token_dir) :
-				state = SHOW_ACCOUNT
-				return
+				#state = SHOW_ACCOUNT
+				
+				# Exit Process Loop
+				return self.state_controller.select(0)
 			
 			# Exit Process Loop
 			return self.state_controller.select(0)
@@ -1022,8 +1035,9 @@ func check_local_wallet_directory()-> bool:
 
 func create_wallet_directory()-> void:
 # Creates a Wallet folder.
-	if not FileDirectory. dir_exists("user://wallet"):
-		FileDirectory.make_dir("user://wallet")
+	print (" Creating Wallet Directory")
+	if not FileDirectory. dir_exists(token_dir):
+		FileDirectory.make_dir(token_dir)
 	else: return 
 
 
