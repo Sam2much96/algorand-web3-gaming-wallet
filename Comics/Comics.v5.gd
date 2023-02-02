@@ -622,8 +622,8 @@ func _start_detection(_position): #for swipe detection
 		_e.start()
 		print ('start swipe detection :') #for debug purposes delete later
 
-"Only Two Swipe Directions Are Implemented"
 
+"Only Two Swipe Directions Are Currently Implemented"
 func _end_detection(__position):
 #_e.stop()
 	direction = (__position - swipe_start_position).normalized()
@@ -674,7 +674,7 @@ func _end_detection(__position):
 		swipe_target_memory_y.append(__position.y)
 	_e.stop()
 	
-	#Kinda works
+	#Works
 	if swipe_target_memory_x.size() && swipe_target_memory_y.size() >= 3 && swipe_target_memory_x.pop_back() != null:
 		x1 = swipe_target_memory_x.pop_front()
 		x2  = swipe_target_memory_x.pop_back()
@@ -769,9 +769,9 @@ func _end_detection(__position):
 			
 		emit_signal('swiped', Vector2(0.0,-sign(direction.y))) #vertical swipe
 			#	print ('poot poot poot') 
-	# temporarily disabling
-	#if swipe_target_memory_x.size() && swipe_target_memory_y.size() > 40:
-	#	clear_memory()
+	
+	if swipe_target_memory_x.size() && swipe_target_memory_y.size() > 50:
+		clear_memory()
 
 	else: return
 
