@@ -370,6 +370,8 @@ func _process(_delta):
 	match state:
 		NEW_ACCOUNT: #loads wallet details if account already exists
 			
+			# Buggy
+			
 			run_wallet_checks()
 			if not algod_node_exists:
 				#Make sure an algod node is running or connet to mainnet or testnet
@@ -379,7 +381,8 @@ func _process(_delta):
 		
 			
 			'Generates New Account'
-			if not FileDirectory.file_exists(token_dir) : # if account info doesn't exist
+			# if account info directory doesn't exist
+			if not FileDirectory.file_exists(token_dir) : 
 				
 				"Creates Wallet Directory if it doesn't exist"
 				create_wallet_directory()
@@ -408,7 +411,9 @@ func _process(_delta):
 			if FileDirectory.file_exists(token_dir) :
 				state = SHOW_ACCOUNT
 				return
-				
+			
+			# Exit Process Loop
+			return self.state_controller.select(0)
 		CHECK_ACCOUNT:  #Works 
 			
 			if wallet_check == 0:

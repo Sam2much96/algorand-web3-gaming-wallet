@@ -499,12 +499,23 @@ func center_page(): #
 			else:
 				pass
 
+
+" Triggers a State Change in Wallet Nodes"
 func next_panel():
 	print ('Next Panel')
 	
-	
-	print ("changing to Show account State")
-	return Wallet.state_controller.select(0) #show dashboard
+	#********Wallet State Controller Logic*******#
+	#print ("changing to Show account State")
+	var q : int = Wallet.state_controller.get_index()
+	var p : int =  Wallet.state_controller.get_item_count()
+	if q < p :
+		q = q + 1
+		print ("Q: ",q) # for debug purposes only
+		return Wallet.state_controller.select(q) #show dashboard
+	elif q == p:
+		q = 0
+		print ("Q: ",q) # for debug purposes only
+		return Wallet.state_controller.select(q) # Start from beginning again
 	
 	#emit_signal("next_panel")
 	#if loaded_comics == true :
@@ -519,8 +530,18 @@ func next_panel():
 func prev_panel():
 	print ('prev panel')
 	
-	print ("changing to Show account State")
-	return Wallet.state_controller.select(0) #show dashboard
+		#********Wallet State Controller Logic*******#
+	#print ("changing to Show account State")
+	var q : int = Wallet.state_controller.get_index()
+	var p : int =  Wallet.state_controller.get_item_count()
+	if q <= p :
+		q = q - 1
+		print ("Q: ",q) # for debug purposes only
+		return Wallet.state_controller.select(q) #show dashboard
+	elif q == 0:
+		#q = 0
+		print ("Q: ",q) # for debug purposes only
+		return #Wallet.state_controller.select(q) # Do nothing
 	
 	#emit signals
 	#emit_signal("previous_panel")
