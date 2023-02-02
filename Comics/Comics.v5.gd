@@ -622,13 +622,14 @@ func _start_detection(_position): #for swipe detection
 		_e.start()
 		print ('start swipe detection :') #for debug purposes delete later
 
+"Only Two Swipe Directions Are Implemented"
 
 func _end_detection(__position):
 #_e.stop()
 	direction = (__position - swipe_start_position).normalized()
 	"Left and Right "
 		
-	if round(direction.x) == -1:
+	if round(direction.x) == -1: # Doesnt work
 		print('left swipe 1') #for debug purposes
 		#next_panel()
 		
@@ -638,7 +639,7 @@ func _end_detection(__position):
 		return Wallet._Animation.play("SWIPE_LEFT")
 		
 		
-	if round(direction.x) == 1:
+	if round(direction.x) == 1: # works
 		print('right swipe 1') #for debug purposes
 		#prev_panel()
 		
@@ -649,14 +650,14 @@ func _end_detection(__position):
 	
 	"Up and Down"
 	
-	if -sign(direction.y) < -swipe_parameters:
+	if -sign(direction.y) < -swipe_parameters: # works
 		print('down swipe 1 = wrong calibration error ') #for debug purposes
 		#next_panel()  # Lef
 		
 		# Play Animation
 		return Wallet._Animation.play("SWIPE_LEFT")
 		
-	if -sign(direction.y)  > swipe_parameters:
+	if -sign(direction.y)  > swipe_parameters: # Doesnt work
 		print('up swipe 1') #for debug purposes
 		#prev_panel()
 		
