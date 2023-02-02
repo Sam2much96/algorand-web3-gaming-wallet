@@ -371,6 +371,10 @@ func _process(_delta):
 		NEW_ACCOUNT: #loads wallet details if account already exists
 			
 			# Buggy
+			# Bug Details: It bugs up when saving New Account Details Generated 
+			# And then Gets Stuck in a generation loop
+			# It also returns a false wallet check
+			
 			
 			# Runs Wallet Checks
 			run_wallet_checks()
