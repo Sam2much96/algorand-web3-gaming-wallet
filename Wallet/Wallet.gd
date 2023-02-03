@@ -726,17 +726,18 @@ func _process(_delta):
 				self.state_controller.select(0)
 			pass
 		SHOW_MNEMONIC:
-			
-			hideUI()
-			# Show CreatAccountSuccessful UI
-			CreatAccountSuccessful_UI.show()
-			
-			# Display Mnemonic in UI label
-			CreatAccountSuccessful_Mnemonic_Label.text = "Mnemmonic : "+ mnemonic
-			
-			
-			self.set_process(false)
-
+			if mnemonic != "":
+				hideUI()
+				# Show CreatAccountSuccessful UI
+				CreatAccountSuccessful_UI.show()
+				
+				# Display Mnemonic in UI label
+				CreatAccountSuccessful_Mnemonic_Label.text = "Mnemmonic : "+ mnemonic
+				self.set_process(false)
+			elif mnemonic == "":
+				# Revert to Import Mnemonic state
+				self.state_controller.select(3) 
+				return OS.alert("Mnemonic invalid", "Error")
 
 func check_internet():
 	if !good_internet:
