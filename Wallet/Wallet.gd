@@ -138,7 +138,7 @@ var local_image_file : String = "user://wallet/img0.png.png"
 
 "State Machine"
 
-enum {NEW_ACCOUNT,CHECK_ACCOUNT, SHOW_ACCOUNT, IMPORT_ACCOUNT, TRANSACTIONS ,COLLECTIBLES, SMARTCONTRACTS, IDLE, PASSWORD, SHOW_MNEMONIC}
+enum {NEW_ACCOUNT,CHECK_ACCOUNT, SHOW_ACCOUNT, IMPORT_ACCOUNT, TRANSACTIONS ,COLLECTIBLES, SMARTCONTRACTS, IDLE, PASSWORD, SHOW_MNEMONIC, ASSET_OPTIN}
 export var state = IDLE
 
 var wallet_check : int = 0
@@ -296,9 +296,12 @@ func __ready():
 		print ("HTTP REQUEST NODE: ",typeof(q))
 		
 		
+		
+	" Shows Login UI"
+	
 	#if user first boots app
 	if OS.get_ticks_msec() < 10_000: 
-		self.state_controller.select(7) #show password login
+		self.state_controller.select(6) #show password login
 
 
 	"Mobile UI"
@@ -343,33 +346,35 @@ func _process(_delta):
 	
 	# UI state Processing (works-ish)
 	# Remove New Account State. It has a new UI mapping
-	if self.state_controller.get_selected() == 0:
-		state = SHOW_ACCOUNT #only loads wallet once
-		
-	elif self.state_controller.get_selected() == 1:
-		#wallet_check = 0 # resets the wallet check stopper
-		state = CHECK_ACCOUNT
-#	elif self.state_controller.get_selected() == 2:
-#		wallet_check = 0 # resets the wallet check stopper
-#		state = NEW_ACCOUNT
-	elif self.state_controller.get_selected() == 2:
-		wallet_check = 0 # resets the wallet check stopper
-		state = IMPORT_ACCOUNT
-	elif self.state_controller.get_selected() == 3:
-		wallet_check = 0 # resets the wallet check stopper
-		state = TRANSACTIONS
-	elif self.state_controller.get_selected() == 4:
-		wallet_check = 0 # resets the wallet check stopper
-		state = SMARTCONTRACTS
-	elif self.state_controller.get_selected() == 5:
-		wallet_check = 0 # resets the wallet check stopper
-		state = COLLECTIBLES
-	elif self.state_controller.get_selected() == 6:
-		wallet_check = 0
-		state = PASSWORD
-	elif self.state_controller.get_selected() == 7:
-		wallet_check = 0
-		state = SHOW_MNEMONIC
+	"Constantly Running Process Introduces a stuck state Bug"
+	if self.state_controller.visible :
+		if self.state_controller.get_selected() == 0:
+			state = SHOW_ACCOUNT #only loads wallet once
+			
+		elif self.state_controller.get_selected() == 1:
+			#wallet_check = 0 # resets the wallet check stopper
+			state = CHECK_ACCOUNT
+	#	elif self.state_controller.get_selected() == 2:
+	#		wallet_check = 0 # resets the wallet check stopper
+	#		state = NEW_ACCOUNT
+		elif self.state_controller.get_selected() == 2:
+			wallet_check = 0 # resets the wallet check stopper
+			state = IMPORT_ACCOUNT
+		elif self.state_controller.get_selected() == 3:
+			wallet_check = 0 # resets the wallet check stopper
+			state = TRANSACTIONS
+		elif self.state_controller.get_selected() == 4:
+			wallet_check = 0 # resets the wallet check stopper
+			state = SMARTCONTRACTS
+		elif self.state_controller.get_selected() == 5:
+			wallet_check = 0 # resets the wallet check stopper
+			state = COLLECTIBLES
+		elif self.state_controller.get_selected() == 6:
+			wallet_check = 0
+			state = PASSWORD
+		elif self.state_controller.get_selected() == 7:
+			wallet_check = 0
+			state = SHOW_MNEMONIC
 	
 	
 	"Constantly Running Process Introduces a Text UI Bug"
@@ -477,8 +482,7 @@ func _process(_delta):
 				#Revert to Import account state
 				
 				push_error('account info file does not exist, Import Wallet or generate New One')
-				self.state_controller.select(3) #rewrite as a method
-				#programmatically delete NFT
+				self.state_controller.select(2) 
 			
 			return
 		IMPORT_ACCOUNT: #works 
@@ -735,6 +739,9 @@ func _process(_delta):
 				# Revert to Import Mnemonic state
 				self.state_controller.select(2) 
 				return OS.alert("Mnemonic invalid", "Error")
+		ASSET_OPTIN:
+			hideUI()
+			Asset_UI.show()
 
 func check_internet():
 	if !good_internet:
@@ -1185,10 +1192,18 @@ func _input(event):
 		asset_optin = true
 	if asset_optin_txn_reject_button.pressed:
 		print ("asset optin cancelled")
-		return self.state_controller.select(4) # Return to Transaction UI
+		return self.state_controller.select(3) # Return to Transaction UI
 	if _Create_Acct_button.pressed:
-		self.state_controller.select(2) #Create Account 
-		print ("Create Acct button pressed")
+		
+		# Fixes Stuck State Bug
+		# Check state controller process()
+		self.state_controller.select(-1)
+		state = NEW_ACCOUNT
+		
+		
+		#self.state_controller.select(2) #Create Account 
+		print ("Create Acct button pressed", state)
+		return state
 	if txn_txn_valid_button.pressed:
 		transaction_valid = true #works
 		print ("Txn button pressed: ",transaction_valid) #for debug purposes only
@@ -1212,7 +1227,7 @@ func _input(event):
 	if fund_Acct_Button.pressed:
 		_on_testnetdispenser_pressed()
 	if make_Payment_Button.pressed:
-		self.state_controller.select(4)
+		self.state_controller.select(3)
 	if imported_mnemonic_button.pressed:
 		imported_mnemonic = true
 	if funding_success_close_button.pressed :
@@ -1353,7 +1368,7 @@ func reset_transaction_parameters():
 # Implement Asset ID UI for Transactions
 # Implement Asset Optin UX
 #sdfksdlfnskdfnglk
-func _NFT():
+#func _NFT():
 	# create and hide buttons depending on the amount of Assets counted
 	# Set gallery UI testure button to Asset NFT texture downloaded
 	
@@ -1361,6 +1376,6 @@ func _NFT():
 	
 	# load, show and hide NFT's on Button clicks
 	# Implement Drag and Drop mechanics
-	pass
+#	pass
 
 

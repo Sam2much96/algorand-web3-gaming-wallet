@@ -563,7 +563,7 @@ func prev_panel():
 	# Hacky
 
 
-	if Wallet.state != Wallet.COLLECTIBLES or Wallet.NEW_ACCOUNT:
+	if Wallet.state != Wallet.COLLECTIBLES :
 		q.append(Wallet.state_controller.get_selected_id())
 		#var p : int = Wallet.state_controller.get_index()
 		var l : int = Wallet.state_controller.get_selected_id()
@@ -676,7 +676,7 @@ func _end_detection(__position):
 		
 		
 	if round(direction.x) == 1: # works
-		print('right swipe 1') #for debug purposes
+		print('right swipe 1 - works') #for debug purposes
 		
 		next_panel() #works
 		
