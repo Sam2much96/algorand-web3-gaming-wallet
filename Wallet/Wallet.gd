@@ -138,7 +138,7 @@ var local_image_file : String = "user://wallet/img0.png.png"
 
 "State Machine"
 
-enum {NEW_ACCOUNT,CHECK_ACCOUNT, SHOW_ACCOUNT, IMPORT_ACCOUNT, TRANSACTIONS ,COLLECTIBLES, SMARTCONTRACTS, IDLE, PASSWORD, SHOW_MNEMONIC, ASSET_OPTIN}
+enum {NEW_ACCOUNT,CHECK_ACCOUNT, SHOW_ACCOUNT, IMPORT_ACCOUNT, TRANSACTIONS ,COLLECTIBLES, SMARTCONTRACTS, IDLE, PASSWORD, SHOW_MNEMONIC}
 export var state = IDLE
 
 var wallet_check : int = 0
@@ -739,9 +739,7 @@ func _process(_delta):
 				# Revert to Import Mnemonic state
 				self.state_controller.select(2) 
 				return OS.alert("Mnemonic invalid", "Error")
-		ASSET_OPTIN:
-			hideUI()
-			Asset_UI.show()
+
 
 func check_internet():
 	if !good_internet:

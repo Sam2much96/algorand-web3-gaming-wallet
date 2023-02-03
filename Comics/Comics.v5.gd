@@ -568,9 +568,7 @@ func prev_panel():
 		#var p : int = Wallet.state_controller.get_index()
 		var l : int = Wallet.state_controller.get_selected_id()
 		var p = l - 1
-		
-
-
+		 
 		if p <= Wallet.state_controller.get_item_count() && p != -1 :
 			Wallet.state_controller.select(p)
 		
@@ -580,6 +578,17 @@ func prev_panel():
 			
 		print ('Selected Wallet State: ',Wallet.state_controller.get_selected_id()) # for debug purposes
 		print (q)
+	if Wallet.state == Wallet.COLLECTIBLES:
+		print("Asset UI Visible: ", Wallet.Asset_UI.is_visible_in_tree()) # For Debug Purposes only
+		if Wallet.Asset_UI.is_visible_in_tree() == true:
+			Wallet.hideUI()
+			Wallet.collectibles_UI.show()
+			
+			pass
+		if Wallet.Asset_UI.is_visible_in_tree() == false:
+			Wallet.hideUI()
+			Wallet.Asset_UI.show()
+			pass
 
 
 		# Stops Overflow with thos array
