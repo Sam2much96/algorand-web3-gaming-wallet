@@ -649,7 +649,8 @@ func _end_detection(__position):
 		
 		
 		# Play Animation
-		return Wallet._Animation.play("SWIPE_LEFT")
+		Wallet._Animation.play("SWIPE_LEFT")
+		return Wallet._Animation.queue("RESET")
 		
 		
 	if round(direction.x) == 1: # works
@@ -658,8 +659,9 @@ func _end_detection(__position):
 		
 		
 		# Play Animation
-		return Wallet._Animation.play("SWIPE_RIGHT")
 		
+		Wallet._Animation.play("SWIPE_RIGHT")
+		return Wallet._Animation.queue("RESET")
 	
 	"Up and Down"
 	
@@ -668,7 +670,10 @@ func _end_detection(__position):
 		#next_panel()  # Lef
 		
 		# Play Animation
-		return Wallet._Animation.play("SWIPE_LEFT")
+		
+		#return Wallet._Animation.play("SWIPE_LEFT")
+		Wallet._Animation.play("SWIPE_LEFT")
+		return Wallet._Animation.queue("RESET")
 		
 	if -sign(direction.y)  > swipe_parameters: # Doesnt work
 		print('up swipe 1') #for debug purposes
