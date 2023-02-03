@@ -23,7 +23,7 @@
 # Bugs:
 # (1) it has a wierd updatable bug that's visible in the debug panel
 # (2) Center Page is buggy
-# (3) Drag and Drop across small distances is buggy
+# (3) Drag and Drop across small distances is buggy (fixed)
 # (4) Calibrate Swipe Gestures
 # *************************************************
 
@@ -111,6 +111,10 @@ var x2 #: float
 var y1 #: float
 var y2 #: float
 export(float,0.5,1.5) var MAX_DIAGONAL_SLOPE  = 1.3
+
+
+# For Panel Changer
+var q : Array = []
 
 func _ready():
 	#wordbubble() #for debug purposes only
@@ -512,59 +516,71 @@ func next_panel():
 	print ('Next Panel')
 	
 	#********Wallet State Controller Logic*******#
-	#print ("changing to Show account State")
+
+	# Hacky
 	
 	
 		# Bug: Adds up number too rapidly
-
 		# Solutions
 		# (1) Change the Current Frame Data Structure to Array, for comparisons
-	var q : int = Wallet.state_controller.get_index()
-	var p : int =  Wallet.state_controller.get_item_count()
-	if q < p :
-		q = q + 1
-		print ("Q: ",q) # for debug purposes only
-		return Wallet.state_controller.select(q) #show dashboard
-	elif q == p:
-		q = 0
-		print ("Q: ",q) # for debug purposes only
-		return Wallet.state_controller.select(q) # Start from beginning again
+
 	
-	#emit_signal("next_panel")
-	#if loaded_comics == true :
-	#	current_frame = current_frame + 1
-	#	emit_signal("panel_change") 
-	#	center_page()
-	#	return int(current_frame) 
-	#if Music.music_on == true:
-	#	Music.play_sfx(Music.comic_sfx)
+	if Wallet.state != Wallet.COLLECTIBLES:
+		# save the current index to array
+		q.append(Wallet.state_controller.get_selected_id())
+		
+		var l : int = q.pop_back() #Wallet.state_controller.get_selected_id()
+		var p = l + 1
+			#if q < p :
+
+		if p <= Wallet.state_controller.get_item_count():
+			Wallet.state_controller.select(p)
+			
+			# Play Animation
+		
+			Wallet._Animation.play("SWIPE_RIGHT")
+			Wallet._Animation.queue("RESET")
+
+		print ('Selected Wallet State: ',Wallet.state_controller.get_selected_id()) # for debug purposes
+		print (q) # for debug purposes only
+
+
+		# Stops Overflow with thos array
+		if q.size() >= Wallet.state_controller.get_item_count():
+			q.clear()
 
 
 func prev_panel():
 	print ('prev panel')
 	
-		#********Wallet State Controller Logic*******#
-	#print ("changing to Show account State")
-	var q : int = Wallet.state_controller.get_index()
-	var p : int =  Wallet.state_controller.get_item_count()
-	if q <= p :
-		q = q - 1
-		print ("Q: ",q) # for debug purposes only
-		return Wallet.state_controller.select(q) #show dashboard
-	elif q == 0:
-		#q = 0
-		print ("Q: ",q) # for debug purposes only
-		return #Wallet.state_controller.select(q) # Do nothing
-	
-	#emit signals
-	#emit_signal("previous_panel")
-	#if loaded_comics == true :
-	#	current_frame =abs(current_frame - 1 )
-	#	emit_signal("panel_change")  
-	#	center_page()
-	#	return int(current_frame) 
-	#if Music.music_on == true: 
-	##	Music.play_sfx(Music.comic_sfx)
+	#********Wallet State Controller Logic*******#
+	# Hacky
+
+
+	if Wallet.state != Wallet.COLLECTIBLES or Wallet.NEW_ACCOUNT:
+		q.append(Wallet.state_controller.get_selected_id())
+		#var p : int = Wallet.state_controller.get_index()
+		var l : int = Wallet.state_controller.get_selected_id()
+		var p = l - 1
+		
+
+
+		if p <= Wallet.state_controller.get_item_count() && p != -1 :
+			Wallet.state_controller.select(p)
+		
+			# Play Animation
+			Wallet._Animation.play("SWIPE_LEFT")
+			return Wallet._Animation.queue("RESET")
+			
+		print ('Selected Wallet State: ',Wallet.state_controller.get_selected_id()) # for debug purposes
+		print (q)
+
+
+		# Stops Overflow with thos array
+		if q.size() >= Wallet.state_controller.get_item_count():
+			q.clear()
+
+
 
 func _on_Backwards_pressed(): #Connect these signals automatically? #Produce the buttons programmatically
 	prev_panel()
@@ -649,31 +665,27 @@ func _end_detection(__position):
 		
 		
 		# Play Animation
-		Wallet._Animation.play("SWIPE_LEFT")
-		return Wallet._Animation.queue("RESET")
+		#Wallet._Animation.play("SWIPE_LEFT")
+		#return Wallet._Animation.queue("RESET")
 		
 		
 	if round(direction.x) == 1: # works
 		print('right swipe 1') #for debug purposes
-		#prev_panel()
 		
+		next_panel() #works
 		
-		# Play Animation
-		
-		Wallet._Animation.play("SWIPE_RIGHT")
-		return Wallet._Animation.queue("RESET")
 	
 	"Up and Down"
 	
 	if -sign(direction.y) < -swipe_parameters: # works
 		print('down swipe 1 = wrong calibration error ') #for debug purposes
-		#next_panel()  # Lef
 		
-		# Play Animation
+		#Disabled. Calling from Wallet Scene Instead
+		# To avoid Looping bug
+		prev_panel()
 		
-		#return Wallet._Animation.play("SWIPE_LEFT")
-		Wallet._Animation.play("SWIPE_LEFT")
-		return Wallet._Animation.queue("RESET")
+		
+
 		
 	if -sign(direction.y)  > swipe_parameters: # Doesnt work
 		print('up swipe 1') #for debug purposes

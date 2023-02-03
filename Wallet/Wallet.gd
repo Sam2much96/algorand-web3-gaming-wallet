@@ -840,7 +840,6 @@ func connect_signals(): #connects all required signals in the parent node
 	#	Comics_v5.connect("next_panel", self, "next_UI")
 
 
-
 func debug_signal_connections()->void:
 	#debuggers
 	print("Networking Connected: ",q.is_connected("request_completed", self, "_http_request_completed"))
