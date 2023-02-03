@@ -145,6 +145,9 @@ func _ready():
 	
 	
 	#print ("Wallet UI elemts: ",Wallet.UI_Elements) #for debug purposes only
+	
+	# Triggers CUstom Ready State in Wallet Node
+	
 	Wallet.__ready()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

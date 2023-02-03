@@ -244,7 +244,8 @@ var processing : bool
 #*****Animation Player******#
 var _Animation : AnimationPlayer 
 
-
+# Placeholder Dictionary for creating New Accts
+var dict : Dictionary = {'address': address, 'amount': 0, 'mnemonic': mnemonic }
 
 "Checks the Nodes connection Between Singleton & UI"
 func check_Nodes() -> bool:
@@ -380,31 +381,24 @@ func _process(_delta):
 			# Bug Details: It bugs up when saving New Account Details Generated 
 			# Suggested Solutions: Debug Save Account Parameters for New Accounts
 			# Work Around: SHow Mnemonic State
-			
-			
-			# Runs Wallet Checks
-			run_wallet_checks()
-			
-			# Creates Algod node
-			#if not algod_node_exists:
-			#	#Make sure an algod node is running or connet to mainnet or testnet
-			#	self.Algorand.create_algod_node('TESTNET')
-			#	self.Algorand._test_algod_connection()
-			#	algod_node_exists= true
-		
+
 			
 			'Generates New Account'
 			# if account info directory doesn't exist
-			if not FileDirectory.file_exists(token_dir) : 
-				print ("File director" + token_dir + " doesn't exist") # for debug purposes only
+			# Error Catcher 1
+			if not FileDirectory.dir_exists(token_dir): 
+				print ("File directory" + token_dir + " doesn't exist") # for debug purposes only
 				
 				
 				"Creates Wallet Directory if it doesn't exist"
 				
 				
 				create_wallet_directory()
-				
-
+			if not FileCheck1.file_exists(token_write_path):
+				save_account_info(dict , 0)
+			
+			# Error Catcher 3
+			if FileCheck1.file_exists(token_write_path):
 				'Generate new Account'
 				self.Algorand.generate_new_account = true
 				Player_account_details=self.Algorand.create_new_account(Player_account_temp)
@@ -414,30 +408,32 @@ func _process(_delta):
 				
 				address= Player_account_details[0]
 				mnemonic= Player_account_details[1]
-				
-				#save_new_account_info(Player_account_details)
+					
+					#save_new_account_info(Player_account_details)
 				'Attempts saving new account info'
-				#breaks
-				var dict = {'address': address, 'amount': 0, 'mnemonic': mnemonic, 'asset_index': '','asset_name': '','asset_unit_name': '', 'asset_url': '' }
+					
+				var _dict = {'address': address, 'amount': 0, 'mnemonic': mnemonic, 'asset_index': '','asset_name': '','asset_unit_name': '', 'asset_url': '' }
+				
+				print (_dict)
 				
 				"saves more account info"
-				print (" Save account Info: ",save_account_info(dict,1))
-				
-				
-				# Exit Process Loop
+				print (" Save account Info: ",save_account_info(_dict,0))
+					
+					#dsfsf
+				# Exit Process Loop Show Mnemonic
 				self.state_controller.select(8)
-				
+					
 				return self.set_process(false)
 				#state = SHOW_ACCOUNT
 				#wallet_check += 1
-			if FileDirectory.file_exists(token_dir) :
-				#state = SHOW_ACCOUNT
+				#if FileDirectory.file_exists(token_dir) :
+					#state = SHOW_ACCOUNT
+					
+					# Exit Process Loop
+				#	return self.state_controller.select(0)
 				
-				# Exit Process Loop
-				return self.state_controller.select(0)
-			
-			# Exit Process Loop
-			return self.state_controller.select(0)
+				# Exit Process Loop to SHow Menm
+				#return self.state_controller.select(0)
 		CHECK_ACCOUNT:  #Works 
 			
 			if wallet_check == 0:
@@ -460,6 +456,7 @@ func _process(_delta):
 		# entering show account previously would present new bugs
 		SHOW_ACCOUNT: 
 			"it's always load account details when ready"
+			
 			if FileCheck1.file_exists(token_write_path)  :
 				#use animation player to alter UI
 				
@@ -747,6 +744,7 @@ func check_internet():
 
 func run_wallet_checks()-> bool: # works 
 	#Make sure an algod node is running or connet to mainnet or testnet
+	# should be run in process method to avoid looping bug
 	if self.Algorand.algod == null:
 		self.Algorand.create_algod_node('TESTNET')
 	
@@ -872,26 +870,29 @@ func save_account_info( info : Dictionary, number: int)-> bool:
 		# encode mnemonic
 		save_dict.mnemonic = convert_string_to_binary(mnemonic)  #saves mnemonic as string error
 		
-		# Is required to debug NFT collectibles
-		# Error Catchers
-	
-	# saves if address has assets
-	# doesnt account for multiple assets
-	if info.has("assets") :
-		save_dict.asset_index =  info['assets'][1].get('asset-id')  #info["created-assets"][number]["index"] 
-		save_dict.asset_amount = info['assets'][1].get('amount')
+		# saves if address has assets
+		# doesnt account for multiple assets, only saves the first Asset
+		if info.has("assets") :
+			save_dict.asset_index =  info['assets'][1].get('asset-id')  #info["created-assets"][number]["index"] 
+			save_dict.asset_amount = info['assets'][1].get('amount')
+			
+			# saves if address has created assets
+		if info.has("created-assets"):
+			save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
+			save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
+			save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
+			
+		else: pass
 		
-		# saves if address has created assets
-	if info.has("created-assets"):
-		save_dict.asset_name = info["created-assets"][number]["params"]["name"] 
-		save_dict.asset_unit_name = info["created-assets"][number]["params"]['unit-name']
-		save_dict.asset_url = info["created-assets"][number]['params']['url'] #asset Uro and asset uri are different. Separate them
 		
 		FileCheck1.store_line(to_json(save_dict))
 		FileCheck1.close()
 		
-		print ("saved account info")
+		print ("saved account info 1")
 		return true
+	
+			#print ("saved account info")
+			#return true
 	if not FileDirectory.open(token_dir) == OK: 
 		push_error("Error: " + str(FileDirectory.open(token_dir)))
 		return false
