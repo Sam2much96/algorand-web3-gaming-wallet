@@ -512,6 +512,8 @@ func center_page(): #
 
 
 " Triggers a State Change in Wallet Nodes"
+# Different Mechanics are Implemented For Different Wallet Nodes
+
 func next_panel():
 	print ('Next Panel')
 	
@@ -524,7 +526,8 @@ func next_panel():
 		# Solutions
 		# (1) Change the Current Frame Data Structure to Array, for comparisons
 
-	
+
+
 	if Wallet.state != Wallet.COLLECTIBLES:
 		# save the current index to array
 		q.append(Wallet.state_controller.get_selected_id())
@@ -534,15 +537,18 @@ func next_panel():
 			#if q < p :
 
 		if p <= Wallet.state_controller.get_item_count():
-			Wallet.state_controller.select(p)
-			
 			# Play Animation
 		
 			Wallet._Animation.play("SWIPE_RIGHT")
 			Wallet._Animation.queue("RESET")
 
+			Wallet.state_controller.select(p)
+			
+
+
 		print ('Selected Wallet State: ',Wallet.state_controller.get_selected_id()) # for debug purposes
 		print (q) # for debug purposes only
+
 
 
 		# Stops Overflow with thos array

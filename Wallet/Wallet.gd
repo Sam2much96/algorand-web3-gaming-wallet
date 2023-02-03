@@ -286,7 +286,7 @@ func __ready():
 			
 			self.state_controller.add_item("Show Account")
 			self.state_controller.add_item("Check Account")
-			self.state_controller.add_item("New Account") # remove from state controller control. Has been mapped to UI button
+			#self.state_controller.add_item("New Account") # remove from state controller control. Has been mapped to UI button
 			self.state_controller.add_item("Import Account")
 			self.state_controller.add_item("Transactions")
 			self.state_controller.add_item("SmartContacts") #should be a sub of Transactions
@@ -349,25 +349,25 @@ func _process(_delta):
 	elif self.state_controller.get_selected() == 1:
 		#wallet_check = 0 # resets the wallet check stopper
 		state = CHECK_ACCOUNT
+#	elif self.state_controller.get_selected() == 2:
+#		wallet_check = 0 # resets the wallet check stopper
+#		state = NEW_ACCOUNT
 	elif self.state_controller.get_selected() == 2:
 		wallet_check = 0 # resets the wallet check stopper
-		state = NEW_ACCOUNT
+		state = IMPORT_ACCOUNT
 	elif self.state_controller.get_selected() == 3:
 		wallet_check = 0 # resets the wallet check stopper
-		state = IMPORT_ACCOUNT
+		state = TRANSACTIONS
 	elif self.state_controller.get_selected() == 4:
 		wallet_check = 0 # resets the wallet check stopper
-		state = TRANSACTIONS
+		state = SMARTCONTRACTS
 	elif self.state_controller.get_selected() == 5:
 		wallet_check = 0 # resets the wallet check stopper
-		state = SMARTCONTRACTS
-	elif self.state_controller.get_selected() == 6:
-		wallet_check = 0 # resets the wallet check stopper
 		state = COLLECTIBLES
-	elif self.state_controller.get_selected() == 7:
+	elif self.state_controller.get_selected() == 6:
 		wallet_check = 0
 		state = PASSWORD
-	elif self.state_controller.get_selected() == 8:
+	elif self.state_controller.get_selected() == 7:
 		wallet_check = 0
 		state = SHOW_MNEMONIC
 	
@@ -421,7 +421,7 @@ func _process(_delta):
 					
 					#dsfsf
 				# Exit Process Loop Show Mnemonic
-				self.state_controller.select(8)
+				self.state_controller.select(7)
 					
 				return self.set_process(false)
 				#state = SHOW_ACCOUNT
@@ -514,7 +514,7 @@ func _process(_delta):
 				#state = SHOW_MNEMONIC
 
 				#return self.set_process(false)
-				return self.state_controller.select(8)
+				return self.state_controller.select(7)
 		#Saves transactions to be processed in the ready function
 		# Saves the Transaction parameters and runs the txn() function
 		# as a subprocess of the _ready() function
@@ -733,7 +733,7 @@ func _process(_delta):
 				self.set_process(false)
 			elif mnemonic == "":
 				# Revert to Import Mnemonic state
-				self.state_controller.select(3) 
+				self.state_controller.select(2) 
 				return OS.alert("Mnemonic invalid", "Error")
 
 func check_internet():
@@ -1131,9 +1131,8 @@ func _input(event):
 		
 		Networking.start_check(4)
 		
-		# should save event positions to an array and 
-		# run calculations using the first and last array positions
-		# Swipe position detector implemented it as state controller changer
+		
+		"Swipe Detection"
 		Comics_v5._start_detection(event.position)
 		
 		
