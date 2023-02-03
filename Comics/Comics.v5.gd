@@ -265,23 +265,30 @@ func _input(event):
 
 	"Handles Screen Dragging"
 	if event is InputEventScreenDrag   :
-		#if event is InputEventMultiScreenDrag: breaks
-		#target = event.get_position()
-		#print ("sglgnlngakdfnl")
-		#return drag(target, Kinematic_2d.position, Kinematic_2d)
-		#Networking.start_check(1)
-		#while not Networking.stop_check():
-		
-		#	_start_detection(target)
-		
-			
-		#if Networking.stop_check(): _end_detection(target)
 		pass
+
+	"Handles Multitouch Gesture"
+	#Documentation: https://github.com/Federico-Ciuffardi/Godot-Touch-Input-Manager/wiki
+	# Use Global Animation Player to play Swipe Gesture Actions
+	# Export Animation Resource File from AlgoWallet App
+	# Load Animation As resource file
+	if event is InputEventScreenTwist:
+		print ("Input: Screen Twist / Action: Rotate")
+	
+	# Zoom in/out Gesture
+	if event is InputEventScreenPinch :
+		print ("Input: Screen Pinch / Action: Zoom In/Out")
+	
+	# Zoom in/out gesture
+	if event is InputEventMultiScreenTap :
+		print ("Input: Screen Tap / Action: Zoom in/OUt")
 
 # Handles releasing 
 	#pass
 # Handles double clicking
 	#pass
+
+
 
 	if event is InputEventMouseButton && event.doubleclick && loaded_comics == true:
 		
