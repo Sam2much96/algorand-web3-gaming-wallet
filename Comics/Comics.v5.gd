@@ -41,6 +41,9 @@ signal freed_comics
 signal swiped(direction)
 signal swiped_canceled(start_position)
  
+# Helper boolean for swipes
+#To be used in other scenes as a Swipe Check Parameter
+var is_swiping : bool = false 
 
 #Placeholder signals
 #signal next_panel
@@ -526,74 +529,66 @@ func next_panel():
 		# Solutions
 		# (1) Change the Current Frame Data Structure to Array, for comparisons
 
+	if Wallet.state == Wallet.COLLECTIBLES:
+		return Wallet._Animation.play("SLIDE_OUT")
 
-
-	if Wallet.state != Wallet.COLLECTIBLES:
-		# save the current index to array
-		q.append(Wallet.state_controller.get_selected_id())
+	elif Wallet.state != Wallet.COLLECTIBLES:
+#		# save the current index to array
+#		q.append(Wallet.state_controller.get_selected_id())
+#		
+#		var l : int = q.pop_back() #Wallet.state_controller.get_selected_id()
+#		var p = l + 1
+#			#if q < p :
+#
+#		if p <= Wallet.state_controller.get_item_count():
+#			# Play Animation
+#		
+		Wallet._Animation.play("SWIPE_RIGHT")
 		
-		var l : int = q.pop_back() #Wallet.state_controller.get_selected_id()
-		var p = l + 1
-			#if q < p :
-
-		if p <= Wallet.state_controller.get_item_count():
-			# Play Animation
-		
-			Wallet._Animation.play("SWIPE_RIGHT")
-			Wallet._Animation.queue("RESET")
-
-			Wallet.state_controller.select(p)
-			
+		return Wallet._Animation.queue("RESET")
+#
+#			Wallet.state_controller.select(p)
+#			
 
 
-		print ('Selected Wallet State: ',Wallet.state_controller.get_selected_id()) # for debug purposes
-		print (q) # for debug purposes only
+#		print ('Selected Wallet State: ',Wallet.state_controller.get_selected_id()) # for debug purposes
+#		print (q) # for debug purposes only
 
 
 
-		# Stops Overflow with thos array
-		if q.size() >= Wallet.state_controller.get_item_count():
-			q.clear()
+#		# Stops Stack Overflow with this array
+#		if q.size() >= Wallet.state_controller.get_item_count():
+#			q.clear()
 
 
 func prev_panel():
 	print ('prev panel')
-	
+	#print ("Is Swiping: ", is_swiping)
 	#********Wallet State Controller Logic*******#
-	# Hacky
-
-
-	if Wallet.state != Wallet.COLLECTIBLES :
-		q.append(Wallet.state_controller.get_selected_id())
-		#var p : int = Wallet.state_controller.get_index()
-		var l : int = Wallet.state_controller.get_selected_id()
-		var p = l - 1
-		 
-		if p <= Wallet.state_controller.get_item_count() && p != -1 :
-			Wallet.state_controller.select(p)
-		
-			# Play Animation
-			Wallet._Animation.play("SWIPE_LEFT")
-			return Wallet._Animation.queue("RESET")
-			
-		print ('Selected Wallet State: ',Wallet.state_controller.get_selected_id()) # for debug purposes
-		print (q)
+	# Hacky UI Logic
 	if Wallet.state == Wallet.COLLECTIBLES:
-		print("Asset UI Visible: ", Wallet.Asset_UI.is_visible_in_tree()) # For Debug Purposes only
-		if Wallet.Asset_UI.is_visible_in_tree() == true:
-			Wallet.hideUI()
-			Wallet.collectibles_UI.show()
+		return Wallet._Animation.play("SLIDE_OUT")
+
+
+	elif Wallet.state != Wallet.COLLECTIBLES :
+#		q.append(Wallet.state_controller.get_selected_id())
+		#var p : int = Wallet.state_controller.get_index()
+#		var l : int = Wallet.state_controller.get_selected_id()
+#		var p = l - 1
+#		 
+#		if p <= Wallet.state_controller.get_item_count() && p != -1 :
+#			Wallet.state_controller.select(p)
+		
+#		# Play Animation
+		Wallet._Animation.play("SWIPE_LEFT")
+		return Wallet._Animation.queue("RESET")
 			
-			pass
-		if Wallet.Asset_UI.is_visible_in_tree() == false:
-			Wallet.hideUI()
-			Wallet.Asset_UI.show()
-			pass
+#		print ('Selected Wallet State: ',Wallet.state_controller.get_selected_id()) # for debug purposes
+#		print (q)
 
-
-		# Stops Overflow with thos array
-		if q.size() >= Wallet.state_controller.get_item_count():
-			q.clear()
+#		# Stops Overflow with thos array
+#		if q.size() >= Wallet.state_controller.get_item_count():
+#			q.clear()
 
 
 
@@ -652,6 +647,7 @@ func clear_memory()-> void:
 
 
 func _start_detection(_position): #for swipe detection
+	is_swiping = true
 	if enabled == true:
 		
 
@@ -667,9 +663,12 @@ func _start_detection(_position): #for swipe detection
 		print ('start swipe detection :') #for debug purposes delete later
 
 
+
 "Only Two Swipe Directions Are Currently Implemented"
 func _end_detection(__position):
 #_e.stop()
+	is_swiping = false
+	
 	direction = (__position - swipe_start_position).normalized()
 	"Left and Right "
 		
@@ -815,6 +814,8 @@ func _end_detection(__position):
 		emit_signal('swiped', Vector2(0.0,-sign(direction.y))) #vertical swipe
 			#	print ('poot poot poot') 
 	
+
+	
 	if swipe_target_memory_x.size() && swipe_target_memory_y.size() > 50:
 		clear_memory()
 
@@ -851,7 +852,7 @@ func _on_Rotate_pressed():#Page Rotation #Rewrite this function as a module
 
 
 
-static func load_local_image_texture_from_global(node : TextureRect, _local_image_path: String)-> void:
+static func load_local_image_texture_from_global(node : TextureRect, _local_image_path: String, expand: bool)-> void:
 	#print ("NFT debug: ", NFT) #for debug purposes only
 	var texture = ImageTexture.new()
 	var image = Image.new()
@@ -860,7 +861,7 @@ static func load_local_image_texture_from_global(node : TextureRect, _local_imag
 	node.show()
 	node.set_texture(texture) #cannot load directly from local storage without permissions
 		#print (NFT.texture) for debug purposes only
-	node.set_expand(true)
+	node.set_expand(expand)
 
 
 """

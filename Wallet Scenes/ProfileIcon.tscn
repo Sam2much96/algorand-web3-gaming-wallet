@@ -1,0 +1,17 @@
+[gd_scene format=2]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PoolVector2Array( 364, 64, 339, 92, 313, 191, 509, 191, 481, 89, 445, 57, 403, 49, 364, 63, 342, 88 )
+width = 20.0
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="Line2D2" type="Line2D" parent="."]
+position = Vector2( 11, 12 )
+points = PoolVector2Array( 395, -89, 372, -86, 357, -75, 345, -62, 342, -46, 343, -26, 354, -11, 370, 1, 394, 5, 418, 1, 430, -10, 441, -27, 442, -45, 438, -61, 429, -73, 414, -85, 395, -88 )
+width = 15.0
+default_color = Color( 0, 0, 0, 1 )
+joint_mode = 1
+begin_cap_mode = 2
+round_precision = 20

@@ -155,6 +155,7 @@ var asset_optin : bool = false
 var asset_txn : bool = false
 
 
+var Asset_UI_showing : bool = false
 
 
 var password_valid : bool = false
@@ -217,9 +218,11 @@ var nft_asset_id : LineEdit
 
 #*****Collectible UI*******#
 var NFT : TextureRect
+var pfp : TextureRect
 var kinematic2d : KinematicBody2D  # for NFT dragNdrop
 var NFT_index_label : Label #Displays Asset Index
-
+var Asset_UI_index : Label
+var Asset_UI_amount : Label
 
 #*****PasswordUI******#
 var password_LineEdit : LineEdit
@@ -262,7 +265,7 @@ func check_Nodes() -> bool:
 		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation, _Create_Acct_button,
 		CreatAccountSuccessful_UI, CreatAccountSuccessful_Mnemonic_Label, CreatAccountSuccessful_Copy_Mnemonic_button,
 		CreatAccountSuccessful_Proceed_home_button, Asset_UI, asset_txn_valid_button, asset_optin_txn_valid_button,
-		asset_optin_txn_reject_button
+		asset_optin_txn_reject_button, pfp, Asset_UI_index, Asset_UI_amount 
 	]
 	
 	passward_UI_Buttons = [_1,_2, _3, _4, _5, _6, _7, _8, _9, _0, zero,delete_last_button]
@@ -343,6 +346,7 @@ func _ready():
 	pass
 
 func _process(_delta):
+	
 	
 	# UI state Processing (works-ish)
 	# Remove New Account State. It has a new UI mapping
@@ -680,11 +684,31 @@ func _process(_delta):
 					wallet_check += 1
 					
 					#connect to wallet NFT logic
-					NFT_index_label.text = "ID: "+ str(asset_index) + "/" + str(asset_name)
-					# Disabling Collectibes UI thumbnails
-					return Comics.load_local_image_texture_from_global(self.NFT, local_image_file)
 					
-				else: return
+					#NFT PFP
+					NFT_index_label.text = "ID: "+ str(asset_index) + "/" + str(asset_name)
+					Asset_UI_index.text = str(_asset_id)
+					Asset_UI_amount.text = "$100"
+					
+					Comics.load_local_image_texture_from_global(self.pfp, local_image_file, false)
+					
+					# Disabling Collectibes UI thumbnails
+					return Comics.load_local_image_texture_from_global(self.NFT, local_image_file, true)
+					
+				"NFT PFP"
+				#if is_image_available_at_local_storage:
+					# set image texture
+				
+					
+				#if Asset_UI.is_visible_in_tree():
+					# Set Asset ID variables
+				
+				#pass
+					
+				#if Comics_v5.is_swiping == true:
+				#	collectibles_UI.hide()
+				#	Asset_UI.show()
+				#else: return
 		#opts into smart contracts with wallet
 		SMARTCONTRACTS: # doesnt work 
 			#hide other ui states
@@ -697,9 +721,7 @@ func _process(_delta):
 			
 			#get parameters from smart contract UI
 
-			if transaction_valid: #buggy
-				#Would Require Compiling to Teal
-				print (" Opt into Smartcontract---Debugging")
+			if transaction_valid: 
 				smart_contract_addr = smartcontract_ui_address_lineEdit.text 
 				_app_id = int(smartcontract_ui_appID_lineEdit.text)
 				_app_args = smartcontract_ui_args_lineEdit.text
@@ -877,8 +899,8 @@ func save_account_info( info : Dictionary, number: int)-> bool:
 		# saves if address has assets
 		# doesnt account for multiple assets, only saves the first Asset
 		if info.has("assets") :
-			save_dict.asset_index =  info['assets'][1].get('asset-id')  #info["created-assets"][number]["index"] 
-			save_dict.asset_amount = info['assets'][1].get('amount')
+			save_dict.asset_index =  info['assets'][number].get('asset-id')  #info["created-assets"][number]["index"] 
+			save_dict.asset_amount = info['assets'][number].get('amount')
 			
 			# saves if address has created assets
 		if info.has("created-assets"):
@@ -1138,9 +1160,15 @@ func _input(event):
 		
 		
 		"Swipe Detection"
+		
+		#Comics_v5.enabled = true
 		Comics_v5._start_detection(event.position)
 		
 		
+		# End Detection once Networking check has timedout
+		
+		#sdfhsdfhsdhsdg
+		# Swipe Detection SHould SHow A new Aset UI with NFT PFP
 		Comics_v5._end_detection(event.position)
 		
 		

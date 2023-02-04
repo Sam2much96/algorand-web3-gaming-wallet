@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://themes/Bold.tres" type="Theme" id=1]
 [ext_resource path="res://themes/Light.tres" type="Theme" id=2]
@@ -7,6 +7,10 @@
 [ext_resource path="res://themes/Panel+white.tres" type="StyleBox" id=5]
 [ext_resource path="res://themes/Regular.tres" type="Theme" id=6]
 [ext_resource path="res://themes/Panel+blue.tres" type="Theme" id=7]
+[ext_resource path="res://icon.png" type="Texture" id=8]
+[ext_resource path="res://Wallet Scenes/ProfileIcon.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Wallet Scenes/BookmarksIcon.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Wallet Scenes/ListsIcon.tscn" type="PackedScene" id=11]
 
 [sub_resource type="Theme" id=1]
 Panel/styles/panel = ExtResource( 5 )
@@ -20,6 +24,7 @@ margin_right = -42.0
 margin_bottom = -2.0
 
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 margin_left = 315.0
 margin_right = 675.0
 margin_bottom = 603.0
@@ -31,6 +36,20 @@ margin_top = 230.0
 margin_right = 675.0
 margin_bottom = 603.0
 color = Color( 0.921569, 0.921569, 0.921569, 1 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+light_mask = 3
+margin_left = 398.0
+margin_top = 30.0
+margin_right = 462.0
+margin_bottom = 94.0
+texture = ExtResource( 8 )
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+position = Vector2( 410.048, 63 )
+scale = Vector2( 0.504762, 0.5 )
+invert_enable = true
+polygon = PoolVector2Array( -15.9434, -18, -15.9434, 24, -13.9623, 30, 9.81134, 52, 17.7358, 56, 63.3019, 56, 71.2264, 52, 91.0377, 30, 95, 22, 95, -18, 91.0377, -30, 75.1887, -48, 69.2453, -52, 11.7925, -52, 5.84906, -50, -13.9623, -26 )
 
 [node name="Panel" type="Panel" parent="."]
 margin_left = 317.0
@@ -54,6 +73,7 @@ margin_bottom = 191.0
 theme = ExtResource( 7 )
 
 [node name="Button" type="Button" parent="."]
+visible = false
 margin_left = 347.0
 margin_top = 419.0
 margin_right = 478.0
@@ -62,6 +82,7 @@ theme = ExtResource( 4 )
 text = "Approve"
 
 [node name="Button2" type="Button" parent="."]
+visible = false
 margin_left = 511.0
 margin_top = 418.0
 margin_right = 645.0
@@ -87,6 +108,7 @@ margin_top = 7.0
 margin_right = 68.0
 margin_bottom = 28.0
 theme = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Amount: "
 
 [node name="Label3" type="Label" parent="YSort/VBoxContainer/HBoxContainer"]
@@ -102,10 +124,10 @@ margin_left = 112.0
 margin_right = 197.0
 margin_bottom = 36.0
 theme = ExtResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "$3000"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="YSort/VBoxContainer"]
-visible = false
 
 [node name="Line2D" type="Line2D" parent="YSort/VBoxContainer/CanvasLayer"]
 position = Vector2( -6, 12 )
@@ -127,6 +149,7 @@ margin_top = 7.0
 margin_right = 100.0
 margin_bottom = 28.0
 theme = ExtResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Merchant ID: "
 align = 1
 
@@ -135,6 +158,7 @@ margin_left = 104.0
 margin_right = 211.0
 margin_bottom = 36.0
 theme = ExtResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "#RET23"
 align = 1
 
@@ -230,3 +254,21 @@ rect_scale = Vector2( 0.7, 0.7 )
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.262745, 0.27451, 0.960784, 1 )
 text = "view more >"
+
+[node name="Icon1" parent="." instance=ExtResource( 9 )]
+visible = false
+offset = Vector2( 250, 400 )
+scale = Vector2( 0.2, 0.2 )
+transform = Transform2D( 0.2, 0, 0, 0.2, 250, 400 )
+
+[node name="Icon2" parent="." instance=ExtResource( 11 )]
+visible = false
+offset = Vector2( 165, 420 )
+scale = Vector2( 0.25, 0.25 )
+transform = Transform2D( 0.25, 0, 0, 0.25, 165, 420 )
+
+[node name="Icon3" parent="." instance=ExtResource( 10 )]
+visible = false
+offset = Vector2( 160, 500 )
+scale = Vector2( 0.3, 0.3 )
+transform = Transform2D( 0.3, 0, 0, 0.3, 160, 500 )

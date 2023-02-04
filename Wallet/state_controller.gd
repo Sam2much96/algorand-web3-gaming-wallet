@@ -71,6 +71,9 @@ onready var button_12 = get_parent().get_node("CanvasLayer/Password_UI/GridConta
 
 onready var AnimationPlayer_ = get_parent().get_node("AnimationPlayer")
 
+onready var profile_pic = get_parent().get_node("CanvasLayer/Asset_UI/TextureRect") 
+onready var asset_ui_index = get_parent().get_node("CanvasLayer/Asset_UI/YSort/VBoxContainer/HBoxContainer2/Label3")  
+onready var asset_ui_amount = get_parent().get_node("CanvasLayer/Asset_UI/YSort/VBoxContainer/HBoxContainer/Label2")  
 
 
 func _ready():
@@ -95,6 +98,9 @@ func _ready():
 	Wallet.NFT = image_texture_holder
 	Wallet.kinematic2d = kinematic2d
 	Wallet.NFT_index_label = asset_index_label
+	Wallet.pfp = profile_pic
+	Wallet.Asset_UI_index = asset_ui_index
+	Wallet.Asset_UI_amount = asset_ui_amount
 	
 	#Buttons
 	Wallet.txn_txn_valid_button = submit_txn_button
