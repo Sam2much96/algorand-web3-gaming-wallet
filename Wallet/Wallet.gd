@@ -687,13 +687,13 @@ func _process(_delta):
 					
 					#NFT PFP
 					NFT_index_label.text = "ID: "+ str(asset_index) + "/" + str(asset_name)
-					Asset_UI_index.text = str(_asset_id)
+					Asset_UI_index.text = str(asset_index)
 					Asset_UI_amount.text = "$100"
 					
-					Comics.load_local_image_texture_from_global(self.pfp, local_image_file, false)
+					Comics.load_local_image_texture_from_global(self.pfp, local_image_file, true, 7)
 					
 					# Disabling Collectibes UI thumbnails
-					return Comics.load_local_image_texture_from_global(self.NFT, local_image_file, true)
+					return Comics.load_local_image_texture_from_global(self.NFT, local_image_file, true,1)
 					
 				"NFT PFP"
 				#if is_image_available_at_local_storage:

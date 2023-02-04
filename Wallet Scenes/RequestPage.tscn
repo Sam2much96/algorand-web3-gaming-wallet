@@ -39,16 +39,22 @@ color = Color( 0.921569, 0.921569, 0.921569, 1 )
 
 [node name="TextureRect" type="TextureRect" parent="."]
 light_mask = 3
-margin_left = 398.0
-margin_top = 30.0
-margin_right = 462.0
-margin_bottom = 94.0
+anchor_left = -0.06
+anchor_top = -0.017
+anchor_right = 0.061
+anchor_bottom = 0.025
+margin_left = 428.0
+margin_top = 47.408
+margin_right = 431.5
+margin_bottom = 68.4
 texture = ExtResource( 8 )
+stretch_mode = 4
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 position = Vector2( 410.048, 63 )
 scale = Vector2( 0.504762, 0.5 )
 invert_enable = true
+invert_border = 430.0
 polygon = PoolVector2Array( -15.9434, -18, -15.9434, 24, -13.9623, 30, 9.81134, 52, 17.7358, 56, 63.3019, 56, 71.2264, 52, 91.0377, 30, 95, 22, 95, -18, 91.0377, -30, 75.1887, -48, 69.2453, -52, 11.7925, -52, 5.84906, -50, -13.9623, -26 )
 
 [node name="Panel" type="Panel" parent="."]
@@ -59,16 +65,16 @@ margin_bottom = 400.0
 theme = SubResource( 1 )
 
 [node name="Panel2" type="Panel" parent="."]
-margin_left = 474.0
+margin_left = 445.0
 margin_top = 102.0
-margin_right = 587.0
+margin_right = 609.0
 margin_bottom = 134.0
 theme = ExtResource( 7 )
 
 [node name="Panel3" type="Panel" parent="."]
-margin_left = 471.0
+margin_left = 445.0
 margin_top = 159.0
-margin_right = 586.0
+margin_right = 609.0
 margin_bottom = 191.0
 theme = ExtResource( 7 )
 
@@ -100,7 +106,7 @@ margin_right = 613.0
 margin_bottom = 214.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="YSort/VBoxContainer"]
-margin_right = 211.0
+margin_right = 212.0
 margin_bottom = 36.0
 
 [node name="Label" type="Label" parent="YSort/VBoxContainer/HBoxContainer"]
@@ -136,30 +142,30 @@ width = 4.0
 
 [node name="Label2" type="Label" parent="YSort/VBoxContainer"]
 margin_top = 40.0
-margin_right = 211.0
+margin_right = 212.0
 margin_bottom = 54.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="YSort/VBoxContainer"]
 margin_top = 58.0
-margin_right = 211.0
+margin_right = 212.0
 margin_bottom = 94.0
 
 [node name="Label2" type="Label" parent="YSort/VBoxContainer/HBoxContainer2"]
 margin_top = 7.0
-margin_right = 100.0
+margin_right = 73.0
 margin_bottom = 28.0
 theme = ExtResource( 6 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Merchant ID: "
+text = "Asset ID: "
 align = 1
 
 [node name="Label3" type="Label" parent="YSort/VBoxContainer/HBoxContainer2"]
-margin_left = 104.0
-margin_right = 211.0
+margin_left = 77.0
+margin_right = 212.0
 margin_bottom = 36.0
 theme = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "#RET23"
+text = "    #RET23"
 align = 1
 
 [node name="YSort2" type="YSort" parent="."]
