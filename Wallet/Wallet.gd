@@ -688,7 +688,7 @@ func _process(_delta):
 					#NFT PFP
 					NFT_index_label.text = "ID: "+ str(asset_index) + "/" + str(asset_name)
 					Asset_UI_index.text = str(asset_index)
-					Asset_UI_amount.text = "$100"
+					Asset_UI_amount.text = "100,000"
 					
 					Comics.load_local_image_texture_from_global(self.pfp, local_image_file, true, 7)
 					
