@@ -65,17 +65,17 @@ margin_bottom = 400.0
 theme = SubResource( 1 )
 
 [node name="Panel2" type="Panel" parent="."]
-margin_left = 445.0
-margin_top = 102.0
-margin_right = 609.0
-margin_bottom = 134.0
+margin_left = 456.0
+margin_top = 136.0
+margin_right = 620.0
+margin_bottom = 168.0
 theme = ExtResource( 7 )
 
 [node name="Panel3" type="Panel" parent="."]
-margin_left = 445.0
-margin_top = 159.0
-margin_right = 609.0
-margin_bottom = 191.0
+margin_left = 456.0
+margin_top = 193.0
+margin_right = 620.0
+margin_bottom = 225.0
 theme = ExtResource( 7 )
 
 [node name="Button" type="Button" parent="."]
@@ -97,7 +97,7 @@ theme = ExtResource( 3 )
 text = "Reject"
 
 [node name="YSort" type="YSort" parent="."]
-position = Vector2( -32, -3 )
+position = Vector2( -25, 33 )
 z_index = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="YSort"]
@@ -131,7 +131,6 @@ margin_left = 112.0
 margin_right = 197.0
 margin_bottom = 36.0
 theme = ExtResource( 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "$3000"
 valign = 1
 
@@ -167,7 +166,6 @@ margin_left = 77.0
 margin_right = 212.0
 margin_bottom = 36.0
 theme = ExtResource( 1 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "    #RET23"
 align = 1
 
