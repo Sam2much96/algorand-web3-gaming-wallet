@@ -527,7 +527,7 @@ func next_panel():
 	
 		# Bug: Adds up number too rapidly
 		# Solutions
-		# (1) Change the Current Frame Data Structure to Array, for comparisons
+		# (1) Change the Current Frame Data Structure to Array, for comparisons (depreciated)
 
 	if Wallet.state == Wallet.COLLECTIBLES:
 		return Wallet._Animation.play("SLIDE_OUT")
@@ -566,7 +566,10 @@ func prev_panel():
 	#print ("Is Swiping: ", is_swiping)
 	#********Wallet State Controller Logic*******#
 	# Hacky UI Logic
+	# Animation Only Plays once bug
+	# It ideally shouldn't
 	if Wallet.state == Wallet.COLLECTIBLES:
+		print ("Asset UI SlideOut")
 		return Wallet._Animation.play("SLIDE_OUT")
 
 

@@ -69,7 +69,9 @@ onready var button_11 = get_parent().get_node("CanvasLayer/Password_UI/GridConta
 onready var button_12 = get_parent().get_node("CanvasLayer/Password_UI/GridContainer/Button12")
 
 
-onready var AnimationPlayer_ = get_parent().get_node("AnimationPlayer")
+onready var AnimationPlayer_ = get_parent().get_node("AnimationTree/AnimationPlayer") # icon and minor UI animations
+onready var AnimationPlayer_2 = get_parent().get_node("AnimationTree/AnimationPlayer2") # State Controller button ANimation
+onready var AnimationTree_ = get_parent().get_node("AnimationTree") #animation tree for complex animations
 
 onready var profile_pic = get_parent().get_node("CanvasLayer/Asset_UI/TextureRect") 
 onready var asset_ui_index = get_parent().get_node("CanvasLayer/Asset_UI/YSort/VBoxContainer/HBoxContainer2/Label3")  
@@ -147,8 +149,8 @@ func _ready():
 	
 	#*****Animation ******#
 	Wallet._Animation = AnimationPlayer_
-	
-	
+	Wallet._Animation_UI = AnimationPlayer_2
+	Wallet._Animation_Tree = AnimationTree_
 	
 	#print ("Wallet UI elemts: ",Wallet.UI_Elements) #for debug purposes only
 	

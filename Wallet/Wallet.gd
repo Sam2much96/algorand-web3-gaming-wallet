@@ -25,13 +25,14 @@
 # (4) Networking Test for Algorand node health, Good internet connection and local img storage
 # (5) Drag and Drop Mechanics using custom comics script
 # (6) Swipe Gestures using custom comics script
+# (7) Animation Player, To fix State Controller button Positioning When changing states
 # *************************************************
 #Bugs:
 
 #(1) UI is not intuitive (fixed)
 #(2) NFT drag and Drop is buggy 
 # (3)  Wallet Node's Process disrupts UI input ( fixed with state_controller and wallet _input() methods)
-
+# (4) Wallet's Animation UI has Stuck animation transition bug. Use Animation Tree to Activate and Deactivate UI animations
 
 # To-DO:
 # 
@@ -246,6 +247,9 @@ var processing : bool
 
 #*****Animation Player******#
 var _Animation : AnimationPlayer 
+var _Animation_UI : AnimationPlayer
+var _Animation_Tree : AnimationTree
+
 
 # Placeholder Dictionary for creating New Accts
 var dict : Dictionary = {'address': address, 'amount': 0, 'mnemonic': mnemonic }
@@ -262,7 +266,7 @@ func check_Nodes() -> bool:
 		txn_addr, txn_amount, funding_success_ui, funding_success_close_button, smart_contract_UI, 
 		smartcontract_ui_address_lineEdit, smartcontract_ui_appID_lineEdit, smartcontract_ui_args_lineEdit,
 		smartcontract_UI_button, nft_asset_id, fund_Acct_Button, make_Payment_Button, password_Entered_Button,
-		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation, _Create_Acct_button,
+		password_LineEdit, collectibles_UI, NFT, kinematic2d, NFT_index_label, _Animation, _Animation_UI, _Animation_Tree ,_Create_Acct_button,
 		CreatAccountSuccessful_UI, CreatAccountSuccessful_Mnemonic_Label, CreatAccountSuccessful_Copy_Mnemonic_button,
 		CreatAccountSuccessful_Proceed_home_button, Asset_UI, asset_txn_valid_button, asset_optin_txn_valid_button,
 		asset_optin_txn_reject_button, pfp, Asset_UI_index, Asset_UI_amount 
@@ -370,6 +374,9 @@ func _process(_delta):
 		elif self.state_controller.get_selected() == 4:
 			wallet_check = 0 # resets the wallet check stopper
 			state = SMARTCONTRACTS
+			
+			
+			
 		elif self.state_controller.get_selected() == 5:
 			wallet_check = 0 # resets the wallet check stopper
 			state = COLLECTIBLES
@@ -385,6 +392,11 @@ func _process(_delta):
 	
 	match state:
 		NEW_ACCOUNT: #loads wallet details if account already exists
+			
+			# Reset UI animation for State controller 
+			_Animation_UI.play("RESET_UI")
+			
+			
 			
 			# Buggy
 			# Bug Details: It bugs up when saving New Account Details Generated 
@@ -464,6 +476,10 @@ func _process(_delta):
 		# Entering any other derivative states without 
 		# entering show account previously would present new bugs
 		SHOW_ACCOUNT: 
+			# Reset UI animation for State controller 
+			_Animation_UI.play("RESET_UI")
+			
+			
 			"it's always load account details when ready"
 			
 			if FileCheck1.file_exists(token_write_path)  :
@@ -493,6 +509,9 @@ func _process(_delta):
 			
 			hideUI()
 			
+			
+			# Reset UI animation for State controller 
+			_Animation_UI.play("RESET_UI")
 			
 			self.mnemonic_ui.show()
 			self.set_process(false)
@@ -533,6 +552,9 @@ func _process(_delta):
 			hideUI()
 			self.transaction_ui.show()
 			self.transaction_ui.focus_mode = 2
+
+			# Reset UI animation for State controller 
+			_Animation_UI.play("RESET_UI")
 
 			
 			#transaction_hint.show()
@@ -619,7 +641,10 @@ func _process(_delta):
 			pass
 			
 	
-		COLLECTIBLES: 
+		COLLECTIBLES:
+			# Reset UI animation for State controller 
+			_Animation_UI.play("RESET_UI")
+			
 			"Checks if the Image is avalable Locally and either downloads or loads it"
 			if wallet_check == 0:
 				hideUI() 
@@ -717,8 +742,17 @@ func _process(_delta):
 			#try running in ready function
 			hideUI()
 			smart_contract_UI.show()
-			#dfsdfhfdh
 			
+			#Play Animation
+			if state_controller.get_selected_id() == 4 :# && wallet_check == 0:
+				#_Animation_UI.play("SWIPE_UP_UI")
+				_Animation_UI.play("REST_UP")
+				#wallet_check += 1
+				
+			
+				
+			
+			#return _Animation_UI.queue("REST_UP")
 			#get parameters from smart contract UI
 
 			if transaction_valid: 
@@ -739,9 +773,15 @@ func _process(_delta):
 		PASSWORD:
 			#Shows Password UI once app is booted first
 			
+						# Reset UI animation for State controller 
+			_Animation_UI.play("PASSWORD")
+			
+			
 			hideUI()
 			
 			passward_UI.show()
+			
+			self.set_process(false)
 			
 			if password_valid: 
 			
@@ -751,6 +791,10 @@ func _process(_delta):
 		SHOW_MNEMONIC:
 			if mnemonic != "":
 				hideUI()
+				
+			# Rest Up UI animation for State controller 
+				_Animation_UI.play("SHOW_MNEMONIC")
+				
 				# Show CreatAccountSuccessful UI
 				CreatAccountSuccessful_UI.show()
 				
@@ -1240,6 +1284,7 @@ func _input(event):
 	if password_Entered_Button.pressed:
 		password_valid = true
 		print ("Password Placeholder entered", password_valid)
+		self.set_process(true)
 
 
 	if CreatAccountSuccessful_Copy_Mnemonic_button.pressed:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://Wallet/state_controller.gd" type="Script" id=1]
 [ext_resource path="res://addons/algodot/Algod.gd" type="Script" id=2]
@@ -20,6 +20,62 @@
 [ext_resource path="res://animation/SWIPE_UP.tres" type="Animation" id=18]
 [ext_resource path="res://animation/SLIDE_IN.tres" type="Animation" id=19]
 [ext_resource path="res://animation/SLIDE_OUT.tres" type="Animation" id=20]
+[ext_resource path="res://animation/RESET_UI.tres" type="Animation" id=21]
+[ext_resource path="res://animation/SWIPE_RIGHT_UI.tres" type="Animation" id=22]
+[ext_resource path="res://animation/SLIDE_OUT_UI.tres" type="Animation" id=23]
+[ext_resource path="res://animation/SWIPE_DOWN_UI.tres" type="Animation" id=24]
+[ext_resource path="res://animation/SWIPE_UP_UI.tres" type="Animation" id=25]
+[ext_resource path="res://animation/SWIPE_LEFT_UI.tres" type="Animation" id=26]
+[ext_resource path="res://animation/SLIDE_IN_UI.tres" type="Animation" id=27]
+[ext_resource path="res://animation/WalletSHOW_MNEMONIC.tres" type="Animation" id=28]
+[ext_resource path="res://animation/PASSWORD.tres" type="Animation" id=29]
+
+[sub_resource type="AnimationRootNode" id=2]
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("state_controller:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 2.63445, 32.1399 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "REST_UP"
+tracks/0/type = "value"
+tracks/0/path = NodePath("state_controller:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 4.94763, 15.3219 ) ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "SMARTCONTRACTS"
+tracks/0/type = "value"
+tracks/0/path = NodePath("state_controller:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 2.31318, 31.5724 ), Vector2( 5.07614, 15.7346 ) ]
+}
 
 [node name="Node" type="Control"]
 anchor_right = 0.474
@@ -62,7 +118,6 @@ rect_scale = Vector2( 1.78005, 1.78005 )
 mouse_filter = 1
 
 [node name="Password_UI" parent="CanvasLayer" instance=ExtResource( 9 )]
-visible = false
 margin_left = -696.0
 margin_top = -69.0
 margin_right = -696.0
@@ -120,10 +175,10 @@ margin_bottom = 2090.0
 rect_scale = Vector2( 1.64405, 1.64405 )
 
 [node name="state_controller" type="OptionButton" parent="."]
-margin_left = 2.31318
-margin_top = 31.5724
-margin_right = 130.313
-margin_bottom = 51.5724
+margin_left = 2.63445
+margin_top = 32.1399
+margin_right = 130.634
+margin_bottom = 52.1399
 rect_scale = Vector2( 0.2, 0.2 )
 focus_mode = 0
 mouse_filter = 1
@@ -134,15 +189,34 @@ script = ExtResource( 1 )
 
 [node name="SwipeIcon" parent="." instance=ExtResource( 6 )]
 visible = false
-offset = Vector2( -100, 500 )
-rotation = 1.5708
-scale = Vector2( 0.7, -0.7 )
-transform = Transform2D( -4.14441e-07, 0.7, 0.7, 4.14441e-07, -100, 500 )
+offset = Vector2( -200, 500 )
+rotation = -1.5708
+transform = Transform2D( -4.37114e-08, -1, 1, -4.37114e-08, -200, 500 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 2 )
+anim_player = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="AnimationTree"]
+root_node = NodePath("../..")
+anims/PASSWORD = ExtResource( 29 )
+anims/RESET = SubResource( 3 )
+anims/RESET_UI = ExtResource( 21 )
+anims/REST_UP = SubResource( 4 )
+anims/SHOW_MNEMONIC = ExtResource( 28 )
+anims/SLIDE_IN_UI = ExtResource( 27 )
+anims/SLIDE_OUT_UI = ExtResource( 23 )
+anims/SWIPE_DOWN_UI = ExtResource( 24 )
+anims/SWIPE_LEFT_UI = ExtResource( 26 )
+anims/SWIPE_RIGHT_UI = ExtResource( 22 )
+anims/SWIPE_UP_UI = ExtResource( 25 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimationTree"]
+root_node = NodePath("../..")
 anims/RESET = ExtResource( 14 )
 anims/SLIDE_IN = ExtResource( 19 )
 anims/SLIDE_OUT = ExtResource( 20 )
+anims/SMARTCONTRACTS = SubResource( 1 )
 anims/SWIPE_DOWN = ExtResource( 15 )
 anims/SWIPE_LEFT = ExtResource( 17 )
 anims/SWIPE_RIGHT = ExtResource( 16 )
