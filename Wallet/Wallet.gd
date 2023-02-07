@@ -1395,7 +1395,8 @@ func smart_contract():
 		
 		hideUI()
 		self.funding_success_ui.show()
-	
+		
+		self._Animation_UI.play("SUCCESS")
 	
 	transaction_valid = false
 	_app_id = 0

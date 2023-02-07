@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://Wallet/state_controller.gd" type="Script" id=1]
 [ext_resource path="res://addons/algodot/Algod.gd" type="Script" id=2]
@@ -29,6 +29,7 @@
 [ext_resource path="res://animation/SLIDE_IN_UI.tres" type="Animation" id=27]
 [ext_resource path="res://animation/WalletSHOW_MNEMONIC.tres" type="Animation" id=28]
 [ext_resource path="res://animation/PASSWORD.tres" type="Animation" id=29]
+[ext_resource path="res://animation/SUCCESSS.tres" type="Animation" id=30]
 
 [sub_resource type="AnimationRootNode" id=2]
 
@@ -126,7 +127,6 @@ rect_scale = Vector2( 1.87476, 1.87476 )
 mouse_filter = 1
 
 [node name="FundingSuccess" parent="CanvasLayer" instance=ExtResource( 10 )]
-visible = false
 margin_left = -635.0
 margin_top = -25.0
 margin_right = -635.0
@@ -206,6 +206,7 @@ anims/REST_UP = SubResource( 4 )
 anims/SHOW_MNEMONIC = ExtResource( 28 )
 anims/SLIDE_IN_UI = ExtResource( 27 )
 anims/SLIDE_OUT_UI = ExtResource( 23 )
+anims/SUCCESS = ExtResource( 30 )
 anims/SWIPE_DOWN_UI = ExtResource( 24 )
 anims/SWIPE_LEFT_UI = ExtResource( 26 )
 anims/SWIPE_RIGHT_UI = ExtResource( 22 )
